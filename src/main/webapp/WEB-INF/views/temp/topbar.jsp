@@ -9,8 +9,8 @@
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active">
-				<a class="nav-link" href="#">
-					Home
+				<a class="nav-link" href="/club/list">
+					동호회
 					<span class="sr-only">(current)</span>
 				</a>
 			</li>
