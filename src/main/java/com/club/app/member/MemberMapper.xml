@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.club.app.member.MemberMapper">
+
+	<insert id="signUp" parameterType="MemberDTO">
+		insert into "TB_MEMBER"
+		values(default, #{memberName}, #{memberEmail}, #{memberPhone}, #{memberBirth}, 2, #{memberPw}, #{memberId})
+	</insert>
+	
+	<select id="detail">
+		select * from "TB_MEMBER"
+		where "MEMBER_ID" = #{memberId}
+	</select>
+	
+</mapper>

@@ -1,0 +1,55 @@
+package com.club.app.member;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+@RequestMapping("/member/*")
+public class MeberController {
+
+	@Autowired
+	private MemberService memberService;
+
+	@GetMapping("signUp")
+	public void signUp() throws Exception {
+
+	}
+
+	@PostMapping("signUp")
+	public String signUp(MemberDTO memberDTO) throws Exception {
+
+		int result = memberService.signUp(memberDTO);
+
+		return "redirect:/";
+	}
+
+	@GetMapping("login")
+	public void login(MemberDTO memberDTO) throws Exception {
+	}
+	
+	@GetMapping("logout")
+	public String logout(HttpSession session) throws Exception {
+		session.invalidate();
+		return "redirect:/";
+	}
+
+	@PostMapping("login")
+	public String login(MemberDTO memberDTO, HttpSession session) throws Exception {
+		MemberDTO login = memberService.detail(memberDTO);
+		session.setAttribute("member", login);
+		return "redirect:/";
+	}
+	
+	@GetMapping("detail")
+	public void detail(MemberDTO memberDTO, Model model, HttpSession session) throws Exception {
+		MemberDTO dto = (MemberDTO)session.getAttribute("member");
+		model.addAttribute("detail", dto);
+	}
+
+}
