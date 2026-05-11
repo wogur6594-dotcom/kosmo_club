@@ -45,4 +45,42 @@ public class MemberService {
 	public MemberDTO detail(MemberDTO memberDTO) throws Exception {
 		return memberMapper.detail(memberDTO);
 	}
+
+	public int delete(MemberDTO memberDTO) throws Exception {
+		return memberMapper.delete(memberDTO);
+	}
+
+	public int update(MemberDTO memberDTO, MultipartFile attach) throws Exception {
+
+		int result = memberMapper.update(memberDTO);
+
+		if (attach != null && !attach.isEmpty()) {
+
+			// 새 파일 저장
+			String fileName = fileManager.fileSave("memberProfile", attach);
+
+			// 프로필 DTO 생성
+			MemberProfileDTO profile = new MemberProfileDTO();
+
+			profile.setMemberNum(memberDTO.getMemberNum());
+			profile.setFileName(fileName);
+			profile.setOriName(attach.getOriginalFilename());
+
+			// 기존 프로필 조회
+			MemberDTO detail = memberMapper.detail(memberDTO);
+
+			// 기존 이미지 있는지 검사
+			if (detail.getProfile() != null) {
+
+				fileManager.fileDelete("memberProfile", detail.getProfile());
+
+				memberMapper.fileUpdate(profile);
+
+			} else {
+				memberMapper.addProfile(profile);
+			}
+		}
+
+		return result;
+	}
 }

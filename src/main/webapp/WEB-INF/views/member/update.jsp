@@ -10,43 +10,51 @@
 </head>
 <body>
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
-	<h1>회원가입 페이지</h1>
-	<form action="./signUp" method="post" enctype="multipart/form-data">
+	<h1>회원정보 수정 페이지</h1>
+	<c:choose>
+		<c:when test="${not empty update.profile.fileName}">
+			<img src="/files/memberProfile/${update.profile.fileName}" class="img-thumbnail">
+		</c:when>
+		<c:otherwise>
+			<img src="/image/default.png" class="img-thumbnail" style="width: 150px; height: 150px;">
+		</c:otherwise>
+	</c:choose>
+	<form action="./update" method="post" enctype="multipart/form-data">
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">이름</span>
 			</div>
-			<input type="text" class="form-control" name="memberName">
+			<input type="text" class="form-control" name="memberName" value="${update.memberName}">
 		</div>
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">ID</span>
 			</div>
-			<input type="text" class="form-control" name="memberId">
+			<input type="text" class="form-control" name="memberId" value="${update.memberId}">
 		</div>
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">Password</span>
 			</div>
-			<input type="password" class="form-control" name="memberPw">
+			<input type="password" class="form-control" name="memberPw" value="${update.memberPw}">
 		</div>
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">Phone</span>
 			</div>
-			<input type="text" class="form-control" name="memberPhone" placeholder="ex) 010-1234-1234">
+			<input type="text" class="form-control" name="memberPhone" placeholder="ex) 01012341234" value="${update.memberPhone}">
 		</div>
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">email</span>
 			</div>
-			<input type="email" class="form-control" name="memberEmail" placeholder="ex) example@naver.com">
+			<input type="email" class="form-control" name="memberEmail" value="${update.memberEmail}">
 		</div>
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">생년월일</span>
 			</div>
-			<input type="date" class="form-control" name="memberBirth">
+			<input type="date" class="form-control" name="memberBirth" value="${update.memberBirth}" readonly>
 		</div>
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
@@ -57,7 +65,7 @@
 				<label class="custom-file-label" for="attach">사진 선택</label>
 			</div>
 		</div>
-		<button type="submit" class="btn btn-outline-dark">회원가입</button>
+		<button type="submit" class="btn btn-outline-dark">정보수정</button>
 	</form>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
