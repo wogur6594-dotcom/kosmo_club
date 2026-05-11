@@ -8,6 +8,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Pager {
+	
+	private String clubCategory;
 
 	// 검색어
 	private String search = "";

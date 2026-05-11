@@ -21,13 +21,12 @@ public class ClubController {
 	@GetMapping("list")
 	public String list(Pager pager, Model model) throws Exception {
 
-		List<ClubDTO> ar = clubService.list(pager);
+		List<ClubDTO> list = clubService.list(pager);
 
-		model.addAttribute("list", ar);
+		model.addAttribute("list", list);
 		model.addAttribute("pager", pager);
 
 		return "club/list";
-
 	}
 
 	@GetMapping("detail")

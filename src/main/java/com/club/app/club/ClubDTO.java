@@ -22,5 +22,7 @@ public class ClubDTO {
 	private Long clubMax;
 	
 	private FileDTO fileDTO;
+	
+	private Long currentMember;
 
 }

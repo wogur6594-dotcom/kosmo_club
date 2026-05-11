@@ -24,7 +24,7 @@
 
 		<p>지역 : ${dto.clubLocation}</p>
 
-		<p>정원 : ${dto.clubMax}</p>
+		<p>회원수 : ${dto.currentMember} / ${dto.clubMax}</p>
 
 		<a href="./list?page=${param.page}">뒤로가기 
 	</div>
