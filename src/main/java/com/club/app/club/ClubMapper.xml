@@ -6,24 +6,44 @@
 <!-- mapper.java의 풀패키지명.클래스명 -->
 <mapper namespace="com.club.app.club.ClubMapper">
 
-	<select id="getCount" resultType="long">
-		SELECT COUNT(*) FROM "TB_CLUB"
+	<select id="getCount" parameterType="Pager" resultType="long">
+		SELECT COUNT(*)
+		FROM "TB_CLUB"
+		<where>
+			<if test="clubCategory != null and clubCategory != ''">
+				"CLUB_CATEGORY" = #{clubCategory}
+			</if>
+		</where>
 	</select>
 
-	<select id="list" resultType="ClubDTO">
+	<select id="list" parameterType="Pager" resultType="ClubDTO">
 
-		SELECT *
-		FROM "TB_CLUB"
-		ORDER BY "CLUB_NUM" ASC
+		SELECT
+		C.*,
+		(
+		SELECT COUNT(*)
+		FROM "TB_CLUB_MEMBER" CM
+		WHERE CM."CLUB_NUM" = C."CLUB_NUM"
+		) AS "CURRENT_MEMBER"
+
+		FROM "TB_CLUB" C
+
+		<where>
+			<if test="clubCategory != null and clubCategory != ''">
+				C."CLUB_CATEGORY" = #{clubCategory}
+			</if>
+		</where>
+
+		ORDER BY C."CLUB_NUM" ASC
+
 		LIMIT #{perPage} OFFSET #{startNum}
 
 	</select>
-	
-	<select id="detail" parameterType="ClubDTO"
-		resultType="ClubDTO">
+
+	<select id="detail" parameterType="ClubDTO" resultType="ClubDTO">
 		SELECT *
 		FROM "TB_CLUB"
-		WHERE "CLUB_NUM"=#{clubNum}
+		WHERE "CLUB_NUM" = #{clubNum}
 	</select>
 
 </mapper>

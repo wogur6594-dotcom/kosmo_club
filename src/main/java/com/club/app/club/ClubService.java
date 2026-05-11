@@ -33,5 +33,11 @@ public class ClubService {
 
 		return result;
 	}
+	
+	public Long getCount(Pager pager) throws Exception {
+
+		return clubMapper.getCount(pager);
+
+	}
 
 }
