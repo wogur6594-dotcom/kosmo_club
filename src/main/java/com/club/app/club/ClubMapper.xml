@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper.java의 풀패키지명.클래스명 -->
+<mapper namespace="com.club.app.club.ClubMapper">
+
+	<select id="getCount" resultType="long">
+		SELECT COUNT(*) FROM "TB_CLUB"
+	</select>
+
+	<select id="list" resultType="ClubDTO">
+
+		SELECT *
+		FROM "TB_CLUB"
+		ORDER BY "CLUB_NUM" ASC
+		LIMIT #{perPage} OFFSET #{startNum}
+
+	</select>
+
+</mapper>
