@@ -4,14 +4,38 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.club.app.member.MemberMapper">
 
-	<insert id="signUp" parameterType="MemberDTO">
+	<insert id="signUp" parameterType="MemberDTO" useGeneratedKeys="true" keyProperty="memberNum">
 		insert into "TB_MEMBER"
-		values(default, #{memberName}, #{memberEmail}, #{memberPhone}, #{memberBirth}, 2, #{memberPw}, #{memberId})
+		values(default, #{memberName}, #{memberEmail}, #{memberPhone}, #{memberBirth}, 2,
+		#{memberPw}, #{memberId})
 	</insert>
-	
-	<select id="detail">
-		select * from "TB_MEMBER"
+
+	<insert id="addProfile" parameterType="MemberProfileDTO">
+		insert into "MEMBER_PROFILE"
+		values(default, #{memberNum}, #{fileName}, #{oriName})
+	</insert>
+
+	<select id="detail" parameterType="MemberDTO" resultMap="memberMap">
+		select * from "TB_MEMBER" as m
+		left join "MEMBER_PROFILE" f
+		using("MEMBER_NUM")
 		where "MEMBER_ID" = #{memberId}
 	</select>
+
+	<resultMap type="MemberDTO" id="memberMap">
+		<id column="MEMBER_NUM" property="memberNum"/>
+		<result column="MEMBER_NAME" property="memberName"/>
+		<result column="MEMBER_EMAIL" property="memberEmail"/>
+		<result column="MEMBER_PHONE" property="memberPhone"/>
+		<result column="MEMBER_BIRTH" property="memberBirth"/>
+		<result column="ROLE_NUM" property="roleNum"/>
+		<result column="MEMBER_ID" property="memberId"/>
+		<result column="MEMBER_PW" property="memberPw"/>
+		<association property="profile" javaType="MemberProfileDTO">
+			<result column="FILE_NUM" property="fileNum"/>
+			<result column="FILE_NAME" property="fileName"/>
+			<result column="ORI_NAME" property="oriName"/>
+		</association>
+	</resultMap>
 	
 </mapper>

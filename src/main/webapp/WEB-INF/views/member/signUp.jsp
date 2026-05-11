@@ -11,7 +11,7 @@
 <body>
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 	<h1>회원가입 페이지</h1>
-	<form action="./signUp" method="post">
+	<form action="./signUp" method="post" enctype="multipart/form-data">
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">이름</span>
@@ -53,8 +53,8 @@
 				<span class="input-group-text" id="inputGroupFileAddon01">프로필 사진</span>
 			</div>
 			<div class="custom-file">
-				<input type="file" class="custom-file-input" id="inputGroupFile01">
-				<label class="custom-file-label" for="inputGroupFile01">사진 선택</label>
+				<input type="file" class="custom-file-input" name="attach">
+				<label class="custom-file-label" for="attach">사진 선택</label>
 			</div>
 		</div>
 		<button type="submit" class="btn btn-outline-dark">회원가입</button>

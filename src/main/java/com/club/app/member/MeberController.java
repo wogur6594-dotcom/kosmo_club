@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -22,9 +24,9 @@ public class MeberController {
 	}
 
 	@PostMapping("signUp")
-	public String signUp(MemberDTO memberDTO) throws Exception {
+	public String signUp(MemberDTO memberDTO,@RequestParam(name="attach", required = false) MultipartFile attach) throws Exception {
 
-		int result = memberService.signUp(memberDTO);
+		memberService.signUp(memberDTO, attach);
 
 		return "redirect:/";
 	}

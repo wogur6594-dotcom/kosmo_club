@@ -11,48 +11,45 @@
 <body>
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 	<h1>회원정보 페이지</h1>
-	<form action="./signUp" method="post">
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">이름</span>
-			</div>
-			<input type="text" class="form-control" name="memberName" value="${detail.memberName}" readonly>
+	<c:choose>
+		<c:when test="${not empty detail.profile.fileName}">
+			<img src="/files/memberProfile/${detail.profile.fileName}" class="img-thumbnail">
+		</c:when>
+		<c:otherwise>
+			<img src="/image/default.png" class="img-thumbnail" style="width: 150px; height: 150px;">
+		</c:otherwise>
+	</c:choose>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon1">이름</span>
 		</div>
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">ID</span>
-			</div>
-			<input type="text" class="form-control" name="memberId" value="${detail.memberId}" readonly>
+		<input type="text" class="form-control" name="memberName" value="${detail.memberName}" readonly>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon1">ID</span>
 		</div>
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">Phone</span>
-			</div>
-			<input type="text" class="form-control" name="memberPhone" value="${detail.memberPhone}" readonly>
+		<input type="text" class="form-control" name="memberId" value="${detail.memberId}" readonly>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon1">Phone</span>
 		</div>
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">email</span>
-			</div>
-			<input type="email" class="form-control" name="memberEmail" value="${detail.memberEmail}" readonly>
+		<input type="text" class="form-control" name="memberPhone" value="${detail.memberPhone}" readonly>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon1">email</span>
 		</div>
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">생년월일</span>
-			</div>
-			<input type="date" class="form-control" name="memberBirth" value="${detail.memberBirth}" readonly>
+		<input type="email" class="form-control" name="memberEmail" value="${detail.memberEmail}" readonly>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon1">생년월일</span>
 		</div>
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="inputGroupFileAddon01">프로필 사진</span>
-			</div>
-			<div class="custom-file">
-				<input type="file" class="custom-file-input" id="inputGroupFile01">
-				<label class="custom-file-label" for="inputGroupFile01">사진 선택</label>
-			</div>
-		</div>
-		<button type="submit" class="btn btn-outline-dark">회원가입</button>
-	</form>
+		<input type="date" class="form-control" name="memberBirth" value="${detail.memberBirth}" readonly>
+	</div>
+	<a class="btn btn-outline-dark" href="/member/update">정보수정</a>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

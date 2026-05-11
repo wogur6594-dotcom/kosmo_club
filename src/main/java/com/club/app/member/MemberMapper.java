@@ -7,4 +7,6 @@ public interface MemberMapper {
 	public int signUp(MemberDTO memberDTO) throws Exception;
 	
 	public MemberDTO detail(MemberDTO memberDTO) throws Exception;
+	
+	public int addProfile(MemberProfileDTO memberProfileDTO) throws Exception;
 }

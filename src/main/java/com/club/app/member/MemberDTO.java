@@ -19,5 +19,7 @@ public class MemberDTO {
 	private Long roleNum;
 	private String memberId;
 	private String memberPw;
+	
+	private MemberProfileDTO profile;
 
 }
