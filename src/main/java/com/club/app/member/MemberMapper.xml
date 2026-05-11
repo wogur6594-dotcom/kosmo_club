@@ -37,5 +37,30 @@
 			<result column="ORI_NAME" property="oriName"/>
 		</association>
 	</resultMap>
-	
+
+	<delete id="delete" parameterType="MemberDTO">
+		delete from "TB_MEMBER"
+		where "MEMBER_NUM" = #{memberNum}
+	</delete>
+
+	<update id="update" parameterType="MemberDTO">
+		update "TB_MEMBER"
+		set 
+		"MEMBER_NAME" = #{memberName},
+		"MEMBER_EMAIL" = #{memberEmail},
+		"MEMBER_PHONE" = #{memberPhone},
+		"MEMBER_BIRTH" = #{memberBirth},
+		"MEMBER_PW" = #{memberPw},
+		"MEMBER_ID" = #{memberId}
+		where "MEMBER_NUM" = #{memberNum}
+	</update>
+
+	<update id="fileUpdate" parameterType="MemberProfileDTO">
+		update "MEMBER_PROFILE"
+		set
+		"FILE_NAME" = #{fileName},
+		"ORI_NAME" = #{oriName}
+		where "MEMBER_NUM" = #{memberNum}
+	</update>
+
 </mapper>

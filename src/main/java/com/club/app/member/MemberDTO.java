@@ -14,7 +14,7 @@ public class MemberDTO {
 	private Long memberNum;
 	private String memberName;
 	private String memberEmail;
-	private Long memberPhone;
+	private String memberPhone;
 	private LocalDate memberBirth;
 	private Long roleNum;
 	private String memberId;

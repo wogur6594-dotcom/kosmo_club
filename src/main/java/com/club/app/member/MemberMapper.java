@@ -9,4 +9,10 @@ public interface MemberMapper {
 	public MemberDTO detail(MemberDTO memberDTO) throws Exception;
 	
 	public int addProfile(MemberProfileDTO memberProfileDTO) throws Exception;
+	
+	public int delete(MemberDTO memberDTO) throws Exception;
+	
+	public int update(MemberDTO memberDTO) throws Exception;
+	
+	public int fileUpdate(MemberProfileDTO memberProfileDTO) throws Exception;
 }
