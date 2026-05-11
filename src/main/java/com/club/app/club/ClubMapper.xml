@@ -18,5 +18,12 @@
 		LIMIT #{perPage} OFFSET #{startNum}
 
 	</select>
+	
+	<select id="detail" parameterType="ClubDTO"
+		resultType="ClubDTO">
+		SELECT *
+		FROM "TB_CLUB"
+		WHERE "CLUB_NUM"=#{clubNum}
+	</select>
 
 </mapper>
