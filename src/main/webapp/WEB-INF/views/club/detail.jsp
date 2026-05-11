@@ -28,6 +28,7 @@
 
 		<a href="./list?page=${param.page}">뒤로가기 
 	</div>
+	
 
 
 </body>
