@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ClubFileDTO extends FileDTO {
-	
-	private Long clubNum;
+
+	private Long boardNum;
 
 }

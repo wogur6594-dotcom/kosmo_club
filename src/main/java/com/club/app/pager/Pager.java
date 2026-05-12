@@ -8,7 +8,9 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Pager {
-	
+
+	private Long clubNum;
+
 	private String clubCategory;
 
 	// 검색어

@@ -28,5 +28,8 @@ public interface ClubMapper {
 
 	// D - delete
 	public int delete(ClubDTO clubDTO) throws Exception;
+	
+	//테스트
+	public List<ClubDTO> index2(Pager pager) throws Exception;
 
 }

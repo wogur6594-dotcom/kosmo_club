@@ -23,7 +23,8 @@
 		(
 		SELECT COUNT(*)
 		FROM "TB_CLUB_MEMBER" CM
-		WHERE CM."CLUB_NUM" = C."CLUB_NUM"
+		WHERE CM."CLUB_NUM"
+		= C."CLUB_NUM"
 		) AS "CURRENT_MEMBER"
 
 		FROM "TB_CLUB" C
@@ -41,9 +42,40 @@
 	</select>
 
 	<select id="detail" parameterType="ClubDTO" resultType="ClubDTO">
-		SELECT *
-		FROM "TB_CLUB"
-		WHERE "CLUB_NUM" = #{clubNum}
+		SELECT
+		C.*,
+		COUNT(CM."MEMBER_NUM") AS "currentMember"
+		FROM "TB_CLUB" C
+		LEFT JOIN "TB_CLUB_MEMBER" CM
+		ON C."CLUB_NUM" = CM."CLUB_NUM"
+		WHERE C."CLUB_NUM" = #{clubNum}
+		GROUP BY C."CLUB_NUM"
+	</select>
+	
+	<!-- 테스트 -->
+	<select id="index2" parameterType="Pager" resultType="ClubDTO">
+
+		SELECT
+		C.*,
+		(
+		SELECT COUNT(*)
+		FROM "TB_CLUB_MEMBER" CM
+		WHERE CM."CLUB_NUM"
+		= C."CLUB_NUM"
+		) AS "CURRENT_MEMBER"
+
+		FROM "TB_CLUB" C
+
+		<where>
+			<if test="clubCategory != null and clubCategory != ''">
+				C."CLUB_CATEGORY" = #{clubCategory}
+			</if>
+		</where>
+
+		ORDER BY C."CLUB_NUM" ASC
+
+		LIMIT #{perPage} OFFSET #{startNum}
+
 	</select>
 
 </mapper>
