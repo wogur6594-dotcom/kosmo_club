@@ -19,7 +19,10 @@
 		select * from "TB_MEMBER" as m
 		left join "MEMBER_PROFILE" f
 		using("MEMBER_NUM")
-		where "MEMBER_ID" = #{memberId}
+		inner join "TB_ROLE"
+		using("ROLE_NUM")
+		where "MEMBER_ID" =
+		#{memberId}
 	</select>
 
 	<resultMap type="MemberDTO" id="memberMap">
@@ -31,11 +34,19 @@
 		<result column="ROLE_NUM" property="roleNum"/>
 		<result column="MEMBER_ID" property="memberId"/>
 		<result column="MEMBER_PW" property="memberPw"/>
+		<result column="ENABLED" property="enabled"/>
+		<result column="CREDENTIALS_NON_EXPIRED" property="credentialsNonExpired"/>
+		<result column="ACCOUNT_NON_LOCKED" property="accountNonLocked"/>
+		<result column="ACCOUNT_NON_EXPIRED" property="accountNonExpired"/>
 		<association property="profile" javaType="MemberProfileDTO">
 			<result column="FILE_NUM" property="fileNum"/>
 			<result column="FILE_NAME" property="fileName"/>
 			<result column="ORI_NAME" property="oriName"/>
 		</association>
+		<collection property="roles" javaType="java.util.List" ofType="RoleDTO">
+			<id column="ROLE_NUM" property="roleNum"/>
+			<result column="ROLE_NAME" property="roleName"/>
+		</collection>
 	</resultMap>
 
 	<delete id="delete" parameterType="MemberDTO">
@@ -45,13 +56,19 @@
 
 	<update id="update" parameterType="MemberDTO">
 		update "TB_MEMBER"
-		set 
+		set
 		"MEMBER_NAME" = #{memberName},
 		"MEMBER_EMAIL" = #{memberEmail},
 		"MEMBER_PHONE" = #{memberPhone},
 		"MEMBER_BIRTH" = #{memberBirth},
-		"MEMBER_PW" = #{memberPw},
 		"MEMBER_ID" = #{memberId}
+		where "MEMBER_NUM" = #{memberNum}
+	</update>
+
+	<update id="updatePw" parameterType="MemberDTO">
+		update "TB_MEMBER"
+		set
+		"MEMBER_PW" = #{memberPw}
 		where "MEMBER_NUM" = #{memberNum}
 	</update>
 

@@ -1,21 +1,42 @@
 package com.club.app.member;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.club.app.file.FileManager;
 
 @Service
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
 	@Autowired
 	private MemberMapper memberMapper;
 
 	@Autowired
 	private FileManager fileManager;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Override
+	public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
+		MemberDTO memberDTO = new MemberDTO();
+		memberDTO.setMemberId(memberId);
+		memberDTO = memberMapper.detail(memberDTO);
+		return memberDTO;
+	}
+
 
 	public int signUp(MemberDTO memberDTO, MultipartFile attach) throws Exception {
+		// DB에 저장
+		memberDTO.setMemberPw(passwordEncoder.encode(memberDTO.getMemberPw()));
+	
 
 		// 1. 회원가입
 		int result = memberMapper.signUp(memberDTO);
@@ -52,8 +73,19 @@ public class MemberService {
 
 	public int update(MemberDTO memberDTO, MultipartFile attach) throws Exception {
 
-		int result = memberMapper.update(memberDTO);
+	    // 1. 기본 정보 업데이트
+	   int result = memberMapper.update(memberDTO);
 
+	    // 2. 비밀번호가 들어왔을 때만 변경
+	    if (memberDTO.getMemberPw() != null && !memberDTO.getMemberPw().isBlank()) {
+
+	        String encodedPw = passwordEncoder.encode(memberDTO.getMemberPw());
+	        memberDTO.setMemberPw(encodedPw);
+
+	        memberMapper.updatePw(memberDTO);
+	    }
+
+	    // 3. 파일 저장
 		if (attach != null && !attach.isEmpty()) {
 
 			// 새 파일 저장
@@ -80,7 +112,14 @@ public class MemberService {
 				memberMapper.addProfile(profile);
 			}
 		}
-
 		return result;
+	}
+	
+	public int updatePw(MemberDTO memberDTO) throws Exception {
+
+	    String encodedPw = passwordEncoder.encode(memberDTO.getMemberPw());
+	    memberDTO.setMemberPw(encodedPw);
+
+	    return memberMapper.updatePw(memberDTO);
 	}
 }
