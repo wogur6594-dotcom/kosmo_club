@@ -18,4 +18,8 @@ public interface MemberMapper {
 	public int fileUpdate(MemberProfileDTO memberProfileDTO) throws Exception;
 	
 	public int updatePw(MemberDTO memberDTO) throws Exception;
+	
+	public int checkId(MemberDTO memberDTO) throws Exception;
+	
+	public int checkEmail(MemberDTO memberDTO) throws Exception;
 }

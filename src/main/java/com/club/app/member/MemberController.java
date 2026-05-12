@@ -5,15 +5,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -24,23 +26,40 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 
-	@GetMapping("signUp")
-	public void signUp() throws Exception {
-
-	}
 
 	@GetMapping("/")
 	public String index() throws Exception{
 		return "index";
 	}
 	
+	@GetMapping("signUp")
+	public String signUp() throws Exception {
+		return "member/signUp";
+	}
+	
 	@PostMapping("signUp")
-	public String signUp(MemberDTO memberDTO, @RequestParam(name = "attach", required = false) MultipartFile attach)
+	public String signUp(@Valid MemberDTO memberDTO, BindingResult bindingResult, @RequestParam(name = "attach", required = false) MultipartFile attach)
 			throws Exception {
-
+		
+	    if (bindingResult.hasErrors()) {
+	        return "member/signUp";
+	    }
+	    
 		memberService.signUp(memberDTO, attach);
 
 		return "redirect:/";
+	}
+	
+	@GetMapping("checkId")
+	@ResponseBody
+	public boolean checkId(MemberDTO memberDTO) throws Exception {
+	    return memberService.checkId(memberDTO);
+	}
+	
+	@GetMapping("checkEmail")
+	@ResponseBody
+	public boolean checkEmail(MemberDTO memberDTO) throws Exception {
+	    return memberService.checkEmail(memberDTO);
 	}
 
 	@GetMapping("login")

@@ -34,6 +34,15 @@ public class MemberService implements UserDetailsService {
 
 
 	public int signUp(MemberDTO memberDTO, MultipartFile attach) throws Exception {
+		
+	    if (memberMapper.checkId(memberDTO) > 0) {
+	        throw new RuntimeException("");
+	    }
+	    
+	    if (memberMapper.checkEmail(memberDTO) > 0) {
+	        throw new RuntimeException("");
+	    }
+	    
 		// DB에 저장
 		memberDTO.setMemberPw(passwordEncoder.encode(memberDTO.getMemberPw()));
 	
@@ -62,6 +71,16 @@ public class MemberService implements UserDetailsService {
 
 		return result;
 	}
+	
+    public boolean checkId(MemberDTO memberDTO) throws Exception {
+        int result = memberMapper.checkId(memberDTO);
+        return result > 0;
+    }
+    
+    public boolean checkEmail(MemberDTO memberDTO) throws Exception {
+        int result = memberMapper.checkEmail(memberDTO);
+        return result > 0;
+    }
 
 	public MemberDTO detail(MemberDTO memberDTO) throws Exception {
 		return memberMapper.detail(memberDTO);

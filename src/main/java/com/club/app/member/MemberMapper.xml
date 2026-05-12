@@ -80,4 +80,16 @@
 		where "MEMBER_NUM" = #{memberNum}
 	</update>
 
+	<select id="checkId" resultType="int">
+		select count(*)
+		from "TB_MEMBER"
+		where "MEMBER_ID" = #{memberId}
+	</select>
+	
+	<select id="checkEmail" resultType="String">
+		select count(*)
+		from "TB_MEMBER"
+		where "MEMBER_EMAIL" = #{memberEmail}
+	</select>
+
 </mapper>
