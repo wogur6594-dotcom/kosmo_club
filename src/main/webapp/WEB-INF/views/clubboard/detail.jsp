@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <!DOCTYPE html>
@@ -18,30 +19,35 @@
 
 	<div class="container mt-5">
 
-		<h1>${dto.boardTitle}</h1>
+		<div class="d-flex align-items-center mb-3">
 
-		<hr>
+			<h1 class="mr-3 mb-0">${dto.boardTitle}</h1>
 
-		<div class="mb-3">
-
-			<p>
-				<strong>작성자 :</strong> ${dto.boardWriter}
-			</p>
-
-			<p>
-				<strong>카테고리 :</strong> ${dto.boardCategory}
-			</p>
-
-			<p>
-				<strong>작성일 :</strong> ${dto.createDate}
-			</p>
+			<span class="badge badge-success"> ${dto.boardCategory} </span>
 
 		</div>
 
 		<hr>
 
+		<div class="mb-3">
+
+			<div class="d-flex justify-content-between mb-4">
+
+				<div>
+					<strong>작성자 :</strong> ${dto.boardWriter}
+				</div>
+
+				<div>
+					<strong>작성일 :</strong> ${fn:replace(fn:substring(dto.boardDate, 0, 16), 'T', ' ')}
+				</div>
+
+			</div>
+
+		</div>
+
+
+
 		<hr>
-		<h5>첨부 이미지</h5>
 
 		<c:forEach items="${dto.list}" var="file">
 			<img src="/clubboard/${file.fileName}" class="img-fluid mb-3"
@@ -63,7 +69,7 @@
 
 		<div class="mt-4">
 
-			<a href="/club/detail?clubNum=${dto.clubNum}"
+			<a href="/clubboard/detail?clubNum=${dto.clubNum}"
 				class="btn btn-secondary"> 동호회로 돌아가기 </a>
 
 		</div>

@@ -16,18 +16,24 @@
 		</where>
 	</select>
 
-	<select id="list" parameterType="Pager" resultType="ClubDTO">
+	<select id="list" parameterType="Pager"
+		resultMap="clubFileResultMap">
 
 		SELECT
 		C.*,
+		F."FILE_NUM",
+		F."FILE_NAME",
+		F."ORI_NAME",
 		(
 		SELECT COUNT(*)
 		FROM "TB_CLUB_MEMBER" CM
-		WHERE CM."CLUB_NUM"
-		= C."CLUB_NUM"
-		) AS "CURRENT_MEMBER"
-
+		WHERE CM."CLUB_NUM" = C."CLUB_NUM"
+		) AS
+		"CURRENT_MEMBER"
 		FROM "TB_CLUB" C
+		LEFT JOIN "TB_CLUBFILE" F
+		ON
+		C."CLUB_NUM" = F."CLUB_NUM"
 
 		<where>
 			<if test="clubCategory != null and clubCategory != ''">
@@ -36,46 +42,89 @@
 		</where>
 
 		ORDER BY C."CLUB_NUM" ASC
-
 		LIMIT #{perPage} OFFSET #{startNum}
 
 	</select>
 
-	<select id="detail" parameterType="ClubDTO" resultType="ClubDTO">
+	<resultMap id="clubFileResultMap" type="ClubDTO">
+		<id property="clubNum" column="CLUB_NUM" />
+		<result property="clubName" column="CLUB_NAME" />
+		<result property="clubCategory" column="CLUB_CATEGORY" />
+		<result property="clubLocation" column="CLUB_LOCATION" />
+		<result property="clubMax" column="CLUB_MAX" />
+		<result property="currentMember" column="CURRENT_MEMBER" />
+
+		<association property="fileDTO" javaType="FileDTO">
+			<id property="fileNum" column="FILE_NUM" />
+			<result property="fileName" column="FILE_NAME" />
+			<result property="oriName" column="ORI_NAME" />
+		</association>
+	</resultMap>
+
+	<select id="detail" parameterType="ClubDTO"
+		resultMap="clubFileResultMap">
+
 		SELECT
 		C.*,
-		COUNT(CM."MEMBER_NUM") AS "currentMember"
+		COUNT(CM."MEMBER_NUM") AS "CURRENT_MEMBER",
+		F."FILE_NUM",
+		F."FILE_NAME",
+		F."ORI_NAME"
 		FROM "TB_CLUB" C
 		LEFT JOIN "TB_CLUB_MEMBER" CM
 		ON C."CLUB_NUM" = CM."CLUB_NUM"
+		LEFT JOIN "TB_CLUBFILE" F
+		ON C."CLUB_NUM" = F."CLUB_NUM"
 		WHERE C."CLUB_NUM" = #{clubNum}
-		GROUP BY C."CLUB_NUM"
+		GROUP BY
+		C."CLUB_NUM",
+		F."FILE_NUM",
+		F."FILE_NAME",
+		F."ORI_NAME"
+
 	</select>
-	
+
 	<!-- 테스트 -->
-	<select id="index2" parameterType="Pager" resultType="ClubDTO">
 
-		SELECT
-		C.*,
+
+
+	<insert id="create" parameterType="ClubDTO"
+		useGeneratedKeys="true" keyProperty="clubNum" keyColumn="CLUB_NUM">
+
+		INSERT INTO
+		"TB_CLUB"
 		(
-		SELECT COUNT(*)
-		FROM "TB_CLUB_MEMBER" CM
-		WHERE CM."CLUB_NUM"
-		= C."CLUB_NUM"
-		) AS "CURRENT_MEMBER"
+		"CLUB_NAME",
+		"CLUB_CATEGORY",
+		"CLUB_LOCATION",
+		"CLUB_MAX"
+		)
+		VALUES
+		(
+		#{clubName},
+		#{clubCategory},
+		#{clubLocation},
+		#{clubMax}
+		)
 
-		FROM "TB_CLUB" C
+	</insert>
 
-		<where>
-			<if test="clubCategory != null and clubCategory != ''">
-				C."CLUB_CATEGORY" = #{clubCategory}
-			</if>
-		</where>
+	<insert id="createFile" parameterType="FileDTO">
 
-		ORDER BY C."CLUB_NUM" ASC
+		INSERT INTO "TB_CLUBFILE"
+		(
+		"FILE_NAME",
+		"ORI_NAME",
+		"CLUB_NUM"
+		)
+		VALUES
+		(
+		#{fileName},
+		#{oriName},
+		#{clubNum}
+		)
 
-		LIMIT #{perPage} OFFSET #{startNum}
+	</insert>
 
-	</select>
 
 </mapper>

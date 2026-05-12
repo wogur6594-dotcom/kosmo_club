@@ -21,7 +21,7 @@ public class ClubBoardController {
 
 	@GetMapping("list")
 	public String list(Pager pager, Model model) throws Exception {
-		model.addAttribute("list", clubBoardService.list(pager));
+		model.addAttribute("list", clubBoardService.clubBoardList(pager));
 		model.addAttribute("pager", pager);
 
 		return "clubboard/list";
@@ -37,7 +37,7 @@ public class ClubBoardController {
 			pager.setPage(1L);
 		}
 
-		pager.setPerPage(6L);
+		pager.setPerPage(5L);
 
 		model.addAttribute("dto", clubBoardService.detail(clubBoardDTO));
 

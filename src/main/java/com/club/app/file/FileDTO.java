@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 public class FileDTO {
 
+	private Long clubNum;
 	private Long fileNum;
 	private String fileName;
 	private String oriName;

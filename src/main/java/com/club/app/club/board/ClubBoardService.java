@@ -21,27 +21,16 @@ public class ClubBoardService {
 	@Autowired
 	private ClubBoardMapper clubBoardMapper;
 
-	public List<ClubBoardDTO> list(Pager pager) throws Exception {
-		Long totalCount = clubBoardMapper.getCount(pager);
-
-		pager.makePageNum(totalCount);
-		pager.makeStartNum();
-
-		return clubBoardMapper.list(pager);
-	}
-
 	public List<ClubBoardDTO> clubBoardList(Pager pager) throws Exception {
 
-		Long totalCount = clubBoardMapper.getClubBoardCount(pager);
+	    Long totalCount = clubBoardMapper.getCount(pager);
 
-		pager.makePageNum(totalCount);
-		pager.makeStartNum();
+	    pager.makePageNum(totalCount);
+	    pager.makeStartNum();
 
-//		System.out.println("totalCount = " + totalCount);
-//		System.out.println(pager); 테스트용으로 만들었고 나중에 삭제할거임
-
-		return clubBoardMapper.clubBoardList(pager);
+	    return clubBoardMapper.clubBoardList(pager);
 	}
+
 
 	public ClubBoardDTO detail(ClubBoardDTO clubBoardDTO) throws Exception {
 
