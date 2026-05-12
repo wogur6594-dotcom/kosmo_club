@@ -1,6 +1,9 @@
 package com.club.app.club.board;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.club.app.club.ClubDTO;
 
@@ -28,4 +31,8 @@ public class ClubBoardDTO {
 	private String boardCategory;
 
 	private String boardWriter;
+	
+	private List<ClubFileDTO> list;
+	
+	private MultipartFile[] attaches;
 }

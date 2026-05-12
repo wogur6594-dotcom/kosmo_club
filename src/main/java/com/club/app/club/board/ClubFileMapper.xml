@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.club.app.club.board.ClubFileMapper">
+
+	<insert id="addFile" parameterType="ClubFileDTO">
+		INSERT INTO "TB_CLUB_BOARD_FILE"
+		(
+			"BOARD_NUM",
+			"FILE_NAME",
+			"ORI_NAME"
+		)
+		VALUES
+		(
+			#{boardNum},
+			#{fileName},
+			#{oriName}
+		)
+	</insert>
+
+	<select id="getFiles" parameterType="ClubBoardDTO" resultType="ClubFileDTO">
+		SELECT *
+		FROM "TB_CLUB_BOARD_FILE"
+		WHERE "BOARD_NUM" = #{boardNum}
+	</select>
+
+</mapper>

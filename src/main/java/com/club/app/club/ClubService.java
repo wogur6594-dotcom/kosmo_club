@@ -39,5 +39,13 @@ public class ClubService {
 		return clubMapper.getCount(pager);
 
 	}
+	//테스트
+	public List<ClubDTO> index2(Pager pager) throws Exception {
+
+		pager.makePageNum(clubMapper.getCount(pager));
+		pager.makeStartNum();
+
+		return clubMapper.list(pager);
+	}
 
 }

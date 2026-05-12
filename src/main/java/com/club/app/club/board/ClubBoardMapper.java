@@ -9,6 +9,8 @@ import com.club.app.pager.Pager;
 @Mapper
 public interface ClubBoardMapper {
 
+	public List<ClubBoardDTO> clubBoardListByClubNum(Long clubNum) throws Exception;
+
 	public Long getCount(Pager pager) throws Exception;
 
 	public List<ClubBoardDTO> list(Pager pager) throws Exception;
@@ -20,4 +22,8 @@ public interface ClubBoardMapper {
 	public int update(ClubBoardDTO clubBoardDTO) throws Exception;
 
 	public int delete(ClubBoardDTO clubBoardDTO) throws Exception;
+
+	public Long getClubBoardCount(Pager pager) throws Exception;
+
+	public List<ClubBoardDTO> clubBoardList(Pager pager) throws Exception;
 }

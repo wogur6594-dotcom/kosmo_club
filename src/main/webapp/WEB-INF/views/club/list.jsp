@@ -14,6 +14,7 @@
 </head>
 
 <body>
+	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
 	<div class="container mt-5">
 
@@ -56,7 +57,8 @@
 
 								<p class="card-text">지역 : ${dto.clubLocation}</p>
 
-								<p class="card-text">회원수 : ${dto.currentMember} / ${dto.clubMax}명</p>
+								<p class="card-text">회원수 : ${dto.currentMember} /
+									${dto.clubMax}명</p>
 							</div>
 
 						</a>
