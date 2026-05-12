@@ -5,75 +5,114 @@
 
 <mapper namespace="com.club.app.club.board.ClubBoardMapper">
 
-    <!-- 게시글 개수 -->
-    <select id="getCount" resultType="long">
-        SELECT COUNT(*)
-        FROM "TB_CLUB_BOARD"
-    </select>
+	<!-- 게시글 개수 -->
+	<select id="getCount" resultType="long">
+		SELECT COUNT(*)
+		FROM
+		"TB_CLUB_BOARD"
+	</select>
 
-    <!-- 게시글 목록 -->
-    <select id="list" resultType="ClubBoardDTO">
-        SELECT *
-        FROM "TB_CLUB_BOARD"
-        ORDER BY "BOARD_NUM" DESC
-        LIMIT #{perPage}
-        OFFSET #{startNum}
-    </select>
+	<!-- 게시글 목록 -->
+	<select id="list" resultType="ClubBoardDTO">
+		SELECT *
+		FROM "TB_CLUB_BOARD"
+		ORDER
+		BY "BOARD_NUM" DESC
+		LIMIT #{perPage}
+		OFFSET #{startNum}
+	</select>
 
-    <!-- 게시글 상세 -->
-    <select id="detail"
-        parameterType="ClubBoardDTO"
-        resultType="ClubBoardDTO">
+	<!-- 게시글 상세 -->
+	<select id="detail" parameterType="ClubBoardDTO"
+		resultType="ClubBoardDTO">
 
-        SELECT *
-        FROM "TB_CLUB_BOARD"
-        WHERE "BOARD_NUM" = #{boardNum}
+		SELECT *
+		FROM "TB_CLUB_BOARD"
+		WHERE "BOARD_NUM" = #{boardNum}
 
-    </select>
+	</select>
 
-    <!-- 게시글 작성 -->
-    <insert id="create"
-        parameterType="ClubBoardDTO">
+	<!-- 동호회 게시판 -->
+	<select id="getClubBoardCount" resultType="long">
+		SELECT COUNT(*)
+		FROM
+		"TB_CLUB_BOARD"
+		WHERE "CLUB_NUM" = #{clubNum}
+	</select>
 
-        INSERT INTO "TB_CLUB_BOARD"
-        (
-            "CLUB_NUM",
-            "BOARD_TITLE",
-            "BOARD_CONTENTS",
-            "BOARD_CATEGORY",
-            "BOARD_WRITER"
-        )
-        VALUES
-        (
-            #{clubNum},
-            #{boardTitle},
-            #{boardContents},
-            #{boardCategory},
-            #{boardWriter}
-        )
+	<select id="clubBoardList" parameterType="Pager"
+		resultType="ClubBoardDTO">
+		SELECT *
+		FROM "TB_CLUB_BOARD"
+		WHERE "CLUB_NUM" = #{clubNum}
+		ORDER BY "BOARD_NUM" DESC
+		LIMIT #{perPage}
+		OFFSET #{startNum}
+	</select>
 
-    </insert>
+	<select id="clubBoardListByClubNum" parameterType="long"
+		resultType="ClubBoardDTO">
 
-    <!-- 수정 -->
-    <update id="update"
-        parameterType="ClubBoardDTO">
+		SELECT *
+		FROM "TB_CLUB_BOARD"
+		WHERE "CLUB_NUM" = #{clubNum}
+		ORDER BY "BOARD_NUM" DESC
 
-        UPDATE "TB_CLUB_BOARD"
-        SET
-            "BOARD_TITLE" = #{boardTitle},
-            "BOARD_CONTENTS" = #{boardContents},
-            "BOARD_CATEGORY" = #{boardCategory}
-        WHERE "BOARD_NUM" = #{boardNum}
+	</select>
+	
+	<!-- 게시판 첨부파일 조회 -->
+	<select id="getFiles" parameterType="ClubBoardDTO"
+		resultType="ClubFileDTO">
 
-    </update>
+		SELECT *
+		FROM "TB_CLUB_BOARD_FILE"
+		WHERE "BOARD_NUM" =
+		#{boardNum}
 
-    <!-- 삭제 -->
-    <delete id="delete"
-        parameterType="ClubBoardDTO">
+	</select>
 
-        DELETE FROM "TB_CLUB_BOARD"
-        WHERE "BOARD_NUM" = #{boardNum}
 
-    </delete>
+	<!-- 게시글 작성 -->
+	<insert id="create" parameterType="ClubBoardDTO"
+		useGeneratedKeys="true" keyProperty="boardNum">
+
+		INSERT INTO "TB_CLUB_BOARD"
+		(
+		"CLUB_NUM",
+		"BOARD_TITLE",
+		"BOARD_CONTENTS",
+		"BOARD_CATEGORY",
+		"BOARD_WRITER"
+		)
+		VALUES
+		(
+		#{clubNum},
+		#{boardTitle},
+		#{boardContents},
+		#{boardCategory},
+		#{boardWriter}
+		)
+
+	</insert>
+
+	<!-- 수정 -->
+	<update id="update" parameterType="ClubBoardDTO">
+
+		UPDATE "TB_CLUB_BOARD"
+		SET
+		"BOARD_TITLE" = #{boardTitle},
+		"BOARD_CONTENTS" = #{boardContents},
+		"BOARD_CATEGORY" = #{boardCategory}
+		WHERE "BOARD_NUM" = #{boardNum}
+
+	</update>
+
+	<!-- 삭제 -->
+	<delete id="delete" parameterType="ClubBoardDTO">
+
+		DELETE FROM "TB_CLUB_BOARD"
+		WHERE "BOARD_NUM" = #{boardNum}
+
+	</delete>
 
 </mapper>

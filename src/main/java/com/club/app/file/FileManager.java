@@ -15,7 +15,7 @@ public class FileManager {
 	private String path;
 
 	public boolean fileDelete(String name, FileDTO fileDTO) throws Exception {
-		File file = new File(path, name); // C:/upload/notice
+		File file = new File(path, name); // C:/upload/
 		file = new File(file, fileDTO.getFileName()); // ***./jpg 파일명
 
 		return file.delete();
@@ -23,28 +23,29 @@ public class FileManager {
 	}
 
 	public String fileSave(String name, MultipartFile mf) throws Exception {
-		// 이미지 검사
-		if (!mf.getContentType().startsWith("image")) {
 
+		if (!mf.getContentType().startsWith("image")) {
 			throw new Exception("이미지 파일만 가능");
 		}
-		// 1. 저장 위치
+
 		File file = new File(path, name);
+
+		System.out.println("저장 폴더 경로: " + file.getAbsolutePath());
+
 		if (!file.exists()) {
 			file.mkdirs();
 		}
 
-		// 2. 파일명, 확장자
 		String fileName = UUID.randomUUID().toString();
 		fileName = fileName + "_" + mf.getOriginalFilename();
 
 		file = new File(file, fileName);
 
-		// 3. 저장
+		System.out.println("저장 파일 경로: " + file.getAbsolutePath());
+
 		FileCopyUtils.copy(mf.getBytes(), file);
 
 		return fileName;
-
 	}
 
 }
