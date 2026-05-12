@@ -36,7 +36,8 @@
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">Password</span>
 			</div>
-			<input type="password" class="form-control" name="memberPw" value="${update.memberPw}">
+			<input type="password" class="form-control" name="memberPw" readonly>
+			<button type="button">비밀번호 수정</button>
 		</div>
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">

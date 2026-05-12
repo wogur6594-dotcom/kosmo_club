@@ -50,7 +50,7 @@
 		<input type="date" class="form-control" name="memberBirth" value="${detail.memberBirth}" readonly>
 	</div>
 	<a class="btn btn-outline-dark" href="/member/update">정보수정</a>
-	<form action="./delete" method="post">
+	<form action="/member/delete" method="post">
 		<button type="submit" class="btn btn-outline-danger">회원삭제</button>
 	</form>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<a class="navbar-brand" href="/">Index</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +31,7 @@
 			</li>
 		</ul>
 		<ul class="navbar-nav ml-auto">
-			<c:if test="${empty member}">
+			<sec:authorize access="!isAuthenticated()">
 				<li class="nav-item">
 					<a class="nav-link" href="/member/login">
 						<i class="bi bi-box-arrow-in-right"></i>
@@ -43,8 +44,8 @@
 						회원가입
 					</a>
 				</li>
-			</c:if>
-			<c:if test="${not empty member}">
+			</sec:authorize>
+			<sec:authorize access="isAuthenticated()">
 				<li class="nav-item">
 					<a class="nav-link" href="/member/logout">
 						<i class="bi bi-box-arrow-right"></i>
@@ -57,7 +58,7 @@
 						회원정보
 					</a>
 				</li>
-			</c:if>
+			</sec:authorize>
 		</ul>
 	</div>
 </nav>

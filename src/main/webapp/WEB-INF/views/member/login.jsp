@@ -10,22 +10,26 @@
 </head>
 <body>
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
-		<h1>로그인 페이지</h1>
-		<form action="./login" method="post">
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-					<span class="input-group-text" id="basic-addon1">ID</span>
-				</div>
-				<input type="text" class="form-control" name="memberId">
+	<h1>로그인 페이지</h1>
+	<form action="./login" method="post">
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon1">ID</span>
 			</div>
-			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-					<span class="input-group-text" id="basic-addon1">PW</span>
-				</div>
-				<input type="password" class="form-control" name="memberPw">
+			<input type="text" class="form-control" name="memberId">
+		</div>
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text" id="basic-addon1">PW</span>
 			</div>
-			<button type="submit" class="btn btn-outline-dark">로그인</button>
-		</form>
+			<input type="password" class="form-control" name="memberPw">
+		</div>
+		<button type="submit" class="btn btn-outline-dark">로그인</button>
+	</form>
+	<div>
+		<h3>${param.message}</h3>
+	</div>
+	<c:remove var="loginError" scope="session" />
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
