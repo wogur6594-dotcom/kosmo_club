@@ -6,10 +6,11 @@
 <mapper namespace="com.club.app.club.board.ClubBoardMapper">
 
 	<!-- 게시글 개수 -->
-	<select id="getCount" resultType="long">
-		SELECT COUNT(*)
-		FROM
-		"TB_CLUB_BOARD"
+	<select id="getCount" parameterType="Pager" resultType="long">
+		SELECT
+		COUNT(*)
+		FROM "TB_CLUB_BOARD"
+		WHERE "CLUB_NUM" = #{clubNum}
 	</select>
 
 	<!-- 게시글 목록 -->
@@ -26,9 +27,20 @@
 	<select id="detail" parameterType="ClubBoardDTO"
 		resultType="ClubBoardDTO">
 
-		SELECT *
+		SELECT
+		"BOARD_NUM" AS "boardNum",
+		"BOARD_TITLE" AS
+		"boardTitle",
+		"BOARD_CONTENTS" AS "boardContents",
+		"BOARD_WRITER" AS
+		"boardWriter",
+		"BOARD_CATEGORY" AS "boardCategory",
+		"CREATE_DATE" AS
+		"boardDate",
+		"CLUB_NUM" AS "clubNum"
 		FROM "TB_CLUB_BOARD"
-		WHERE "BOARD_NUM" = #{boardNum}
+		WHERE
+		"BOARD_NUM" = #{boardNum}
 
 	</select>
 
@@ -42,12 +54,24 @@
 
 	<select id="clubBoardList" parameterType="Pager"
 		resultType="ClubBoardDTO">
-		SELECT *
+
+		SELECT
+		"BOARD_NUM" AS "boardNum",
+		"CLUB_NUM" AS "clubNum",
+		"BOARD_TITLE" AS
+		"boardTitle",
+		"BOARD_CONTENTS" AS "boardContents",
+		"BOARD_WRITER" AS
+		"boardWriter",
+		"BOARD_CATEGORY" AS "boardCategory",
+		"CREATE_DATE" AS
+		"boardDate"
 		FROM "TB_CLUB_BOARD"
 		WHERE "CLUB_NUM" = #{clubNum}
 		ORDER BY "BOARD_NUM" DESC
 		LIMIT #{perPage}
 		OFFSET #{startNum}
+
 	</select>
 
 	<select id="clubBoardListByClubNum" parameterType="long"
@@ -59,7 +83,7 @@
 		ORDER BY "BOARD_NUM" DESC
 
 	</select>
-	
+
 	<!-- 게시판 첨부파일 조회 -->
 	<select id="getFiles" parameterType="ClubBoardDTO"
 		resultType="ClubFileDTO">
@@ -82,6 +106,7 @@
 		"BOARD_TITLE",
 		"BOARD_CONTENTS",
 		"BOARD_CATEGORY",
+		"CREATE_DATE",
 		"BOARD_WRITER"
 		)
 		VALUES
@@ -90,6 +115,7 @@
 		#{boardTitle},
 		#{boardContents},
 		#{boardCategory},
+		now(),
 		#{boardWriter}
 		)
 

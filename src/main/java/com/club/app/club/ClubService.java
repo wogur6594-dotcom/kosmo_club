@@ -1,11 +1,14 @@
 package com.club.app.club;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.club.app.file.FileDTO;
 import com.club.app.pager.Pager;
 
 @Service
@@ -13,6 +16,8 @@ public class ClubService {
 
 	@Autowired
 	private ClubMapper clubMapper;
+	
+	
 
 	public List<ClubDTO> list(Pager pager) throws Exception {
 
@@ -27,25 +32,47 @@ public class ClubService {
 		return clubMapper.detail(clubDTO);
 	}
 
-	public int create(ClubDTO clubDTO) throws Exception {
+	public int create(ClubDTO clubDTO, MultipartFile[] attaches) throws Exception {
 
-		int result = clubMapper.create(clubDTO);
+	    int result = clubMapper.create(clubDTO);
 
-		return result;
+	    String path = "C:/upload/club/";
+
+	    File dir = new File(path);
+	    if (!dir.exists()) {
+	        dir.mkdirs();
+	    }
+
+	    for (MultipartFile multipartFile : attaches) {
+
+	        if (multipartFile.isEmpty()) {
+	            continue;
+	        }
+
+	        String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
+
+	        File file = new File(path, fileName);
+
+	        multipartFile.transferTo(file);
+
+	        FileDTO fileDTO = new FileDTO();
+	        fileDTO.setFileName(fileName);
+	        fileDTO.setOriName(multipartFile.getOriginalFilename());
+	        fileDTO.setClubNum(clubDTO.getClubNum());
+
+	        clubMapper.createFile(fileDTO);
+	    }
+
+	    return result;
 	}
-	
+
 	public Long getCount(Pager pager) throws Exception {
 
 		return clubMapper.getCount(pager);
 
 	}
-	//테스트
-	public List<ClubDTO> index2(Pager pager) throws Exception {
 
-		pager.makePageNum(clubMapper.getCount(pager));
-		pager.makeStartNum();
+	// 테스트
 
-		return clubMapper.list(pager);
-	}
 
 }
