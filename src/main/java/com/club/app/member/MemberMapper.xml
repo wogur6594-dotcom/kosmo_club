@@ -86,7 +86,7 @@
 		where "MEMBER_ID" = #{memberId}
 	</select>
 	
-	<select id="checkEmail" resultType="String">
+	<select id="checkEmail" resultType="int">
 		select count(*)
 		from "TB_MEMBER"
 		where "MEMBER_EMAIL" = #{memberEmail}

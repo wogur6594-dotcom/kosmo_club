@@ -91,6 +91,7 @@ pwCheck.addEventListener("blur", () => {
 //------------------- 이메일 중복 확인---------------------------
 const emailCheckBtn = document.getElementById("emailCheckBtn");
 const email = document.getElementById("email")
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 let isEmailChecked = false;
 let isEmailAvailable = false;
@@ -101,28 +102,29 @@ email.addEventListener("change", () => {
     document.getElementById("emailStatus").innerText = "";
 })
 
+
 emailCheckBtn.addEventListener("click", () => {
-	const eValue = email.value;
-	
+    const eValue = email.value;
+
     if (!eValue) {
         alert("이메일을 입력하세요.");
-		return;
+        return;
     }
-	
-	fetch(`/member/checkEmail?memberEmail=${eValue}`)
-	.then(res => res.json())
-	.then(data => {
-	    isEmailChecked = true;
-	    isEmailAvailable = !data; // true면 중복
 
-	    if (data) {
-	        emailStatus.style.color = "red";
-	        document.getElementById("emailStatus").innerText = "사용 불가능";
-	    } else {
-	        emailStatus.style.color = "green";
-	        document.getElementById("emailStatus").innerText = "사용 가능";
-	    }
-	});
+    fetch(`/member/checkEmail?memberEmail=${eValue}`)
+        .then(res => res.json())
+        .then(data => {
+            isEmailChecked = true;
+            isEmailAvailable = !data; // true면 중복
+
+            if (data) {
+                emailStatus.style.color = "red";
+                document.getElementById("emailStatus").innerText = "사용 불가능";
+            } else {
+                emailStatus.style.color = "green";
+                document.getElementById("emailStatus").innerText = "사용 가능";
+            }
+        });
 
 })
 
@@ -132,7 +134,7 @@ emailCheckBtn.addEventListener("click", () => {
 
 
 
-
+// ----------------------------------- submit 버튼 ----------------------------------
 
 form.addEventListener("submit", (e) => {
 
@@ -153,17 +155,17 @@ form.addEventListener("submit", (e) => {
         e.preventDefault();
         return;
     }
-	
-	if (!isEmailChecked) {
-	    alert("이메일 중복체크를 해주세요");
-	    e.preventDefault();
-	    return;
-	}
-	
-	if (!isEmailAvailable) {
-	    alert("이미 사용중인 아이디입니다");
-	    e.preventDefault();
-	    return;
-	}
+
+    if (!isEmailChecked) {
+        alert("이메일 중복체크를 해주세요");
+        e.preventDefault();
+        return;
+    }
+
+    if (!isEmailAvailable) {
+        alert("이미 사용중인 아이디입니다");
+        e.preventDefault();
+        return;
+    }
 
 });
