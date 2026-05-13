@@ -13,15 +13,22 @@ public class ClubMemberService {
 
 		int check = clubMemberMapper.checkJoin(clubMemberDTO);
 
-		if(check > 0) {
+		if (check > 0) {
 			return 0;
+		}
+
+		Long currentMember = clubMemberMapper.getCurrentMember(clubMemberDTO.getClubNum());
+		Long clubMax = clubMemberMapper.getClubMax(clubMemberDTO.getClubNum());
+
+		if (currentMember >= clubMax) {
+			return -1; // 정원 초과
 		}
 
 		return clubMemberMapper.join(clubMemberDTO);
 	}
-	
+
 	public int checkJoin(ClubMemberDTO clubMemberDTO) throws Exception {
-	    return clubMemberMapper.checkJoin(clubMemberDTO);
+		return clubMemberMapper.checkJoin(clubMemberDTO);
 	}
 
 }

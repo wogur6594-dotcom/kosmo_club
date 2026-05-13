@@ -1,7 +1,5 @@
 package com.club.app.club.board;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -9,10 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.club.app.club.ClubService;
+import com.club.app.club.board.comment.ClubBoardCommentService;
 import com.club.app.club.member.ClubMemberDTO;
 import com.club.app.club.member.ClubMemberService;
 import com.club.app.member.MemberDTO;
@@ -23,7 +20,16 @@ import com.club.app.pager.Pager;
 public class ClubBoardController {
 
 	@Autowired
+	private ClubBoardCommentService clubBoardCommentService;
+
+	@Autowired
 	private ClubFileService clubFileService;
+
+	@Autowired
+	private ClubMemberService clubMemberService;
+
+	@Autowired
+	private ClubBoardService clubBoardService;
 
 	@PostMapping("mainImage")
 	public String mainImage(Long fileNum, Long boardNum, Long clubNum) throws Exception {
@@ -33,14 +39,9 @@ public class ClubBoardController {
 		return "redirect:./update?boardNum=" + boardNum + "&clubNum=" + clubNum;
 	}
 
-	@Autowired
-	private ClubMemberService clubMemberService;
-
-	@Autowired
-	private ClubBoardService clubBoardService;
-
 	@GetMapping("list")
 	public String list(Pager pager, Model model) throws Exception {
+
 		model.addAttribute("list", clubBoardService.clubBoardList(pager));
 		model.addAttribute("pager", pager);
 
@@ -52,7 +53,6 @@ public class ClubBoardController {
 
 		pager.setClubNum(clubBoardDTO.getClubNum());
 
-		// 강제 지정
 		if (pager.getPage() == null || pager.getPage() < 1) {
 			pager.setPage(1L);
 		}
@@ -65,12 +65,14 @@ public class ClubBoardController {
 
 		model.addAttribute("pager", pager);
 
+		model.addAttribute("commentList", clubBoardCommentService.list(clubBoardDTO.getBoardNum()));
+
 		return "clubboard/detail";
 	}
 
 	@GetMapping("create")
 	public String create(ClubBoardDTO clubBoardDTO, Model model, @AuthenticationPrincipal MemberDTO memberDTO,
-			RedirectAttributes rttr) throws Exception {
+			org.springframework.web.servlet.mvc.support.RedirectAttributes rttr) throws Exception {
 
 		if (memberDTO == null) {
 			return "redirect:/member/login";
@@ -88,6 +90,7 @@ public class ClubBoardController {
 		}
 
 		model.addAttribute("dto", clubBoardDTO);
+
 		return "clubboard/create";
 	}
 
@@ -131,7 +134,6 @@ public class ClubBoardController {
 		ClubBoardDTO checkDTO = clubBoardService.detail(clubBoardDTO);
 
 		if (!memberDTO.getMemberId().equals(checkDTO.getBoardWriter())) {
-
 			return "redirect:/clubboard/detail?boardNum=" + clubBoardDTO.getBoardNum() + "&clubNum="
 					+ clubBoardDTO.getClubNum();
 		}
@@ -160,6 +162,15 @@ public class ClubBoardController {
 		clubBoardService.delete(clubBoardDTO);
 
 		return "redirect:/club/detail?clubNum=" + clubBoardDTO.getClubNum();
+	}
+
+	@PostMapping("deleteImage")
+	public String deleteImage(@RequestParam("fileNum") Long fileNum, @RequestParam("boardNum") Long boardNum,
+			@RequestParam("clubNum") Long clubNum) throws Exception {
+
+		clubFileService.deleteImage(fileNum);
+
+		return "redirect:./update?boardNum=" + boardNum + "&clubNum=" + clubNum;
 	}
 
 }

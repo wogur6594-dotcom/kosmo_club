@@ -15,7 +15,11 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ClubBoardDTO {
-	
+
+	private Long commentCount;
+
+	private Long fileCount;
+
 	private String memberName;
 
 	private ClubDTO clubDTO;
@@ -33,8 +37,8 @@ public class ClubBoardDTO {
 	private String boardCategory;
 
 	private String boardWriter;
-	
+
 	private List<ClubFileDTO> list;
-	
+
 	private MultipartFile[] attaches;
 }

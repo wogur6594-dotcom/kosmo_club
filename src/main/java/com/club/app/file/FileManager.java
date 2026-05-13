@@ -48,5 +48,13 @@ public class FileManager {
 
 		return fileName;
 	}
+	
+	public boolean fileDelete(String name, String fileName) throws Exception {
+
+		File file = new File(path, name);
+		file = new File(file, fileName);
+
+		return file.delete();
+	}
 
 }

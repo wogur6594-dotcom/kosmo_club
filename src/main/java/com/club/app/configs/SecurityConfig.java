@@ -30,7 +30,14 @@ public class SecurityConfig {
 			})
 			.authorizeHttpRequests(auth -> {
 				auth
-				.requestMatchers("/", "/member/login", "/member/join", "/css/**", "/js/**", "/images/**").permitAll()
+				.requestMatchers("/", "/member/login", "/member/join",
+						"/css/**", "/js/**", "/images/**", "/files/**")
+				.permitAll()
+
+				// 동호회 개설할때 로그인 해야함.. -> 일단 로그인 화면으로 이동하게 수정
+				.requestMatchers("/club/create").authenticated()
+				.requestMatchers("/club/create/**").authenticated()
+
 				.anyRequest().permitAll()
 				;
 			})

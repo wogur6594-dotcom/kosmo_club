@@ -31,9 +31,16 @@
 		) AS
 		"CURRENT_MEMBER"
 		FROM "TB_CLUB" C
-		LEFT JOIN "TB_CLUBFILE" F
-		ON
-		C."CLUB_NUM" = F."CLUB_NUM"
+		LEFT JOIN (
+		SELECT DISTINCT ON ("CLUB_NUM")
+		"FILE_NUM",
+		"FILE_NAME",
+		"ORI_NAME",
+		"CLUB_NUM"
+		FROM "TB_CLUBFILE"
+		ORDER BY "CLUB_NUM", "FILE_NUM" ASC
+		) F
+		ON C."CLUB_NUM" = F."CLUB_NUM"
 
 		<where>
 			<if test="clubCategory != null and clubCategory != ''">
@@ -41,7 +48,7 @@
 			</if>
 		</where>
 
-		ORDER BY C."CLUB_NUM" ASC
+		ORDER BY C."CLUB_NUM" DESC
 		LIMIT #{perPage} OFFSET #{startNum}
 
 	</select>
@@ -53,6 +60,8 @@
 		<result property="clubLocation" column="CLUB_LOCATION" />
 		<result property="clubMax" column="CLUB_MAX" />
 		<result property="currentMember" column="CURRENT_MEMBER" />
+		<result property="clubContents" column="CLUB_CONTENTS" />
+		<result property="ownerName" column="OWNER_NAME" />
 
 		<association property="fileDTO" javaType="FileDTO">
 			<id property="fileNum" column="FILE_NUM" />
@@ -69,22 +78,40 @@
 		COUNT(CM."MEMBER_NUM") AS "CURRENT_MEMBER",
 		F."FILE_NUM",
 		F."FILE_NAME",
-		F."ORI_NAME"
+		F."ORI_NAME",
+		OWNER."MEMBER_NAME" AS
+		"OWNER_NAME"
+
 		FROM "TB_CLUB" C
+
 		LEFT JOIN "TB_CLUB_MEMBER" CM
-		ON C."CLUB_NUM" = CM."CLUB_NUM"
+		ON
+		C."CLUB_NUM" = CM."CLUB_NUM"
+
 		LEFT JOIN "TB_CLUBFILE" F
-		ON C."CLUB_NUM" = F."CLUB_NUM"
+		ON C."CLUB_NUM" =
+		F."CLUB_NUM"
+
+		LEFT JOIN "TB_CLUB_MEMBER" OCM
+		ON C."CLUB_NUM" =
+		OCM."CLUB_NUM"
+		AND OCM."ROLE_NUM" = 1
+
+		LEFT JOIN "TB_MEMBER" OWNER
+		ON
+		OCM."MEMBER_NUM" = OWNER."MEMBER_NUM"
+
 		WHERE C."CLUB_NUM" = #{clubNum}
+
 		GROUP BY
 		C."CLUB_NUM",
 		F."FILE_NUM",
 		F."FILE_NAME",
-		F."ORI_NAME"
+		F."ORI_NAME",
+		OWNER."MEMBER_NAME"
 
 	</select>
 
-	<!-- 테스트 -->
 
 
 
@@ -97,14 +124,16 @@
 		"CLUB_NAME",
 		"CLUB_CATEGORY",
 		"CLUB_LOCATION",
-		"CLUB_MAX"
+		"CLUB_MAX",
+		"CLUB_CONTENTS"
 		)
 		VALUES
 		(
 		#{clubName},
 		#{clubCategory},
 		#{clubLocation},
-		#{clubMax}
+		#{clubMax},
+		#{clubContents}
 		)
 
 	</insert>
@@ -125,6 +154,30 @@
 		)
 
 	</insert>
+
+	<select id="isClubOwner" parameterType="ClubDTO"
+		resultType="long">
+		SELECT COUNT(*)
+		FROM "TB_CLUB_MEMBER"
+		WHERE "CLUB_NUM" =
+		#{clubNum}
+		AND "MEMBER_NUM" = #{memberNum}
+		AND "ROLE_NUM" = 1
+	</select>
+
+	<select id="isAdmin" parameterType="MemberDTO" resultType="long">
+		SELECT COUNT(*)
+		FROM "TB_MEMBER"
+		WHERE "MEMBER_NUM" = #{memberNum}
+		AND
+		"ROLE_NUM" = 1
+	</select>
+
+	<delete id="delete" parameterType="ClubDTO">
+		DELETE FROM "TB_CLUB"
+		WHERE
+		"CLUB_NUM" = #{clubNum}
+	</delete>
 
 
 </mapper>

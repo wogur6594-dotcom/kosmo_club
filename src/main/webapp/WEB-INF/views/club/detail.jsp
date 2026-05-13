@@ -35,7 +35,15 @@
 
 		<div class="d-flex justify-content-between align-items-center mb-3">
 
-			<h1 style="font-weight: 700;">${dto.clubName}</h1>
+			<div class="d-flex align-items-center">
+
+				<span class="badge badge-success mr-2"
+					style="font-size: 14px; padding: 5px 8px;">
+					${dto.clubCategory} </span>
+
+				<h1 class="mb-0" style="font-weight: 700;">${dto.clubName}</h1>
+
+			</div>
 
 			<div>
 				<form action="/clubMember/join" method="post"
@@ -52,6 +60,19 @@
 				<a href="./list?page=${param.page}" class="btn btn-sm"
 					style="background-color: #8c7b6d; color: white; border-radius: 12px; padding: 6px 16px;">
 					뒤로가기 </a>
+
+				<c:if test="${canDelete}">
+					<form action="./delete" method="post" style="display: inline;"
+						onsubmit="return confirm('정말 삭제하시겠습니까?');">
+
+						<input type="hidden" name="clubNum" value="${dto.clubNum}">
+
+						<button type="submit" class="btn btn-sm"
+							style="background-color: #b00020; color: white; border-radius: 12px; padding: 6px 16px; border: none;">
+							삭제</button>
+
+					</form>
+				</c:if>
 			</div>
 
 		</div>
@@ -62,11 +83,18 @@
 
 			<div class="col-md-6">
 
-				<span class="badge badge-success mb-3"> ${dto.clubCategory} </span>
 
-				<p class="mt-3">지역 : ${dto.clubLocation}</p>
+
+				<p class="mt-3">회장 : ${dto.ownerName}</p>
+
+				<p>지역 : ${dto.clubLocation}</p>
 
 				<p>회원수 : ${dto.currentMember} / ${dto.clubMax}</p>
+
+				<c:if test="${not empty dto.clubContents}">
+					<p style="margin-top: 16px; color: #5f4b3b; line-height: 1.7;">
+						${dto.clubContents}</p>
+				</c:if>
 
 			</div>
 
@@ -115,7 +143,26 @@
 								${boardDTO.boardCategory} </span> <a
 							href="../clubboard/detail?boardNum=${boardDTO.boardNum}&clubNum=${dto.clubNum}"
 							style="color: #a85b00; text-decoration: none;">
-								${boardDTO.boardTitle} </a></td>
+								${boardDTO.boardTitle} </a> 
+
+<c:if test="${boardDTO.fileCount > 0}">
+	<span style="font-size: 13px; margin-left: 5px; color: #8c7b6d;">
+		🖼
+	</span>
+</c:if>
+
+<c:if test="${boardDTO.commentCount > 0}">
+	<span
+		style="
+			color: #b36200;
+			font-weight: 700;
+			margin-left: 4px;
+		">
+		(${boardDTO.commentCount})
+	</span>
+</c:if>
+
+							</td>
 
 						<td>
 							${fn:replace(fn:substring(boardDTO.createDate.toString(), 0, 16), 'T', ' ')}

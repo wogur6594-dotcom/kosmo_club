@@ -17,13 +17,10 @@ public class ClubMemberController {
 	private ClubMemberService clubMemberService;
 
 	@PostMapping("join")
-	public String join(
-			ClubMemberDTO clubMemberDTO,
-			@AuthenticationPrincipal MemberDTO memberDTO,
-			RedirectAttributes redirectAttributes
-			) throws Exception {
+	public String join(ClubMemberDTO clubMemberDTO, @AuthenticationPrincipal MemberDTO memberDTO,
+			RedirectAttributes redirectAttributes) throws Exception {
 
-		if(memberDTO == null) {
+		if (memberDTO == null) {
 			return "redirect:/member/login";
 		}
 
@@ -32,8 +29,10 @@ public class ClubMemberController {
 
 		int result = clubMemberService.join(clubMemberDTO);
 
-		if(result > 0) {
+		if (result > 0) {
 			redirectAttributes.addFlashAttribute("message", "가입이 완료되었습니다.");
+		} else if (result == -1) {
+			redirectAttributes.addFlashAttribute("message", "정원이 초과되어 가입할 수 없습니다.");
 		} else {
 			redirectAttributes.addFlashAttribute("message", "이미 가입한 동호회입니다.");
 		}

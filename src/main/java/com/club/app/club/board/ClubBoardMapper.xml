@@ -14,13 +14,26 @@
 	</select>
 
 	<!-- 게시글 목록 -->
-	<select id="list" resultType="ClubBoardDTO">
-		SELECT *
-		FROM "TB_CLUB_BOARD"
-		ORDER
-		BY "BOARD_NUM" DESC
-		LIMIT #{perPage}
-		OFFSET #{startNum}
+	<select id="list" parameterType="Pager"
+		resultType="ClubBoardDTO">
+		SELECT
+		B.*,
+		M."MEMBER_NAME",
+		(
+		SELECT COUNT(*)
+		FROM
+		"TB_CLUB_BOARD_FILE" BF
+		WHERE BF."BOARD_NUM" = B."BOARD_NUM"
+		) AS
+		"FILE_COUNT"
+		FROM "TB_CLUB_BOARD" B
+		LEFT JOIN "TB_MEMBER" M
+		ON
+		B."MEMBER_NUM" = M."MEMBER_NUM"
+		WHERE B."CLUB_NUM" = #{clubNum}
+		ORDER BY
+		B."BOARD_NUM" DESC
+		LIMIT #{perPage} OFFSET #{startNum}
 	</select>
 
 	<!-- 게시글 상세 -->
@@ -59,6 +72,7 @@
 		resultType="ClubBoardDTO">
 
 		SELECT
+
 		CB."BOARD_NUM" AS "boardNum",
 		CB."CLUB_NUM" AS
 		"clubNum",
@@ -66,13 +80,34 @@
 		CB."BOARD_CONTENTS" AS
 		"boardContents",
 		CB."BOARD_WRITER" AS "boardWriter",
+
 		M."MEMBER_NAME" AS
 		"memberName",
+
 		CB."BOARD_CATEGORY" AS "boardCategory",
+
 		CB."CREATE_DATE"
-		AS "createDate"
+		AS "createDate",
+
+		(
+		SELECT COUNT(*)
+		FROM "TB_CLUB_BOARD_FILE" BF
+		WHERE
+		BF."BOARD_NUM" =
+		CB."BOARD_NUM"
+		) AS "fileCount",
+
+		(
+		SELECT COUNT(*)
+		FROM
+		"TB_CLUB_BOARD_COMMENT" BC
+		WHERE BC."BOARD_NUM" =
+		CB."BOARD_NUM"
+		) AS
+		"commentCount"
 
 		FROM "TB_CLUB_BOARD" CB
+
 		JOIN "TB_MEMBER" M
 		ON
 		CB."BOARD_WRITER" = M."MEMBER_ID"
@@ -80,6 +115,7 @@
 		WHERE CB."CLUB_NUM" = #{clubNum}
 
 		ORDER BY CB."BOARD_NUM" DESC
+
 		LIMIT #{perPage}
 		OFFSET #{startNum}
 
@@ -127,10 +163,11 @@
 		#{boardWriter},
 		#{boardCategory},
 		#{clubNum},
-		NOW()
+		NOW() AT TIME ZONE 'Asia/Seoul'
 		)
 
 	</insert>
+	
 	<!-- 수정 -->
 	<update id="update" parameterType="ClubBoardDTO">
 

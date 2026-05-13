@@ -198,20 +198,42 @@ a {
 	color: #a35400;
 }
 
-.category-active,
-.active-page {
+.category-active, .active-page {
 	background-color: #a35400 !important;
 	color: white !important;
 }
 
+/* 링크 hover 시 파란색 방지 */
+a:hover {
+	color: inherit !important;
+	text-decoration: none !important;
+}
 
+/* 카테고리 버튼 hover 색상 고정 */
+.category-filter:hover {
+	background-color: #f7eee8 !important;
+	color: #6f5b4c !important;
+	text-decoration: none !important;
+}
+
+/* 선택된 카테고리는 hover 해도 갈색 유지 */
+.category-filter.category-active:hover {
+	background-color: #a35400 !important;
+	color: white !important;
+}
 </style>
 
 </head>
 
 
-<body id="page-top"
-	class="bg-background text-on-background min-h-screen">
+<body id="page-top" class="text-on-background min-h-screen"
+	style="background-color: #f8f5f1;">
+
+	<c:if test="${not empty msg}">
+		<script>
+			alert("${msg}");
+		</script>
+	</c:if>
 
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
@@ -228,8 +250,18 @@ a {
 						class="font-body-lg text-body-lg text-on-secondary-container opacity-90 mb-md">취향이
 						비슷한 이웃들을 만나보세요. 운동부터 공부까지, 즐거운 동네 생활이 시작됩니다.</p>
 					<a href="./create"
-						class="bg-secondary text-on-secondary px-md py-3 rounded-full font-label-lg text-label-lg flex items-center gap-2 hover:shadow-lg transition-all active:scale-95">
-						<span class="material-symbols-outlined">add_circle</span> 모임 만들기
+						class="inline-flex items-center gap-2
+	bg-[#a35400] hover:bg-[#8b4700]
+	text-white font-semibold
+	px-8 py-4
+	rounded-2xl
+	shadow-[0_8px_20px_rgba(163,84,0,0.25)]
+	hover:shadow-[0_12px_28px_rgba(163,84,0,0.35)]
+	transition-all duration-300
+	active:scale-95">
+
+						<span class="material-symbols-outlined text-[22px]">
+							add_circle </span> 모임 만들기
 					</a>
 				</div>
 				<div class="absolute right-0 top-0 bottom-0 w-1/2 hidden md:block">
@@ -242,42 +274,102 @@ a {
 		</section>
 		<!-- Filters Section -->
 		<section class="max-w-container-max mx-auto px-gutter mb-lg">
+
 			<div class="flex flex-wrap gap-sm items-center">
-				<span class="font-label-lg text-label-lg text-on-surface mr-sm">관심사별로
-					찾기:</span> <a href="${pageContext.request.contextPath}/club/list"
-					class="px-md py-2 rounded-full ${empty param.clubCategory ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'} font-label-lg text-label-lg active:scale-95 transition-all">
-					전체 </a> <a
+
+				<span class="font-label-lg text-label-lg text-on-surface mr-sm">
+					관심사별로 찾기: </span>
+
+				<!-- 전체 -->
+				<a href="${pageContext.request.contextPath}/club/list"
+					class="category-filter px-md py-2 rounded-full
+			${empty param.clubCategory
+			? 'bg-primary text-on-primary category-active'
+			: 'bg-surface-container-low text-on-surface-variant'}
+			font-label-lg text-label-lg active:scale-95 transition-all">
+
+					전체 </a>
+
+				<!-- 운동 -->
+				<a
 					href="${pageContext.request.contextPath}/club/list?clubCategory=운동"
-					class="px-md py-2 rounded-full ${param.clubCategory eq '운동' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'} font-label-lg text-label-lg hover:bg-surface-container-highest active:scale-95 transition-all flex items-center gap-1">
-					<span class="material-symbols-outlined text-[18px]">exercise</span>
-					운동
-				</a> <a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=맛집"
-					class="px-md py-2 rounded-full ${param.clubCategory eq '맛집' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'} font-label-lg text-label-lg hover:bg-surface-container-highest active:scale-95 transition-all flex items-center gap-1">
-					<span class="material-symbols-outlined text-[18px]">restaurant</span>
-					맛집
-				</a> <a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=여행"
-					class="px-md py-2 rounded-full ${param.clubCategory eq '여행' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'} font-label-lg text-label-lg hover:bg-surface-container-highest active:scale-95 transition-all flex items-center gap-1">
-					<span class="material-symbols-outlined text-[18px]">travel_explore</span>
-					여행
-				</a> <a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=음악"
-					class="px-md py-2 rounded-full ${param.clubCategory eq '음악' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'} font-label-lg text-label-lg hover:bg-surface-container-highest active:scale-95 transition-all flex items-center gap-1">
-					<span class="material-symbols-outlined text-[18px]">music_note</span>
-					음악
-				</a> <a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=스터디"
-					class="px-md py-2 rounded-full ${param.clubCategory eq '스터디' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'} font-label-lg text-label-lg hover:bg-surface-container-highest active:scale-95 transition-all flex items-center gap-1">
-					<span class="material-symbols-outlined text-[18px]">school</span>
-					스터디
-				</a> <a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=기타"
-					class="px-md py-2 rounded-full ${param.clubCategory eq '기타' ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface-variant'} font-label-lg text-label-lg hover:bg-surface-container-highest active:scale-95 transition-all flex items-center gap-1">
-					<span class="material-symbols-outlined text-[18px]">more_horiz</span>
-					기타
+					class="category-filter px-md py-2 rounded-full
+			${param.clubCategory eq '운동'
+			? 'bg-primary text-on-primary category-active'
+			: 'bg-surface-container-low text-on-surface-variant'}
+			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+
+					<span class="material-symbols-outlined text-[18px]">
+						exercise </span> 운동
 				</a>
+
+				<!-- 맛집 -->
+				<a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=맛집"
+					class="category-filter px-md py-2 rounded-full
+			${param.clubCategory eq '맛집'
+			? 'bg-primary text-on-primary category-active'
+			: 'bg-surface-container-low text-on-surface-variant'}
+			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+
+					<span class="material-symbols-outlined text-[18px]">
+						restaurant </span> 맛집
+				</a>
+
+				<!-- 여행 -->
+				<a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=여행"
+					class="category-filter px-md py-2 rounded-full
+			${param.clubCategory eq '여행'
+			? 'bg-primary text-on-primary category-active'
+			: 'bg-surface-container-low text-on-surface-variant'}
+			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+
+					<span class="material-symbols-outlined text-[18px]">
+						travel_explore </span> 여행
+				</a>
+
+				<!-- 음악 -->
+				<a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=음악"
+					class="category-filter px-md py-2 rounded-full
+			${param.clubCategory eq '음악'
+			? 'bg-primary text-on-primary category-active'
+			: 'bg-surface-container-low text-on-surface-variant'}
+			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+
+					<span class="material-symbols-outlined text-[18px]">
+						music_note </span> 음악
+				</a>
+
+				<!-- 스터디 -->
+				<a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=스터디"
+					class="category-filter px-md py-2 rounded-full
+			${param.clubCategory eq '스터디'
+			? 'bg-primary text-on-primary category-active'
+			: 'bg-surface-container-low text-on-surface-variant'}
+			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+
+					<span class="material-symbols-outlined text-[18px]"> school
+				</span> 스터디
+				</a>
+
+				<!-- 기타 -->
+				<a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=기타"
+					class="category-filter px-md py-2 rounded-full
+			${param.clubCategory eq '기타'
+			? 'bg-primary text-on-primary category-active'
+			: 'bg-surface-container-low text-on-surface-variant'}
+			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+
+					<span class="material-symbols-outlined text-[18px]">
+						more_horiz </span> 기타
+				</a>
+
 			</div>
+
 		</section>
 		<!-- Clubs Grid (Bento Style) -->
 
@@ -327,9 +419,18 @@ a {
 
 							<div
 								class="flex items-center justify-between border-t border-outline-variant/30 pt-sm">
-								<span class="flex items-center text-secondary font-label-lg">
-									<span class="w-2 h-2 rounded-full bg-secondary mr-2"></span>
-									${dto.currentMember} / ${dto.clubMax}명
+								<span class="flex items-center font-label-lg"
+									style="
+		color: ${dto.currentMember >= dto.clubMax ? '#d93025' : '#1e8e3e'};
+		font-weight: 700;
+	">
+
+									<span class="w-2 h-2 rounded-full mr-2"
+									style="
+			background-color: ${dto.currentMember >= dto.clubMax ? '#d93025' : '#1e8e3e'};
+		">
+								</span> 정원 : ${dto.currentMember} / ${dto.clubMax}명
+
 								</span> <span
 									class="text-primary font-label-lg hover:underline transition-all">
 									상세보기 </span>
@@ -379,12 +480,11 @@ a {
 			<div class="flex flex-col gap-sm">
 				<div
 					class="text-headline-sm font-headline-sm font-bold text-on-surface-variant flex items-center gap-2">
-					<span class="material-symbols-outlined">eco</span> Neighborhood
-					Marketplace
+					<span class="material-symbols-outlined">eco</span> Kosmo
 				</div>
 				<p
 					class="font-body-sm text-body-sm text-on-surface-variant opacity-80">©
-					2024 Neighborhood Marketplace Inc. Connecting neighbors locally.</p>
+					2026 Kosmo 팀프로젝트</p>
 			</div>
 			<div class="flex flex-col gap-xs">
 				<h4 class="font-label-lg text-label-lg text-on-surface mb-xs">Community</h4>

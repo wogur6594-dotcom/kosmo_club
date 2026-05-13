@@ -33,4 +33,17 @@
 
 	</insert>
 
+	<select id="getCurrentMember" parameterType="long"
+		resultType="long">
+		SELECT COUNT(*)
+		FROM "TB_CLUB_MEMBER"
+		WHERE "CLUB_NUM" = #{clubNum}
+	</select>
+
+	<select id="getClubMax" parameterType="long" resultType="long">
+		SELECT "CLUB_MAX"
+		FROM "TB_CLUB"
+		WHERE "CLUB_NUM" = #{clubNum}
+	</select>
+
 </mapper>

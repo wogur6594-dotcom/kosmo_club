@@ -49,6 +49,8 @@ body {
 	background-color: #6f472b;
 	color: white;
 }
+
+
 </style>
 </head>
 
@@ -62,6 +64,7 @@ body {
 
 			<h2 class="mb-4 title-color">게시글 수정</h2>
 
+			<!-- 게시글 수정 form -->
 			<form action="./update" method="post" enctype="multipart/form-data">
 
 				<input type="hidden" name="boardNum" value="${dto.boardNum}">
@@ -105,20 +108,31 @@ body {
 											alt="${f.oriName}">
 
 										<div class="text-center mt-2">
-
+										
+										<%-- 이건 나중에 멀티파일 되면 활용
 											<c:if test="${f.isMain}">
-												<div class="badge badge-warning">
+												<div class="badge badge-warning mb-1">
 													대표 이미지
 												</div>
 											</c:if>
 
 											<c:if test="${not f.isMain}">
+											
 												<button type="submit"
 													form="mainImageForm${f.fileNum}"
 													class="btn btn-sm btn-outline-warning mt-1">
 													대표 설정
 												</button>
-											</c:if>
+											</c:if> --%>
+
+											<br>
+
+											<button type="submit"
+												form="deleteImageForm${f.fileNum}"
+												class="btn btn-sm btn-danger mt-1"
+												onclick="return confirm('이미지를 삭제하시겠습니까?');">
+												이미지 삭제
+											</button>
 
 										</div>
 
@@ -155,10 +169,24 @@ body {
 
 			</form>
 
+			<!-- 대표 이미지 설정 form: 수정 form 밖에 있어야 함 -->
 			<c:if test="${not empty dto.list}">
 				<c:forEach items="${dto.list}" var="f">
 
 					<form id="mainImageForm${f.fileNum}" action="./mainImage" method="post">
+						<input type="hidden" name="fileNum" value="${f.fileNum}">
+						<input type="hidden" name="boardNum" value="${dto.boardNum}">
+						<input type="hidden" name="clubNum" value="${dto.clubNum}">
+					</form>
+
+				</c:forEach>
+			</c:if>
+
+			<!-- 이미지 삭제 form: 수정 form 밖에 있어야 함 -->
+			<c:if test="${not empty dto.list}">
+				<c:forEach items="${dto.list}" var="f">
+
+					<form id="deleteImageForm${f.fileNum}" action="./deleteImage" method="post">
 						<input type="hidden" name="fileNum" value="${f.fileNum}">
 						<input type="hidden" name="boardNum" value="${dto.boardNum}">
 						<input type="hidden" name="clubNum" value="${dto.clubNum}">

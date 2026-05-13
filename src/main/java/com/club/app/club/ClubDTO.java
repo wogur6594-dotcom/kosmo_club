@@ -24,5 +24,11 @@ public class ClubDTO {
 	private FileDTO fileDTO;
 	
 	private Long currentMember;
+	
+	private String clubContents;
+	
+	private String ownerName;
+	
+	private Long memberNum;
 
 }

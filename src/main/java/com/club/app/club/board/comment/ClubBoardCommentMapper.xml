@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.club.app.club.board.comment.ClubBoardCommentMapper">
+
+	<!-- 댓글 목록 -->
+
+	<select id="list" parameterType="long"
+		resultType="ClubBoardCommentDTO">
+
+		SELECT
+
+		C."COMMENT_NUM" AS "commentNum",
+		C."BOARD_NUM" AS
+		"boardNum",
+		C."MEMBER_NUM" AS "memberNum",
+		M."MEMBER_NAME" AS
+		"memberName",
+		C."COMMENT_CONTENTS" AS "commentContents",
+		C."CREATE_DATE" AS "createDate"
+
+		FROM "TB_CLUB_BOARD_COMMENT" C
+
+		JOIN
+		"TB_MEMBER" M
+		ON C."MEMBER_NUM" = M."MEMBER_NUM"
+
+		WHERE C."BOARD_NUM" =
+		#{boardNum}
+
+		ORDER BY C."COMMENT_NUM" ASC
+
+	</select>
+
+	<!-- 댓글 등록 -->
+
+	<insert id="add">
+
+		INSERT INTO "TB_CLUB_BOARD_COMMENT"
+		(
+		"BOARD_NUM",
+		"MEMBER_NUM",
+		"COMMENT_CONTENTS",
+		"CREATE_DATE"
+		)
+		VALUES
+		(
+		#{boardNum},
+		#{memberNum},
+		#{commentContents},
+		NOW() AT TIME ZONE
+		'Asia/Seoul'
+		)
+
+	</insert>
+
+	<!-- 댓글 삭제 -->
+
+	<delete id="delete" parameterType="long">
+
+		DELETE FROM
+		"TB_CLUB_BOARD_COMMENT"
+
+		WHERE "COMMENT_NUM" = #{commentNum}
+
+	</delete>
+
+</mapper>

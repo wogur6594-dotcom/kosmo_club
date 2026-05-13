@@ -15,4 +15,8 @@ public interface ClubFileMapper {
 
 	public int setMainImage(Long fileNum) throws Exception;
 
+	public ClubFileDTO detailFile(Long fileNum) throws Exception;
+
+	public int deleteFile(Long fileNum) throws Exception;
+
 }
