@@ -71,8 +71,8 @@
 				<span class="input-group-text" id="inputGroupFileAddon01">프로필 사진</span>
 			</div>
 			<div class="custom-file">
-				<input type="file" class="custom-file-input" name="attach">
-				<label class="custom-file-label" for="attach">사진 선택</label>
+				<input type="file" class="custom-file-input" name="attach" id="attach" accept="image/*">
+				<label class="custom-file-label" for="attach" id="selectFile">사진 선택</label>
 			</div>
 		</div>
 		<button type="submit" class="btn btn-outline-dark">회원가입</button>
