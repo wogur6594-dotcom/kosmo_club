@@ -28,19 +28,22 @@
 		resultType="ClubBoardDTO">
 
 		SELECT
-		"BOARD_NUM" AS "boardNum",
-		"BOARD_TITLE" AS
+		CB."BOARD_NUM" AS "boardNum",
+		CB."BOARD_TITLE" AS
 		"boardTitle",
-		"BOARD_CONTENTS" AS "boardContents",
-		"BOARD_WRITER" AS
-		"boardWriter",
-		"BOARD_CATEGORY" AS "boardCategory",
-		"CREATE_DATE" AS
-		"boardDate",
-		"CLUB_NUM" AS "clubNum"
-		FROM "TB_CLUB_BOARD"
-		WHERE
-		"BOARD_NUM" = #{boardNum}
+		CB."BOARD_CONTENTS" AS "boardContents",
+		CB."BOARD_WRITER"
+		AS "boardWriter",
+		CB."BOARD_CATEGORY" AS "boardCategory",
+		CB."CREATE_DATE" AS "createDate",
+		CB."CLUB_NUM" AS "clubNum",
+		M."MEMBER_NAME" AS "memberName"
+		FROM "TB_CLUB_BOARD" CB
+		JOIN "TB_MEMBER"
+		M
+		ON CB."BOARD_WRITER" = M."MEMBER_ID"
+		WHERE CB."BOARD_NUM" =
+		#{boardNum}
 
 	</select>
 
@@ -56,19 +59,27 @@
 		resultType="ClubBoardDTO">
 
 		SELECT
-		"BOARD_NUM" AS "boardNum",
-		"CLUB_NUM" AS "clubNum",
-		"BOARD_TITLE" AS
-		"boardTitle",
-		"BOARD_CONTENTS" AS "boardContents",
-		"BOARD_WRITER" AS
-		"boardWriter",
-		"BOARD_CATEGORY" AS "boardCategory",
-		"CREATE_DATE" AS
-		"boardDate"
-		FROM "TB_CLUB_BOARD"
-		WHERE "CLUB_NUM" = #{clubNum}
-		ORDER BY "BOARD_NUM" DESC
+		CB."BOARD_NUM" AS "boardNum",
+		CB."CLUB_NUM" AS
+		"clubNum",
+		CB."BOARD_TITLE" AS "boardTitle",
+		CB."BOARD_CONTENTS" AS
+		"boardContents",
+		CB."BOARD_WRITER" AS "boardWriter",
+		M."MEMBER_NAME" AS
+		"memberName",
+		CB."BOARD_CATEGORY" AS "boardCategory",
+		CB."CREATE_DATE"
+		AS "createDate"
+
+		FROM "TB_CLUB_BOARD" CB
+		JOIN "TB_MEMBER" M
+		ON
+		CB."BOARD_WRITER" = M."MEMBER_ID"
+
+		WHERE CB."CLUB_NUM" = #{clubNum}
+
+		ORDER BY CB."BOARD_NUM" DESC
 		LIMIT #{perPage}
 		OFFSET #{startNum}
 
@@ -102,25 +113,24 @@
 
 		INSERT INTO "TB_CLUB_BOARD"
 		(
-		"CLUB_NUM",
 		"BOARD_TITLE",
 		"BOARD_CONTENTS",
+		"BOARD_WRITER",
 		"BOARD_CATEGORY",
-		"CREATE_DATE",
-		"BOARD_WRITER"
+		"CLUB_NUM",
+		"CREATE_DATE"
 		)
 		VALUES
 		(
-		#{clubNum},
 		#{boardTitle},
 		#{boardContents},
+		#{boardWriter},
 		#{boardCategory},
-		now(),
-		#{boardWriter}
+		#{clubNum},
+		NOW()
 		)
 
 	</insert>
-
 	<!-- 수정 -->
 	<update id="update" parameterType="ClubBoardDTO">
 

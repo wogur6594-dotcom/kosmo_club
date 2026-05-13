@@ -10,4 +10,9 @@ public interface ClubFileMapper {
 	public int addFile(ClubFileDTO clubFileDTO) throws Exception;
 
 	public List<ClubFileDTO> getFiles(ClubBoardDTO clubBoardDTO) throws Exception;
+
+	public int resetMainImage(Long boardNum) throws Exception;
+
+	public int setMainImage(Long fileNum) throws Exception;
+
 }

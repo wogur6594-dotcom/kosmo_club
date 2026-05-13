@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 public class ClubBoardDTO {
 	
-	private LocalDateTime boardDate;
+	private String memberName;
 
 	private ClubDTO clubDTO;
 

@@ -17,6 +17,18 @@
 
 <body style="background-color: #fff7f3;">
 
+	<c:if test="${not empty msg}">
+		<script>
+			alert("${msg}");
+		</script>
+	</c:if>
+
+	<c:if test="${not empty message}">
+		<script>
+			alert("${message}");
+		</script>
+	</c:if>
+
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
 	<div class="container mt-5" style="max-width: 1120px;">
@@ -26,9 +38,18 @@
 			<h1 style="font-weight: 700;">${dto.clubName}</h1>
 
 			<div>
-				<a href="" class="btn btn-sm"
-					style="background-color: #b36200; color: white; border-radius: 12px; padding: 6px 16px;">
-					가입하기 </a> <a href="./list?page=${param.page}" class="btn btn-sm"
+				<form action="/clubMember/join" method="post"
+					style="display: inline;">
+
+					<input type="hidden" name="clubNum" value="${dto.clubNum}">
+
+					<button type="submit" class="btn btn-sm"
+						style="background-color: #b36200; color: white; border-radius: 12px; padding: 6px 16px; border: none;">
+
+						가입하기</button>
+
+				</form>
+				<a href="./list?page=${param.page}" class="btn btn-sm"
 					style="background-color: #8c7b6d; color: white; border-radius: 12px; padding: 6px 16px;">
 					뒤로가기 </a>
 			</div>
@@ -78,35 +99,33 @@
 
 			<thead>
 				<tr>
-
 					<th>작성자</th>
 					<th>제목</th>
 					<th>등록일</th>
-					<th>카테고리</th>
 				</tr>
 			</thead>
 
 			<tbody>
 				<c:forEach items="${boardList}" var="boardDTO">
 					<tr>
+						<td>${boardDTO.memberName}</td>
 
-						<td>${boardDTO.boardWriter}</td>
+						<td><span class="badge badge-success"
+							style="font-size: 10px; padding: 3px 6px; margin-right: 5px;">
+								${boardDTO.boardCategory} </span> <a
+							href="../clubboard/detail?boardNum=${boardDTO.boardNum}&clubNum=${dto.clubNum}"
+							style="color: #a85b00; text-decoration: none;">
+								${boardDTO.boardTitle} </a></td>
 
-						<td><a
-							href="/clubboard/detail?boardNum=${boardDTO.boardNum}&page=${pager.page}"
-							style="color: #a35400;"> ${boardDTO.boardTitle} </a></td>
-
-
-						<td>${fn:replace(fn:substring(boardDTO.boardDate.toString(), 0, 16), 'T', ' ')}
+						<td>
+							${fn:replace(fn:substring(boardDTO.createDate.toString(), 0, 16), 'T', ' ')}
 						</td>
-
-						<td>${boardDTO.boardCategory}</td>
 					</tr>
 				</c:forEach>
 
 				<c:if test="${empty boardList}">
 					<tr>
-						<td colspan="5" class="text-center py-4">등록된 게시글이 없습니다.</td>
+						<td colspan="3" class="text-center py-4">등록된 게시글이 없습니다.</td>
 					</tr>
 				</c:if>
 			</tbody>

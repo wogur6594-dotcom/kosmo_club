@@ -5,25 +5,57 @@
 
 <mapper namespace="com.club.app.club.board.ClubFileMapper">
 
-	<insert id="addFile" parameterType="ClubFileDTO">
+	<insert id="addFile">
+
 		INSERT INTO "TB_CLUB_BOARD_FILE"
 		(
-			"BOARD_NUM",
-			"FILE_NAME",
-			"ORI_NAME"
+		"BOARD_NUM",
+		"FILE_NAME",
+		"ORI_NAME",
+		"IS_MAIN"
 		)
+
 		VALUES
 		(
-			#{boardNum},
-			#{fileName},
-			#{oriName}
+		#{boardNum},
+		#{fileName},
+		#{oriName},
+		#{isMain}
 		)
+
 	</insert>
 
-	<select id="getFiles" parameterType="ClubBoardDTO" resultType="ClubFileDTO">
-		SELECT *
+	<select id="getFiles" parameterType="ClubBoardDTO"
+		resultType="ClubFileDTO">
+
+		SELECT
+		"FILE_NUM" AS "fileNum",
+		"BOARD_NUM" AS "boardNum",
+		"FILE_NAME" AS
+		"fileName",
+		"ORI_NAME" AS "oriName",
+		"IS_MAIN" AS "isMain"
 		FROM "TB_CLUB_BOARD_FILE"
 		WHERE "BOARD_NUM" = #{boardNum}
+		ORDER BY "FILE_NUM" ASC
+
 	</select>
+
+	<update id="resetMainImage">
+
+		UPDATE "TB_CLUB_BOARD_FILE"
+		SET "IS_MAIN" = FALSE
+		WHERE "BOARD_NUM" = #{boardNum}
+
+	</update>
+
+	<update id="setMainImage">
+
+		UPDATE "TB_CLUB_BOARD_FILE"
+		SET "IS_MAIN" = TRUE
+		WHERE
+		"FILE_NUM" = #{fileNum}
+
+	</update>
 
 </mapper>

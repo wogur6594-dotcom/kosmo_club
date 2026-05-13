@@ -32,15 +32,29 @@
 						<form method="post" enctype="multipart/form-data">
 
 							<div class="form-group">
+							<!-- 제목 -->
 								<label>제목</label> <input type="text" name="boardTitle"
 									class="form-control">
 							</div>
-
+							
+							<!-- 카테고리 -->
+							<div class="form-group">
+								<label for="boardCategory">카테고리</label> <select
+									name="boardCategory" id="boardCategory" class="form-control">
+									<option value="자유">자유</option>
+									<option value="일정">일정</option>
+									<option value="공지">공지</option>
+									<option value="후기">후기</option>
+								</select>
+							</div>
+							
+							<!-- 내용 -->
 							<div class="form-group">
 								<label>내용</label>
 								<textarea name="boardContents" class="form-control"></textarea>
 							</div>
-
+							
+							<!-- 파일업로드 -->
 							<div class="form-group">
 								<label>파일 업로드</label> <input type="file" name="attaches"
 									multiple class="form-control">

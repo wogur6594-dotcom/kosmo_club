@@ -11,7 +11,7 @@ import com.club.app.pager.Pager;
 
 @Service
 public class ClubBoardService {
-	
+
 	@Autowired
 	private ClubFileMapper clubFileMapper;
 
@@ -23,14 +23,13 @@ public class ClubBoardService {
 
 	public List<ClubBoardDTO> clubBoardList(Pager pager) throws Exception {
 
-	    Long totalCount = clubBoardMapper.getCount(pager);
+		Long totalCount = clubBoardMapper.getCount(pager);
 
-	    pager.makePageNum(totalCount);
-	    pager.makeStartNum();
+		pager.makePageNum(totalCount);
+		pager.makeStartNum();
 
-	    return clubBoardMapper.clubBoardList(pager);
+		return clubBoardMapper.clubBoardList(pager);
 	}
-
 
 	public ClubBoardDTO detail(ClubBoardDTO clubBoardDTO) throws Exception {
 
@@ -47,6 +46,8 @@ public class ClubBoardService {
 
 		if (clubBoardDTO.getAttaches() != null) {
 
+			boolean checkMain = false;
+
 			for (MultipartFile mf : clubBoardDTO.getAttaches()) {
 
 				if (mf.isEmpty()) {
@@ -61,6 +62,13 @@ public class ClubBoardService {
 				clubFileDTO.setFileName(fileName);
 				clubFileDTO.setOriName(mf.getOriginalFilename());
 
+				if (!checkMain) {
+					clubFileDTO.setIsMain(true);
+					checkMain = true;
+				} else {
+					clubFileDTO.setIsMain(false);
+				}
+
 				clubFileMapper.addFile(clubFileDTO);
 			}
 		}
@@ -69,7 +77,31 @@ public class ClubBoardService {
 	}
 
 	public int update(ClubBoardDTO clubBoardDTO) throws Exception {
-		return clubBoardMapper.update(clubBoardDTO);
+
+		int result = clubBoardMapper.update(clubBoardDTO);
+
+		if (clubBoardDTO.getAttaches() != null) {
+
+			for (MultipartFile mf : clubBoardDTO.getAttaches()) {
+
+				if (mf.isEmpty()) {
+					continue;
+				}
+
+				String fileName = fileManager.fileSave("clubboard", mf);
+
+				ClubFileDTO clubFileDTO = new ClubFileDTO();
+
+				clubFileDTO.setBoardNum(clubBoardDTO.getBoardNum());
+				clubFileDTO.setFileName(fileName);
+				clubFileDTO.setOriName(mf.getOriginalFilename());
+				clubFileDTO.setIsMain(false);
+
+				clubFileMapper.addFile(clubFileDTO);
+			}
+		}
+
+		return result;
 	}
 
 	public int delete(ClubBoardDTO clubBoardDTO) throws Exception {

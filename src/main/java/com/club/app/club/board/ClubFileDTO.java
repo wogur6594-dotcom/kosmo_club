@@ -1,14 +1,22 @@
 package com.club.app.club.board;
 
-import com.club.app.file.FileDTO;
-
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
-public class ClubFileDTO extends FileDTO {
+@ToString
+public class ClubFileDTO {
+
+	private Long fileNum;
 
 	private Long boardNum;
+
+	private String fileName;
+
+	private String oriName;
+
+	private Boolean isMain;
 
 }
