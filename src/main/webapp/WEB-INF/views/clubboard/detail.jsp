@@ -69,7 +69,7 @@
 
 		<div class="mt-4">
 
-			<a href="/clubboard/detail?clubNum=${dto.clubNum}"
+			<a href="/club/detail?clubNum=${dto.clubNum}&page=${param.page}"
 				class="btn btn-secondary"> 동호회로 돌아가기 </a>
 
 		</div>

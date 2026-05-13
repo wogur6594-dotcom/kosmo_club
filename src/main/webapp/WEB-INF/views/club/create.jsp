@@ -65,6 +65,7 @@
 							</div>
 
 							<button class="btn btn-primary">등록</button>
+							<a href="./list" class="btn btn-secondary">뒤로</a>
 
 						</form>
 

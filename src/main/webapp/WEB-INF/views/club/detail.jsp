@@ -78,7 +78,7 @@
 
 			<thead>
 				<tr>
-				
+
 					<th>작성자</th>
 					<th>제목</th>
 					<th>등록일</th>
@@ -89,11 +89,11 @@
 			<tbody>
 				<c:forEach items="${boardList}" var="boardDTO">
 					<tr>
-						
+
 						<td>${boardDTO.boardWriter}</td>
 
 						<td><a
-							href="../clubboard/detail?boardNum=${boardDTO.boardNum}"
+							href="/clubboard/detail?boardNum=${boardDTO.boardNum}&page=${pager.page}"
 							style="color: #a35400;"> ${boardDTO.boardTitle} </a></td>
 
 
