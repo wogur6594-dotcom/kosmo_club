@@ -110,6 +110,16 @@ emailCheckBtn.addEventListener("click", () => {
         alert("이메일을 입력하세요.");
         return;
     }
+	
+	if (!emailRegex.test(eValue)) {
+	    isEmailChecked = false;
+	    isEmailAvailable = false;
+
+	    emailStatus.style.color = "red";
+	    document.getElementById("emailStatus").innerText = "올바른 이메일 형식이 아닙니다.";
+
+	    return;
+	}
 
     fetch(`/member/checkEmail?memberEmail=${eValue}`)
         .then(res => res.json())
@@ -167,5 +177,30 @@ form.addEventListener("submit", (e) => {
         e.preventDefault();
         return;
     }
+
+});
+
+// -------------------------------------사진 이름------------------------------------
+const attach = document.getElementById("attach");
+
+attach.addEventListener("change", (e) => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    // 이미지 파일 검사
+    if (!file.type.startsWith("image/")) {
+
+        alert("이미지 파일만 업로드 가능합니다.");
+
+        e.target.value = "";
+
+        document.getElementById("selectFile").innerText = "사진 선택";
+
+        return;
+    }
+
+    document.getElementById("selectFile").innerText = file.name;
 
 });
