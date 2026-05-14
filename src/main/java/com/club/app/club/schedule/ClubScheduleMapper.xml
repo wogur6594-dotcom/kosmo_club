@@ -75,8 +75,23 @@
 	<delete id="delete">
 
 		DELETE FROM "TB_CLUB_SCHEDULE"
-		WHERE "SCHEDULE_NUM" = #{scheduleNum}
+		WHERE "SCHEDULE_NUM" =
+		#{scheduleNum}
 
 	</delete>
+
+	<update id="update" parameterType="ClubScheduleDTO">
+
+		UPDATE "TB_CLUB_SCHEDULE"
+		SET
+		"SCHEDULE_TITLE" = #{scheduleTitle},
+		"SCHEDULE_CONTENTS" = #{scheduleContents},
+		"SCHEDULE_LOCATION" = #{scheduleLocation},
+		"SCHEDULE_START" = #{scheduleStart},
+		"SCHEDULE_END" = #{scheduleEnd},
+		"SCHEDULE_MAX" = #{scheduleMax}
+		WHERE "SCHEDULE_NUM" = #{scheduleNum}
+
+	</update>
 
 </mapper>

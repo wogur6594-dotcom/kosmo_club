@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.club.app.club.ClubDTO;
+import com.club.app.club.ClubService;
 import com.club.app.club.board.comment.ClubBoardCommentService;
 import com.club.app.club.member.ClubMemberDTO;
 import com.club.app.club.member.ClubMemberService;
@@ -30,6 +32,9 @@ public class ClubBoardController {
 
 	@Autowired
 	private ClubBoardService clubBoardService;
+
+	@Autowired
+	private ClubService clubService;
 
 	@PostMapping("mainImage")
 	public String mainImage(Long fileNum, Long boardNum, Long clubNum) throws Exception {
@@ -70,38 +75,79 @@ public class ClubBoardController {
 		return "clubboard/detail";
 	}
 
-	@GetMapping("create")
-	public String create(ClubBoardDTO clubBoardDTO, Model model, @AuthenticationPrincipal MemberDTO memberDTO,
-			org.springframework.web.servlet.mvc.support.RedirectAttributes rttr) throws Exception {
+	@PostMapping("create")
+	public String create(ClubBoardDTO clubBoardDTO, @AuthenticationPrincipal MemberDTO memberDTO) throws Exception {
 
 		if (memberDTO == null) {
 			return "redirect:/member/login";
 		}
 
-		ClubMemberDTO clubMemberDTO = new ClubMemberDTO();
-		clubMemberDTO.setClubNum(clubBoardDTO.getClubNum());
-		clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
+		if ("공지".equals(clubBoardDTO.getBoardCategory())) {
 
-		int check = clubMemberService.checkJoin(clubMemberDTO);
+			ClubDTO clubDTO = new ClubDTO();
+			clubDTO.setClubNum(clubBoardDTO.getClubNum());
+			clubDTO.setMemberNum(memberDTO.getMemberNum());
 
-		if (check == 0) {
-			rttr.addFlashAttribute("msg", "동호회 멤버가 아닙니다.");
-			return "redirect:/club/detail?clubNum=" + clubBoardDTO.getClubNum();
+			Long ownerCheck = clubService.isClubOwner(clubDTO);
+
+			if (ownerCheck == 0) {
+				return "redirect:/club/detail?clubNum=" + clubBoardDTO.getClubNum() + "&message=noticeOwnerOnly";
+			}
+
+		} else {
+
+			ClubMemberDTO clubMemberDTO = new ClubMemberDTO();
+			clubMemberDTO.setClubNum(clubBoardDTO.getClubNum());
+			clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
+
+			int check = clubMemberService.checkJoin(clubMemberDTO);
+
+			if (check == 0) {
+				return "redirect:/club/detail?clubNum=" + clubBoardDTO.getClubNum() + "&message=boardMemberOnly";
+			}
 		}
-
-		model.addAttribute("dto", clubBoardDTO);
-
-		return "clubboard/create";
-	}
-
-	@PostMapping("create")
-	public String create(ClubBoardDTO clubBoardDTO, @AuthenticationPrincipal MemberDTO memberDTO) throws Exception {
 
 		clubBoardDTO.setBoardWriter(memberDTO.getMemberId());
 
 		clubBoardService.create(clubBoardDTO);
 
-		return "redirect:./detail?boardNum=" + clubBoardDTO.getBoardNum() + "&clubNum=" + clubBoardDTO.getClubNum();
+		return "redirect:/club/detail?clubNum=" + clubBoardDTO.getClubNum();
+	}
+
+	@GetMapping("create")
+	public String create(ClubBoardDTO clubBoardDTO, @AuthenticationPrincipal MemberDTO memberDTO, Model model)
+			throws Exception {
+
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
+
+		if ("공지".equals(clubBoardDTO.getBoardCategory())) {
+
+			ClubDTO clubDTO = new ClubDTO();
+			clubDTO.setClubNum(clubBoardDTO.getClubNum());
+			clubDTO.setMemberNum(memberDTO.getMemberNum());
+
+			Long ownerCheck = clubService.isClubOwner(clubDTO);
+
+			if (ownerCheck == 0) {
+				return "redirect:/club/detail?clubNum=" + clubBoardDTO.getClubNum() + "&message=noticeOwnerOnly";
+			}
+
+		} else {
+
+			ClubMemberDTO clubMemberDTO = new ClubMemberDTO();
+			clubMemberDTO.setClubNum(clubBoardDTO.getClubNum());
+			clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
+
+			int check = clubMemberService.checkJoin(clubMemberDTO);
+
+			if (check == 0) {
+				return "redirect:/club/detail?clubNum=" + clubBoardDTO.getClubNum() + "&message=memberOnly";
+			}
+		}
+
+		return "clubboard/create";
 	}
 
 	@GetMapping("update")
@@ -154,7 +200,6 @@ public class ClubBoardController {
 		ClubBoardDTO checkDTO = clubBoardService.detail(clubBoardDTO);
 
 		if (!memberDTO.getMemberId().equals(checkDTO.getBoardWriter()) && memberDTO.getRoleNum() != 1) {
-
 			return "redirect:/clubboard/detail?boardNum=" + clubBoardDTO.getBoardNum() + "&clubNum="
 					+ clubBoardDTO.getClubNum();
 		}

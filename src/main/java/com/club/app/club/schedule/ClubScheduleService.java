@@ -29,4 +29,9 @@ public class ClubScheduleService {
 		return clubScheduleMapper.delete(clubScheduleDTO);
 	}
 
+	public int update(ClubScheduleDTO clubScheduleDTO) throws Exception {
+
+		return clubScheduleMapper.update(clubScheduleDTO);
+	}
+
 }

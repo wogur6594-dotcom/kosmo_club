@@ -46,6 +46,8 @@ dependencies {
 	implementation("org.springframework.security:spring-security-taglibs")
 	// webflux
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	//웹소켓
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 eclipse {

@@ -393,8 +393,10 @@ a:hover {
 
 						<div class="h-48 overflow-hidden">
 							<c:choose>
-								<c:when test="${not empty dto.fileDTO}">
-									<img src="/files/club/${dto.fileDTO.fileName}"
+								<c:when
+									test="${not empty dto.fileDTO and not empty dto.fileDTO.fileName}">
+									<img
+										src="${pageContext.request.contextPath}/files/club/${dto.fileDTO.fileName}"
 										alt="${dto.clubName}"
 										class="w-full card-img-fix group-hover:scale-105 transition-transform duration-500">
 								</c:when>
@@ -482,7 +484,7 @@ a:hover {
 
 	</main>
 	<!-- Footer -->
-	<footer
+	<!-- <footer
 		class="w-full py-xl bg-surface-container-low dark:bg-surface-dim border-t border-outline-variant dark:border-outline">
 		<div
 			class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md px-gutter max-w-container-max mx-auto">
@@ -531,7 +533,7 @@ a:hover {
 			</div>
 		</div>
 	</footer>
-	<!-- Mobile BottomNavBar -->
+	Mobile BottomNavBar
 	<div
 		class="md:hidden fixed bottom-0 left-0 right-0 bg-surface/95 backdrop-blur-md border-t border-outline-variant z-50 flex justify-around items-center h-16 px-gutter">
 		<button
@@ -559,6 +561,7 @@ a:hover {
 			<span class="material-symbols-outlined">person</span> <span
 				class="text-[10px] font-label-sm">Profile</span>
 		</button>
-	</div>
+	</div> -->
+	<c:import url="/WEB-INF/views/temp/footer.jsp"></c:import>
 </body>
 </html>
