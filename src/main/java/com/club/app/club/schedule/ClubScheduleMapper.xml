@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.club.app.club.schedule.ClubScheduleMapper">
+
+	<!-- 일정 목록 -->
+	<select id="list" parameterType="long"
+		resultType="ClubScheduleDTO">
+
+		SELECT
+		"SCHEDULE_NUM",
+		"CLUB_NUM",
+		"MEMBER_NUM",
+		"SCHEDULE_TITLE",
+		"SCHEDULE_CONTENTS",
+		"SCHEDULE_LOCATION",
+		"SCHEDULE_START",
+		"SCHEDULE_END",
+		"SCHEDULE_MAX",
+		"CREATE_DATE"
+		FROM
+		"TB_CLUB_SCHEDULE"
+		WHERE "CLUB_NUM" = #{clubNum}
+		ORDER BY
+		"SCHEDULE_START" ASC
+
+	</select>
+
+	<select id="detail" parameterType="ClubScheduleDTO"
+		resultType="ClubScheduleDTO">
+
+		SELECT
+		S.*,
+		M."MEMBER_NAME"
+		FROM "TB_CLUB_SCHEDULE" S
+		LEFT JOIN
+		"TB_MEMBER" M
+		ON S."MEMBER_NUM" = M."MEMBER_NUM"
+		WHERE S."SCHEDULE_NUM"
+		= #{scheduleNum}
+
+	</select>
+
+	<insert id="create" parameterType="ClubScheduleDTO">
+
+		INSERT INTO "TB_CLUB_SCHEDULE"
+		(
+		"CLUB_NUM",
+		"MEMBER_NUM",
+		"SCHEDULE_TITLE",
+		"SCHEDULE_CONTENTS",
+		"SCHEDULE_LOCATION",
+		"SCHEDULE_START",
+		"SCHEDULE_END",
+		"SCHEDULE_MAX",
+		"CREATE_DATE"
+		)
+		VALUES
+		(
+		#{clubNum},
+		#{memberNum},
+		#{scheduleTitle},
+		#{scheduleContents},
+		#{scheduleLocation},
+		#{scheduleStart},
+		#{scheduleEnd},
+		#{scheduleMax},
+		NOW()
+		)
+
+	</insert>
+
+	<delete id="delete">
+
+		DELETE FROM "TB_CLUB_SCHEDULE"
+		WHERE "SCHEDULE_NUM" = #{scheduleNum}
+
+	</delete>
+
+</mapper>
