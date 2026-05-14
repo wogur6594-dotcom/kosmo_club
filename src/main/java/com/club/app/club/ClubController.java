@@ -2,7 +2,6 @@ package com.club.app.club;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,15 +15,22 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.club.app.club.board.ClubBoardService;
+import com.club.app.club.schedule.ClubScheduleService;
 import com.club.app.member.MemberDTO;
 import com.club.app.pager.Pager;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/club/*")
 public class ClubController {
 
-	@Autowired
-	private ClubService clubService;
+	private final ClubScheduleService clubScheduleService;
+
+	private final ClubService clubService;
+
+	private final ClubBoardService clubBoardService;
 
 	@GetMapping("list")
 	public String list(Pager pager, Model model) throws Exception {
@@ -36,9 +42,6 @@ public class ClubController {
 
 		return "club/list";
 	}
-
-	@Autowired
-	private ClubBoardService clubBoardService;
 
 	@GetMapping("detail")
 	public void detail(ClubDTO clubDTO, Pager pager, Model model) throws Exception {
@@ -53,7 +56,9 @@ public class ClubController {
 		model.addAttribute("boardList", clubBoardService.clubBoardList(pager));
 
 		model.addAttribute("pager", pager);
-		
+
+		model.addAttribute("scheduleList", clubScheduleService.list(clubDTO.getClubNum()));
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		boolean canDelete = false;
@@ -79,29 +84,26 @@ public class ClubController {
 	@GetMapping("create")
 	public String create(@AuthenticationPrincipal MemberDTO memberDTO) throws Exception {
 
-	    if (memberDTO == null) {
-	        return "redirect:/member/login";
-	    }
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
 
-	    return "club/create";
+		return "club/create";
 	}
 
 	@PostMapping("create")
-	public String create(
-	        ClubDTO clubDTO,
-	        @RequestParam("attach") MultipartFile[] attaches,
-	        @AuthenticationPrincipal MemberDTO memberDTO
-	        ) throws Exception {
+	public String create(ClubDTO clubDTO, @RequestParam("attach") MultipartFile[] attaches,
+			@AuthenticationPrincipal MemberDTO memberDTO) throws Exception {
 
-	    if (memberDTO == null) {
-	        return "redirect:/member/login";
-	    }
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
 
-	    clubService.create(clubDTO, attaches, memberDTO);
+		clubService.create(clubDTO, attaches, memberDTO);
 
-	    return "redirect:/club/list";
+		return "redirect:/club/list";
 	}
-	
+
 	@PostMapping("delete")
 	public String delete(ClubDTO clubDTO, RedirectAttributes redirectAttributes) throws Exception {
 
@@ -130,6 +132,5 @@ public class ClubController {
 		redirectAttributes.addFlashAttribute("msg", "동호회가 삭제되었습니다.");
 		return "redirect:./list";
 	}
-
 
 }

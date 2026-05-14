@@ -272,103 +272,112 @@ a:hover {
 				</div>
 			</div>
 		</section>
-		<!-- Filters Section -->
-		<section class="max-w-container-max mx-auto px-gutter mb-lg">
 
-			<div class="flex flex-wrap gap-sm items-center">
 
-				<span class="font-label-lg text-label-lg text-on-surface mr-sm">
-					관심사별로 찾기: </span>
 
-				<!-- 전체 -->
-				<a href="${pageContext.request.contextPath}/club/list"
-					class="category-filter px-md py-2 rounded-full
+		<div id="club-list"></div>
+
+		<div class="flex flex-wrap gap-3 mb-3">
+
+
+
+			<!-- Filters Section -->
+			<section class="max-w-container-max mx-auto px-gutter mb-2">
+
+				<div class="flex flex-wrap gap-sm items-center">
+
+					<span class="font-label-lg text-label-lg text-on-surface mr-sm">
+						관심사별로 찾기: </span>
+
+					<!-- 전체 -->
+					<a href="${pageContext.request.contextPath}/club/list#club-list"
+						class="category-filter px-md py-2 rounded-full
 			${empty param.clubCategory
 			? 'bg-primary text-on-primary category-active'
 			: 'bg-surface-container-low text-on-surface-variant'}
 			font-label-lg text-label-lg active:scale-95 transition-all">
 
-					전체 </a>
+						전체 </a>
 
-				<!-- 운동 -->
-				<a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=운동"
-					class="category-filter px-md py-2 rounded-full
+					<!-- 운동 -->
+					<a
+						href="${pageContext.request.contextPath}/club/list?clubCategory=운동#club-list"
+						class="category-filter px-md py-2 rounded-full
 			${param.clubCategory eq '운동'
 			? 'bg-primary text-on-primary category-active'
 			: 'bg-surface-container-low text-on-surface-variant'}
 			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
 
-					<span class="material-symbols-outlined text-[18px]">
-						exercise </span> 운동
-				</a>
+						<span class="material-symbols-outlined text-[18px]">
+							exercise </span> 운동
+					</a>
 
-				<!-- 맛집 -->
-				<a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=맛집"
-					class="category-filter px-md py-2 rounded-full
+					<!-- 맛집 -->
+					<a
+						href="${pageContext.request.contextPath}/club/list?clubCategory=맛집#club-list"
+						class="category-filter px-md py-2 rounded-full
 			${param.clubCategory eq '맛집'
 			? 'bg-primary text-on-primary category-active'
 			: 'bg-surface-container-low text-on-surface-variant'}
 			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
 
-					<span class="material-symbols-outlined text-[18px]">
-						restaurant </span> 맛집
-				</a>
+						<span class="material-symbols-outlined text-[18px]">
+							restaurant </span> 맛집
+					</a>
 
-				<!-- 여행 -->
-				<a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=여행"
-					class="category-filter px-md py-2 rounded-full
+					<!-- 여행 -->
+					<a
+						href="${pageContext.request.contextPath}/club/list?clubCategory=여행#club-list"
+						class="category-filter px-md py-2 rounded-full
 			${param.clubCategory eq '여행'
 			? 'bg-primary text-on-primary category-active'
 			: 'bg-surface-container-low text-on-surface-variant'}
 			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
 
-					<span class="material-symbols-outlined text-[18px]">
-						travel_explore </span> 여행
-				</a>
+						<span class="material-symbols-outlined text-[18px]">
+							travel_explore </span> 여행
+					</a>
 
-				<!-- 음악 -->
-				<a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=음악"
-					class="category-filter px-md py-2 rounded-full
+					<!-- 음악 -->
+					<a
+						href="${pageContext.request.contextPath}/club/list?clubCategory=음악#club-list"
+						class="category-filter px-md py-2 rounded-full
 			${param.clubCategory eq '음악'
 			? 'bg-primary text-on-primary category-active'
 			: 'bg-surface-container-low text-on-surface-variant'}
 			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
 
-					<span class="material-symbols-outlined text-[18px]">
-						music_note </span> 음악
-				</a>
+						<span class="material-symbols-outlined text-[18px]">
+							music_note </span> 음악
+					</a>
 
-				<!-- 스터디 -->
-				<a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=스터디"
-					class="category-filter px-md py-2 rounded-full
+					<!-- 스터디 -->
+					<a
+						href="${pageContext.request.contextPath}/club/list?clubCategory=스터디#club-list"
+						class="category-filter px-md py-2 rounded-full
 			${param.clubCategory eq '스터디'
 			? 'bg-primary text-on-primary category-active'
 			: 'bg-surface-container-low text-on-surface-variant'}
 			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
 
-					<span class="material-symbols-outlined text-[18px]"> school
-				</span> 스터디
-				</a>
+						<span class="material-symbols-outlined text-[18px]"> school
+					</span> 스터디
+					</a>
 
-				<!-- 기타 -->
-				<a
-					href="${pageContext.request.contextPath}/club/list?clubCategory=기타"
-					class="category-filter px-md py-2 rounded-full
+					<!-- 기타 -->
+					<a
+						href="${pageContext.request.contextPath}/club/list?clubCategory=기타#club-list"
+						class="category-filter px-md py-2 rounded-full
 			${param.clubCategory eq '기타'
 			? 'bg-primary text-on-primary category-active'
 			: 'bg-surface-container-low text-on-surface-variant'}
 			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
 
-					<span class="material-symbols-outlined text-[18px]">
-						more_horiz </span> 기타
-				</a>
-
-			</div>
+						<span class="material-symbols-outlined text-[18px]">
+							more_horiz </span> 기타
+					</a>
+				</div>
+		</div>
 
 		</section>
 		<!-- Clubs Grid (Bento Style) -->
@@ -443,24 +452,24 @@ a:hover {
 				</c:forEach>
 			</div>
 
-
+			<div id="paging-position"></div>
 			<div class="paging">
 
 				<c:if test="${pager.pre}">
 					<a
-						href="${pageContext.request.contextPath}/club/list?page=${pager.start-1}&clubCategory=${pager.clubCategory}">
+						href="${pageContext.request.contextPath}/club/list?page=${pager.start-1}&clubCategory=${pager.clubCategory}#paging-position">
 						Previous </a>
 				</c:if>
 
 				<c:forEach begin="${pager.start}" end="${pager.end}" var="i">
 					<a
-						href="${pageContext.request.contextPath}/club/list?page=${i}&clubCategory=${pager.clubCategory}"
+						href="${pageContext.request.contextPath}/club/list?page=${i}&clubCategory=${pager.clubCategory}#paging-position"
 						class="${pager.page eq i ? 'active-page' : ''}"> ${i} </a>
 				</c:forEach>
 
 				<c:if test="${pager.next}">
 					<a
-						href="${pageContext.request.contextPath}/club/list?page=${pager.end+1}&clubCategory=${pager.clubCategory}">
+						href="${pageContext.request.contextPath}/club/list?page=${pager.end+1}&clubCategory=${pager.clubCategory}#paging-position">
 						Next </a>
 				</c:if>
 
