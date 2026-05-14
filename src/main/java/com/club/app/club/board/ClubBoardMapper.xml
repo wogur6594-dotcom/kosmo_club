@@ -163,11 +163,12 @@
 		#{boardWriter},
 		#{boardCategory},
 		#{clubNum},
-		NOW() AT TIME ZONE 'Asia/Seoul'
+		NOW() AT TIME ZONE
+		'Asia/Seoul'
 		)
 
 	</insert>
-	
+
 	<!-- 수정 -->
 	<update id="update" parameterType="ClubBoardDTO">
 
@@ -187,5 +188,27 @@
 		WHERE "BOARD_NUM" = #{boardNum}
 
 	</delete>
+
+	<select id="noticeList" parameterType="long"
+		resultType="ClubBoardDTO">
+		SELECT
+		CB."BOARD_NUM" AS "boardNum",
+		CB."CLUB_NUM" AS "clubNum",
+		CB."BOARD_TITLE" AS "boardTitle",
+		CB."BOARD_CONTENTS" AS
+		"boardContents",
+		CB."BOARD_WRITER" AS "boardWriter",
+		CB."BOARD_CATEGORY" AS "boardCategory",
+		CB."CREATE_DATE" AS
+		"createDate",
+		M."MEMBER_NAME" AS "memberName"
+		FROM "TB_CLUB_BOARD" CB
+		JOIN "TB_MEMBER" M
+		ON CB."BOARD_WRITER" = M."MEMBER_ID"
+		WHERE CB."CLUB_NUM" = #{clubNum}
+		AND CB."BOARD_CATEGORY" = '공지'
+		ORDER BY CB."BOARD_NUM" DESC
+		LIMIT 5
+	</select>
 
 </mapper>

@@ -71,6 +71,19 @@ body {
 	color: #4a382b;
 	line-height: 1.7;
 }
+
+.btn-delete {
+	background-color: #d9534f;
+	color: white;
+	border-radius: 12px;
+	padding: 6px 16px;
+	border: none;
+}
+
+.btn-delete:hover {
+	background-color: #c9302c;
+	color: white;
+}
 </style>
 </head>
 
@@ -113,7 +126,8 @@ body {
 		</p>
 
 		<p>
-			<span class="info-label">현재 참가</span> · ${joinCount} / ${dto.scheduleMax}명
+			<span class="info-label">현재 참가</span> · ${joinCount} /
+			${dto.scheduleMax}명
 		</p>
 
 		<hr>
@@ -126,8 +140,7 @@ body {
 					<c:forEach items="${memberList}" var="member">
 						<li class="list-group-item"
 							style="border-radius: 10px; margin-bottom: 8px;">
-							${member.memberName}
-						</li>
+							${member.memberName}</li>
 					</c:forEach>
 				</ul>
 			</c:when>
@@ -167,8 +180,7 @@ body {
 
 								<c:when test="${joinCount >= dto.scheduleMax}">
 									<button type="button" class="btn btn-secondary" disabled>
-										정원 초과
-									</button>
+										정원 초과</button>
 								</c:when>
 
 								<c:otherwise>
@@ -176,14 +188,10 @@ body {
 										style="display: inline;">
 
 										<input type="hidden" name="scheduleNum"
-											value="${dto.scheduleNum}">
+											value="${dto.scheduleNum}"> <input type="hidden"
+											name="clubNum" value="${dto.clubNum}">
 
-										<input type="hidden" name="clubNum"
-											value="${dto.clubNum}">
-
-										<button type="submit" class="btn btn-brown">
-											참가하기
-										</button>
+										<button type="submit" class="btn btn-brown">참가하기</button>
 									</form>
 								</c:otherwise>
 
@@ -197,19 +205,14 @@ body {
 
 				<c:if test="${canEdit}">
 					<a href="./update?scheduleNum=${dto.scheduleNum}"
-						class="btn btn-sm btn-brown ml-2">
-						수정
-					</a>
+						class="btn btn-sm btn-brown ml-2"> 수정 </a>
 
 					<form action="./delete" method="post" style="display: inline;">
 
-						<input type="hidden" name="scheduleNum"
-							value="${dto.scheduleNum}">
+						<input type="hidden" name="scheduleNum" value="${dto.scheduleNum}">
 
-						<button type="submit" class="btn btn-outline-danger"
-							onclick="return confirm('정말 삭제하시겠습니까?');">
-							삭제
-						</button>
+						<button type="submit" class="btn btn-sm btn-delete ml-2"
+							onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
 
 					</form>
 				</c:if>
@@ -217,8 +220,7 @@ body {
 			</div>
 
 			<a href="../club/detail?clubNum=${dto.clubNum}" class="btn btn-gray">
-				동호회로 돌아가기
-			</a>
+				동호회로 돌아가기 </a>
 
 		</div>
 

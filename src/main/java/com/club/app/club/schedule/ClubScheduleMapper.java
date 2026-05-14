@@ -10,9 +10,11 @@ public interface ClubScheduleMapper {
 	public List<ClubScheduleDTO> list(Long clubNum);
 
 	public int create(ClubScheduleDTO clubScheduleDTO);
-	
+
 	public ClubScheduleDTO detail(ClubScheduleDTO clubScheduleDTO);
-	
+
 	public int delete(ClubScheduleDTO clubScheduleDTO) throws Exception;
+
+	public int update(ClubScheduleDTO clubScheduleDTO) throws Exception;
 
 }

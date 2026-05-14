@@ -82,6 +82,23 @@ body {
 	font-size: 14px;
 }
 
+.notice-item {
+	display: block;
+	background-color: #fff1df;
+	color: #8a4b00;
+	font-weight: 600;
+	padding: 14px 16px;
+	border-radius: 12px;
+	margin-bottom: 10px;
+	text-decoration: none;
+}
+
+.notice-item:hover {
+	background-color: #ffe4c2;
+	color: #6f3c00;
+	text-decoration: none;
+}
+
 .schedule-item {
 	padding: 8px 0;
 }
@@ -145,10 +162,22 @@ body {
 			alert("${msg}");
 		</script>
 	</c:if>
-
-	<c:if test="${not empty message}">
+	
+	<c:if test="${param.message eq 'memberOnly'}">
 		<script>
-			alert("${message}");
+			alert("동호회 멤버만 글 작성이 가능합니다.");
+		</script>
+	</c:if>
+
+	<c:if test="${param.message eq 'scheduleMemberOnly'}">
+		<script>
+			alert("동호회 가입 회원만 일정 등록이 가능합니다.");
+		</script>
+	</c:if>
+
+	<c:if test="${param.message eq 'noticeOwnerOnly'}">
+		<script>
+			alert("공지 등록은 동호회 회장만 가능합니다.");
 		</script>
 	</c:if>
 
@@ -168,15 +197,23 @@ body {
 			</div>
 
 			<div>
-				<form action="/clubMember/join" method="post"
-					style="display: inline;">
-					<input type="hidden" name="clubNum" value="${dto.clubNum}">
+				<c:if test="${not isMember}">
+					<form action="${pageContext.request.contextPath}/clubMember/join"
+						method="post" style="display: inline;"
+						onsubmit="return confirm('이 동호회에 가입하시겠습니까?');">
 
-					<button type="submit" class="btn btn-sm btn-brown">가입하기</button>
-				</form>
+						<input type="hidden" name="clubNum" value="${dto.clubNum}">
+
+						<button type="submit" class="btn btn-sm btn-brown">가입하기</button>
+					</form>
+				</c:if>
+
+				<c:if test="${isMember}">
+					<!-- <span class="badge badge-secondary ml-2"> 가입완료 </span> -->
+				</c:if>
 
 				<a href="./list?page=${param.page}" class="btn btn-sm btn-gray">
-					뒤로가기 </a>
+					목록으로 </a>
 
 				<c:if test="${canDelete}">
 					<form action="./delete" method="post" style="display: inline;"
@@ -218,6 +255,25 @@ body {
 						style="background: #fff3e6; border-radius: 12px; padding: 10px; font-weight: 700; color: #b36200;">
 
 						${dto.currentMember} / ${dto.clubMax} 명</div>
+						
+	<c:choose>
+
+	<c:when test="${isMember}">
+		<a href="/clubChat/room?clubNum=${dto.clubNum}"
+			class="btn btn-sm btn-brown btn-block mt-2">
+			채팅하기
+		</a>
+	</c:when>
+
+	<c:otherwise>
+		<button type="button"
+			class="btn btn-sm btn-brown btn-block mt-2"
+			onclick="alert('동호회 가입 회원만 채팅 가능합니다.');">
+			채팅하기
+		</button>
+	</c:otherwise>
+
+</c:choose>
 
 					<c:if test="${not empty dto.clubContents}">
 						<hr>
@@ -376,29 +432,31 @@ body {
 				</div>
 
 				<div class="side-card p-3">
-					<h5 class="section-title mb-3">공지</h5>
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h5 class="section-title mb-0">공지</h5>
 
-					<div class="notice-box">
-						<c:choose>
-							<c:when test="${not empty noticeList}">
-								<c:forEach items="${noticeList}" var="notice">
-									<p class="mb-2">
-										<strong>[공지]</strong> ${notice.boardTitle}
-									</p>
-								</c:forEach>
-							</c:when>
-
-							<c:otherwise>
-								<p class="mb-0">등록된 공지가 없습니다.</p>
-							</c:otherwise>
-						</c:choose>
+						<a
+							href="../clubboard/create?clubNum=${dto.clubNum}&boardCategory=공지"
+							class="btn btn-sm btn-brown"> 공지 등록 </a>
 					</div>
+
+					<c:choose>
+						<c:when test="${not empty noticeList}">
+							<c:forEach items="${noticeList}" var="notice">
+								<a
+									href="../clubboard/detail?boardNum=${notice.boardNum}&clubNum=${dto.clubNum}"
+									class="notice-item"> ${notice.boardTitle} </a>
+							</c:forEach>
+						</c:when>
+
+						<c:otherwise>
+							<p class="text-muted mb-0">등록된 공지가 없습니다.</p>
+						</c:otherwise>
+					</c:choose>
 				</div>
 
 			</div>
 
 		</div>
-
-	</div>
 </body>
 </html>

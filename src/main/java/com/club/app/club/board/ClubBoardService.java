@@ -111,4 +111,8 @@ public class ClubBoardService {
 	public List<ClubBoardDTO> getBoardListByClubNum(Long clubNum) throws Exception {
 		return clubBoardMapper.clubBoardListByClubNum(clubNum);
 	}
+
+	public List<ClubBoardDTO> noticeList(Long clubNum) throws Exception {
+		return clubBoardMapper.noticeList(clubNum);
+	}
 }
