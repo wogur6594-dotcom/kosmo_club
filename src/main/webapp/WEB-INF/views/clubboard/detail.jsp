@@ -120,8 +120,9 @@ body {
 
 
 			<c:forEach items="${dto.list}" var="file">
-				<img src="/clubboard/${file.fileName}" class="img-fluid mb-3"
-					style="max-width: 400px;">
+				<img
+					src="${pageContext.request.contextPath}/files/clubboard/${file.fileName}"
+					class="img-fluid mb-3" style="max-width: 400px;">
 			</c:forEach>
 			<hr>
 			<c:forEach items="${dto.list}" var="file">
@@ -137,30 +138,29 @@ body {
 				${dto.boardContents}</div>
 
 			<!-- 댓글 -->
-			
-			
+
+
 
 			<c:forEach items="${commentList}" var="comment">
 
-	<div class="mb-3">
+				<div class="mb-3">
 
-		<div>
-			<span style="font-weight: 700;">${comment.memberName}</span>
+					<div>
+						<span style="font-weight: 700;">${comment.memberName}</span> <span
+							style="font-size: 12px; color: #888; margin-left: 8px;">
+							${fn:replace(fn:substring(comment.createDate.toString(), 0, 16), 'T', ' ')}
+						</span>
+					</div>
 
-			<span style="font-size: 12px; color: #888; margin-left: 8px;">
-				${fn:replace(fn:substring(comment.createDate.toString(), 0, 16), 'T', ' ')}
-			</span>
-		</div>
+					<div style="color: #444;">${comment.commentContents}</div>
 
-		<div style="color: #444;">${comment.commentContents}</div>
+				</div>
 
-	</div>
+				<hr>
 
-	<hr>
+			</c:forEach>
 
-</c:forEach>
-			
-			
+
 			<h4 class="mt-5 mb-3">댓글</h4>
 
 			<form action="/clubboardcomment/add" method="post">
@@ -176,7 +176,7 @@ body {
 					style="background-color: #b36200; color: white;">댓글 작성</button>
 
 			</form>
-			
+
 			<!-- 댓글끝 -->
 
 

@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.club.app.club.board.ClubBoardService;
+import com.club.app.club.member.ClubMemberDTO;
+import com.club.app.club.member.ClubMemberService;
 import com.club.app.club.schedule.ClubScheduleService;
 import com.club.app.member.MemberDTO;
 import com.club.app.pager.Pager;
@@ -25,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/club/*")
 public class ClubController {
+
+	private final ClubMemberService clubMemberService;
 
 	private final ClubScheduleService clubScheduleService;
 
@@ -59,9 +63,12 @@ public class ClubController {
 
 		model.addAttribute("scheduleList", clubScheduleService.list(clubDTO.getClubNum()));
 
+		model.addAttribute("noticeList", clubBoardService.noticeList(clubDTO.getClubNum()));
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		boolean canDelete = false;
+		boolean isMember = false;
 
 		if (authentication != null && authentication.isAuthenticated()
 				&& !authentication.getPrincipal().equals("anonymousUser")) {
@@ -76,9 +83,16 @@ public class ClubController {
 			Long adminCheck = clubService.isAdmin(memberDTO);
 
 			canDelete = ownerCheck > 0 || adminCheck > 0;
+
+			ClubMemberDTO clubMemberDTO = new ClubMemberDTO();
+			clubMemberDTO.setClubNum(clubDTO.getClubNum());
+			clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
+
+			isMember = clubMemberService.checkJoin(clubMemberDTO) > 0;
 		}
 
 		model.addAttribute("canDelete", canDelete);
+		model.addAttribute("isMember", isMember);
 	}
 
 	@GetMapping("create")

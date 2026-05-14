@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.club.app.club.chat.ClubMessageMapper">
+
+	<insert id="insert" parameterType="ClubMessageDTO">
+		INSERT INTO "TB_CLUB_MESSAGE"
+		(
+		"CLUB_NUM",
+		"SENDER_NUM",
+		"MESSAGE_CONTENTS"
+		)
+		VALUES
+		(
+		#{clubNum},
+		#{senderNum},
+		#{messageContents}
+		)
+	</insert>
+
+	<select id="list" parameterType="long"
+		resultType="ClubMessageDTO">
+
+		SELECT
+		CM."MESSAGE_NUM",
+		CM."CLUB_NUM",
+		CM."SENDER_NUM",
+
+		M."MEMBER_NAME" AS
+		"SENDER_NAME",
+
+		CM."MESSAGE_CONTENTS",
+
+		TO_CHAR(
+		CM."CREATE_DATE" AT TIME ZONE 'Asia/Seoul',
+		'HH24:MI'
+		) AS "CHAT_TIME"
+
+		FROM "TB_CLUB_MESSAGE" CM
+
+		LEFT JOIN "TB_MEMBER" M
+		ON CM."SENDER_NUM" = M."MEMBER_NUM"
+
+		WHERE CM."CLUB_NUM" = #{clubNum}
+
+		ORDER BY CM."MESSAGE_NUM" ASC
+
+	</select>
+
+</mapper>
