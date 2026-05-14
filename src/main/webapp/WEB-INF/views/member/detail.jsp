@@ -33,6 +33,13 @@
 	</div>
 	<div class="input-group mb-3">
 		<div class="input-group-prepend">
+			<span class="input-group-text" id="basic-addon1">비밀번호</span>
+		</div>
+		<input type="text" class="form-control" readonly>
+		<a class="btn btn-outline-dark" href="/member/pwChange">비밀번호 변경</a>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
 			<span class="input-group-text" id="basic-addon1">Phone</span>
 		</div>
 		<input type="text" class="form-control" name="memberPhone" value="${detail.memberPhone}" readonly>
@@ -55,5 +62,11 @@
 	</form>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+    const msg = "${msg}";
+    if (msg) {
+        alert(msg);
+    }
+</script>
 </body>
 </html>

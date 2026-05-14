@@ -30,6 +30,7 @@ public class SecurityConfig {
 			})
 			.authorizeHttpRequests(auth -> {
 				auth
+				.requestMatchers("/member/update","/member/detail", "/member/delete", "/member/pwChange").authenticated()
 				.requestMatchers("/", "/member/login", "/member/join",
 						"/css/**", "/js/**", "/images/**", "/files/**")
 				.permitAll()
@@ -52,6 +53,12 @@ public class SecurityConfig {
 					.permitAll()
 					;
 			})
+	        .rememberMe(remember -> 
+	        	remember
+	                .rememberMeParameter("remember-me")
+	                .tokenValiditySeconds(60 * 60 * 24 * 7) // 1주
+	                .key("myRememberKey")
+	            )
 			.logout(logout -> {				
 				logout
 				.logoutUrl("/member/logout")

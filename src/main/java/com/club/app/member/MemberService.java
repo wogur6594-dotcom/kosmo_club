@@ -1,6 +1,5 @@
 package com.club.app.member;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +19,7 @@ public class MemberService implements UserDetailsService {
 
 	@Autowired
 	private FileManager fileManager;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -32,20 +31,18 @@ public class MemberService implements UserDetailsService {
 		return memberDTO;
 	}
 
-
 	public int signUp(MemberDTO memberDTO, MultipartFile attach) throws Exception {
-		
-	    if (memberMapper.checkId(memberDTO) > 0) {
-	        throw new RuntimeException("");
-	    }
-	    
-	    if (memberMapper.checkEmail(memberDTO) > 0) {
-	        throw new RuntimeException("");
-	    }
-	    
+
+		if (memberMapper.checkId(memberDTO) > 0) {
+			throw new RuntimeException("");
+		}
+
+		if (memberMapper.checkEmail(memberDTO) > 0) {
+			throw new RuntimeException("");
+		}
+
 		// DB에 저장
 		memberDTO.setMemberPw(passwordEncoder.encode(memberDTO.getMemberPw()));
-	
 
 		// 1. 회원가입
 		int result = memberMapper.signUp(memberDTO);
@@ -71,16 +68,16 @@ public class MemberService implements UserDetailsService {
 
 		return result;
 	}
-	
-    public boolean checkId(MemberDTO memberDTO) throws Exception {
-        int result = memberMapper.checkId(memberDTO);
-        return result > 0;
-    }
-    
-    public boolean checkEmail(MemberDTO memberDTO) throws Exception {
-        int result = memberMapper.checkEmail(memberDTO);
-        return result > 0;
-    }
+
+	public boolean checkId(MemberDTO memberDTO) throws Exception {
+		int result = memberMapper.checkId(memberDTO);
+		return result > 0;
+	}
+
+	public boolean checkEmail(MemberDTO memberDTO) throws Exception {
+		int result = memberMapper.checkEmail(memberDTO);
+		return result > 0;
+	}
 
 	public MemberDTO detail(MemberDTO memberDTO) throws Exception {
 		return memberMapper.detail(memberDTO);
@@ -90,21 +87,41 @@ public class MemberService implements UserDetailsService {
 		return memberMapper.delete(memberDTO);
 	}
 
-	public int update(MemberDTO memberDTO, MultipartFile attach) throws Exception {
+	public int update(MemberDTO memberDTO, MultipartFile attach, boolean deleteProfile) throws Exception {
 
-	    // 1. 기본 정보 업데이트
-	   int result = memberMapper.update(memberDTO);
+		// 기본 정보 업데이트
+		int result = memberMapper.update(memberDTO);
 
-	    // 2. 비밀번호가 들어왔을 때만 변경
-	    if (memberDTO.getMemberPw() != null && !memberDTO.getMemberPw().isBlank()) {
+//	    // 비밀번호가 들어왔을 때만 변경
+//	    if (memberDTO.getMemberPw() != null && !memberDTO.getMemberPw().isBlank()) {
+//
+//	        String encodedPw = passwordEncoder.encode(memberDTO.getMemberPw());
+//	        memberDTO.setMemberPw(encodedPw);
+//
+//	        memberMapper.updatePw(memberDTO);
+//	    }
 
-	        String encodedPw = passwordEncoder.encode(memberDTO.getMemberPw());
-	        memberDTO.setMemberPw(encodedPw);
+		// 이미지 삭제
+	    if (deleteProfile && (attach == null || attach.isEmpty())) {
 
-	        memberMapper.updatePw(memberDTO);
+	        MemberDTO detail = memberMapper.detail(memberDTO);
+
+	        if (detail.getProfile() != null) {
+
+	            // 실제 파일 삭제
+	            fileManager.fileDelete("memberProfile", detail.getProfile());
+
+	            // DB 삭제
+	            MemberProfileDTO profileDTO = new MemberProfileDTO();
+	            profileDTO.setMemberNum(memberDTO.getMemberNum());
+
+	            memberMapper.deleteProfile(profileDTO);
+	        }
+
+	        return result;
 	    }
 
-	    // 3. 파일 저장
+		// 파일 저장
 		if (attach != null && !attach.isEmpty()) {
 
 			// 새 파일 저장
@@ -133,12 +150,26 @@ public class MemberService implements UserDetailsService {
 		}
 		return result;
 	}
-	
+
 	public int updatePw(MemberDTO memberDTO) throws Exception {
 
-	    String encodedPw = passwordEncoder.encode(memberDTO.getMemberPw());
-	    memberDTO.setMemberPw(encodedPw);
+		String encodedPw = passwordEncoder.encode(memberDTO.getMemberPw());
+		memberDTO.setMemberPw(encodedPw);
 
-	    return memberMapper.updatePw(memberDTO);
+		return memberMapper.updatePw(memberDTO);
+	}
+
+	public boolean updateEmail(MemberDTO memberDTO) throws Exception {
+		MemberDTO user = memberMapper.findEmail(memberDTO);
+		// 1. 없으면 중복 아님
+		if (user == null)
+			return false;
+
+		// 2. 본인이면 OK
+		if (user.getMemberNum().equals(memberDTO.getMemberNum()))
+			return false;
+
+		// 3. 다른 사람이면 중복
+		return true;
 	}
 }

@@ -2,16 +2,20 @@ package com.club.app.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +29,9 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 
 	@GetMapping("/")
@@ -38,7 +45,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("signUp")
-	public String signUp(@Valid MemberDTO memberDTO, BindingResult bindingResult, @RequestParam(name = "attach", required = false) MultipartFile attach)
+	public String signUp(@Validated(SignUpGroup.class) MemberDTO memberDTO, BindingResult bindingResult, @RequestParam(name = "attach", required = false) MultipartFile attach)
 			throws Exception {
 		
 	    if (bindingResult.hasErrors()) {
@@ -112,17 +119,72 @@ public class MemberController {
 	}
 
 	@PostMapping("update")
-	public String update(MemberDTO memberDTO,
+	public String update(@Validated(UpdateGroup.class) @ModelAttribute("update")MemberDTO memberDTO,
+						 BindingResult bindingResult,
 	                     @RequestParam(name="attach", required=false) MultipartFile attach,
-	                     Authentication auth) throws Exception {
+	                     @RequestParam(name="deleteProfile", defaultValue="false") boolean deleteProfile,
+	                     Authentication auth,
+	                     Model model) throws Exception {
+		
+	    if (bindingResult.hasErrors()) {
+	        MemberDTO memberProfile = memberService.detail(memberDTO);
+	        // 기존 프로필 복구
+	        memberDTO.setProfile(memberProfile.getProfile());
+	    	model.addAttribute("update", memberDTO);
+	        return "member/update";
+	    }
 
 	    MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
 
 	    memberDTO.setMemberId(loginUser.getMemberId());
 	    memberDTO.setMemberNum(loginUser.getMemberNum());
+	    memberDTO.setMemberBirth(loginUser.getMemberBirth());
 
-	    memberService.update(memberDTO, attach);
+	    memberService.update(memberDTO, attach, deleteProfile);
 
 	    return "redirect:/member/detail";
+	}
+	
+	@PostMapping("emailCheck")
+	@ResponseBody
+	public boolean emailCheck(MemberDTO memberDTO,
+	                          Authentication auth) throws Exception {
+
+	    MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+
+	    memberDTO.setMemberNum(loginUser.getMemberNum());
+
+	    return memberService.updateEmail(memberDTO);
+	}
+	
+	@GetMapping("pwChange")
+	public void pwChange() throws Exception {
+	}
+	
+	@PostMapping("/member/pwChange")
+	public String pwChange(@ModelAttribute MemberDTO memberDTO,
+	                       Authentication auth,
+	                       RedirectAttributes rttr) throws Exception {
+		
+	    MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+	    memberDTO.setMemberNum(loginUser.getMemberNum());
+
+	    memberService.updatePw(memberDTO);
+
+	    rttr.addFlashAttribute("msg", "비밀번호가 변경되었습니다");
+
+	    return "redirect:/member/detail";
+	}
+	
+	@PostMapping("checkPw")
+	@ResponseBody
+	public boolean checkPw(@RequestParam("pw") String pw,
+	                       Authentication auth) throws Exception {
+
+	    MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+
+	    MemberDTO dbUser = memberService.detail(loginUser);
+
+	    return passwordEncoder.matches(pw, dbUser.getMemberPw());
 	}
 }

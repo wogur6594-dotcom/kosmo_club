@@ -11,7 +11,7 @@
 <body>
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 	<h1>로그인 페이지</h1>
-	<form action="./login" method="post">
+	<form action="./login" method="post" id="loginForm">
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="basic-addon1">ID</span>
@@ -24,6 +24,16 @@
 			</div>
 			<input type="password" class="form-control" name="memberPw">
 		</div>
+		<div class="mb-3">
+			<div class="form-check form-check-inline me-4">
+				<input type="checkbox" class="form-check-input" id="saveId">
+				<label class="form-check-label" for="saveId">아이디 저장</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input type="checkbox" class="form-check-input" name="remember-me" id="rememberMe">
+				<label class="form-check-label" for="rememberMe">자동 로그인</label>
+			</div>
+		</div>
 		<button type="submit" class="btn btn-outline-dark">로그인</button>
 	</form>
 	<div>
@@ -32,5 +42,6 @@
 	<c:remove var="loginError" scope="session" />
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/login/login.js"></script>
 </body>
 </html>

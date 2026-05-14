@@ -49,20 +49,20 @@ public class MemberDTO implements UserDetails {
 	}
 
 	private Long memberNum;
-	@NotBlank(message = "이름을 입력하세요")
+	@NotBlank(message = "이름을 입력하세요", groups = {UpdateGroup.class, SignUpGroup.class})
 	private String memberName;
-	@NotBlank(message = "이메일을 입력하세요")
+	@NotBlank(message = "이메일을 입력하세요", groups = {UpdateGroup.class, SignUpGroup.class})
 	private String memberEmail;
-	@NotBlank(message = "전화번호를 입력하세요")
-	@Pattern(regexp = "^01[016789]-\\d{3,4}-\\d{4}$", message = "전화번호 형식이 올바르지 않습니다")
+	@NotBlank(message = "전화번호를 입력하세요", groups = {UpdateGroup.class, SignUpGroup.class})
+	@Pattern(regexp = "^01[016789]-\\d{3,4}-\\d{4}$", message = "전화번호 형식이 올바르지 않습니다", groups = {UpdateGroup.class, SignUpGroup.class})
 	private String memberPhone;
-	@NotNull(message = "생년월일을 입력하세요")
+	@NotNull(message = "생년월일을 입력하세요", groups = {UpdateGroup.class, SignUpGroup.class})
 	private LocalDate memberBirth;
 	private Long roleNum;
-	@NotBlank(message = "아이디를 입력하세요")
-	@Pattern(regexp = "^[a-zA-Z0-9]+$", message = "영어와 숫자만 가능합니다")
+	@NotBlank(message = "아이디를 입력하세요", groups = {UpdateGroup.class, SignUpGroup.class})
+	@Pattern(regexp = "^[a-zA-Z0-9]+$", message = "영어와 숫자만 가능합니다", groups = {UpdateGroup.class, SignUpGroup.class})
 	private String memberId;
-	@NotBlank(message = "비밀번호를 입력하세요")
+	@NotBlank(message = "비밀번호를 입력하세요", groups = SignUpGroup.class)
 //	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])$", message = "비밀번호 형식이 올바르지 않습니다")
 	private String memberPw;
 

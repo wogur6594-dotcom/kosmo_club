@@ -74,8 +74,12 @@
 				<input type="file" class="custom-file-input" name="attach" id="attach" accept="image/*">
 				<label class="custom-file-label" for="attach" id="selectFile">사진 선택</label>
 			</div>
+			<div style="display: none" id="fileDiv">
+				<button type="button" class="btn btn-outline-danger" id="deleteFileBtn">삭제</button>
+			</div>
 		</div>
 		<button type="submit" class="btn btn-outline-dark">회원가입</button>
+
 	</form:form>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>

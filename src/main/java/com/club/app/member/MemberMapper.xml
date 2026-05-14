@@ -80,16 +80,26 @@
 		where "MEMBER_NUM" = #{memberNum}
 	</update>
 
+	<delete id="deleteProfile">
+		delete from "MEMBER_PROFILE"
+		where "MEMBER_NUM" = #{memberNum}
+	</delete>
+
 	<select id="checkId" resultType="int">
 		select count(*)
 		from "TB_MEMBER"
 		where "MEMBER_ID" = #{memberId}
 	</select>
-	
+
 	<select id="checkEmail" resultType="int">
 		select count(*)
 		from "TB_MEMBER"
 		where "MEMBER_EMAIL" = #{memberEmail}
+	</select>
+
+	<select id="findEmail" resultType="MemberDTO">
+		SELECT * FROM "TB_MEMBER"
+		WHERE "MEMBER_EMAIL" = #{memberEmail}
 	</select>
 
 </mapper>

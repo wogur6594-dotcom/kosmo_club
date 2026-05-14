@@ -182,6 +182,7 @@ form.addEventListener("submit", (e) => {
 
 // -------------------------------------사진 이름------------------------------------
 const attach = document.getElementById("attach");
+const fileDiv = document.getElementById("fileDiv")
 
 attach.addEventListener("change", (e) => {
 
@@ -199,8 +200,26 @@ attach.addEventListener("change", (e) => {
         document.getElementById("selectFile").innerText = "사진 선택";
 
         return;
-    }
+    } else {
+		fileDiv.style.display='block'
+	}
 
     document.getElementById("selectFile").innerText = file.name;
+
+});
+
+// ------------------------------------- 파일 삭제 ------------------------------------
+
+const deleteFileBtn = document.getElementById("deleteFileBtn");
+
+deleteFileBtn.addEventListener("click", () => {
+
+    // 파일 초기화
+    attach.value = "";
+
+    // label 원래대로
+    document.getElementById("selectFile").innerText = "사진 선택";
+	
+	fileDiv.style.display='none'
 
 });
