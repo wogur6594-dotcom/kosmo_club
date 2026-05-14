@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.club.app.product.ProductMapper">
+
+	<insert id="add" parameterType="ProductDTO" useGeneratedKeys="true" keyProperty="productNum">
+		insert into "TB_PRODUCT"
+		values (default, #{memberNum}, #{productTitle}, #{productContent}, #{productPrice},
+		#{productLocation}, now(), '판매중', #{productType})
+	</insert>
+
+	<insert id="addFile" parameterType="ProductFileDTO">
+
+		insert into "TB_PRODUCTFILE"
+		values (default, #{productNum}, #{fileName}, #{oriName})
+
+	</insert>
+
+	<sql id="search_sql">
+		where
+			"PRODUCT_TITLE" LIKE CONCAT('%', #{search}, '%')
+	</sql>
+
+	<select id="getCount" resultType="Long" parameterType="pager">
+		select count("PRODUCT_NUM") from "TB_PRODUCT"
+		<include refid="search_sql"></include>
+	</select>
+
+	<select id="list" resultMap="productMap">
+		select * from "TB_PRODUCT" p
+		left join "TB_PRODUCTFILE" f
+		using("PRODUCT_NUM")
+		<include refid="search_sql"></include>
+		order by "CREATETIME" DESC
+		limit #{perPage} offset #{startNum}
+	</select>
+
+	<resultMap id="productMap" type="ProductDTO">
+		<id property="productNum" column="PRODUCT_NUM"/>
+		<result property="productTitle" column="PRODUCT_TITLE"/>
+		<result property="productPrice" column="PRODUCT_PRICE"/>
+		<result property="productLocation" column="PRODUCT_LOCATION"/>
+		<result property="productStatus" column="PRODUCT_STATUS"/>
+		<result property="productType" column="PRODUCT_TYPE"/>
+		<collection property="fileList" ofType="ProductFileDTO">
+			<result property="fileName" column="FILE_NAME"/>
+			<result property="productNum" column="PRODUCT_NUM"/>
+		</collection>
+	</resultMap>
+
+	<select id="detail" resultType="ProductDTO">
+		select * from "TB_PRODUCT"
+		where "PRODUCT_NUM" = #{productNum}
+	</select>
+
+</mapper>

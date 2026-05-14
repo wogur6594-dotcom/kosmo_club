@@ -30,8 +30,8 @@ public class SecurityConfig {
 			})
 			.authorizeHttpRequests(auth -> {
 				auth
-				.requestMatchers("/member/update","/member/detail", "/member/delete", "/member/pwChange").authenticated()
-				.requestMatchers("/", "/member/login", "/member/join",
+				.requestMatchers("/member/update","/member/detail", "/member/delete", "/member/pwChange", "/product/add").authenticated()
+				.requestMatchers("/", "/member/login", "/member/join","/product/list",
 						"/css/**", "/js/**", "/images/**", "/files/**")
 				.permitAll()
 

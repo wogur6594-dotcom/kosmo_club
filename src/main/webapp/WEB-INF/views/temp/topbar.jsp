@@ -12,7 +12,7 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav ml-5">
 				<li class="nav-item mr-4">
-					<a class="nav-link font-weight-bold" href="/used/list" style="color: #5a3d2b;"> Used Goods </a>
+					<a class="nav-link font-weight-bold" href="/product/list" style="color: #5a3d2b;"> 중고거래 </a>
 				</li>
 				<li class="nav-item mr-4">
 					<a class="nav-link font-weight-bold" href="/club/list" style="color: #a35400; border-bottom: 2px solid #a35400;"> Clubs </a>
