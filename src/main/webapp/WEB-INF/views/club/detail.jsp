@@ -17,20 +17,62 @@
 
 <body style="background-color: #fff7f3;">
 
+	<c:if test="${not empty msg}">
+		<script>
+			alert("${msg}");
+		</script>
+	</c:if>
+
+	<c:if test="${not empty message}">
+		<script>
+			alert("${message}");
+		</script>
+	</c:if>
+
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
 	<div class="container mt-5" style="max-width: 1120px;">
 
 		<div class="d-flex justify-content-between align-items-center mb-3">
 
-			<h1 style="font-weight: 700;">${dto.clubName}</h1>
+			<div class="d-flex align-items-center">
+
+				<span class="badge badge-success mr-2"
+					style="font-size: 14px; padding: 5px 8px;">
+					${dto.clubCategory} </span>
+
+				<h1 class="mb-0" style="font-weight: 700;">${dto.clubName}</h1>
+
+			</div>
 
 			<div>
-				<a href="" class="btn btn-sm"
-					style="background-color: #b36200; color: white; border-radius: 12px; padding: 6px 16px;">
-					가입하기 </a> <a href="./list?page=${param.page}" class="btn btn-sm"
+				<form action="/clubMember/join" method="post"
+					style="display: inline;">
+
+					<input type="hidden" name="clubNum" value="${dto.clubNum}">
+
+					<button type="submit" class="btn btn-sm"
+						style="background-color: #b36200; color: white; border-radius: 12px; padding: 6px 16px; border: none;">
+
+						가입하기</button>
+
+				</form>
+				<a href="./list?page=${param.page}" class="btn btn-sm"
 					style="background-color: #8c7b6d; color: white; border-radius: 12px; padding: 6px 16px;">
 					뒤로가기 </a>
+
+				<c:if test="${canDelete}">
+					<form action="./delete" method="post" style="display: inline;"
+						onsubmit="return confirm('정말 삭제하시겠습니까?');">
+
+						<input type="hidden" name="clubNum" value="${dto.clubNum}">
+
+						<button type="submit" class="btn btn-sm"
+							style="background-color: #b00020; color: white; border-radius: 12px; padding: 6px 16px; border: none;">
+							삭제</button>
+
+					</form>
+				</c:if>
 			</div>
 
 		</div>
@@ -41,11 +83,18 @@
 
 			<div class="col-md-6">
 
-				<span class="badge badge-success mb-3"> ${dto.clubCategory} </span>
 
-				<p class="mt-3">지역 : ${dto.clubLocation}</p>
+
+				<p class="mt-3">회장 : ${dto.ownerName}</p>
+
+				<p>지역 : ${dto.clubLocation}</p>
 
 				<p>회원수 : ${dto.currentMember} / ${dto.clubMax}</p>
+
+				<c:if test="${not empty dto.clubContents}">
+					<p style="margin-top: 16px; color: #5f4b3b; line-height: 1.7;">
+						${dto.clubContents}</p>
+				</c:if>
 
 			</div>
 
@@ -78,35 +127,52 @@
 
 			<thead>
 				<tr>
-				
 					<th>작성자</th>
 					<th>제목</th>
 					<th>등록일</th>
-					<th>카테고리</th>
 				</tr>
 			</thead>
 
 			<tbody>
 				<c:forEach items="${boardList}" var="boardDTO">
 					<tr>
-						
-						<td>${boardDTO.boardWriter}</td>
+						<td>${boardDTO.memberName}</td>
 
-						<td><a
-							href="../clubboard/detail?boardNum=${boardDTO.boardNum}"
-							style="color: #a35400;"> ${boardDTO.boardTitle} </a></td>
+						<td><span class="badge badge-success"
+							style="font-size: 10px; padding: 3px 6px; margin-right: 5px;">
+								${boardDTO.boardCategory} </span> <a
+							href="../clubboard/detail?boardNum=${boardDTO.boardNum}&clubNum=${dto.clubNum}"
+							style="color: #a85b00; text-decoration: none;">
+								${boardDTO.boardTitle} </a> 
 
+<c:if test="${boardDTO.fileCount > 0}">
+	<span style="font-size: 13px; margin-left: 5px; color: #8c7b6d;">
+		🖼
+	</span>
+</c:if>
 
-						<td>${fn:replace(fn:substring(boardDTO.boardDate.toString(), 0, 16), 'T', ' ')}
+<c:if test="${boardDTO.commentCount > 0}">
+	<span
+		style="
+			color: #b36200;
+			font-weight: 700;
+			margin-left: 4px;
+		">
+		(${boardDTO.commentCount})
+	</span>
+</c:if>
+
+							</td>
+
+						<td>
+							${fn:replace(fn:substring(boardDTO.createDate.toString(), 0, 16), 'T', ' ')}
 						</td>
-
-						<td>${boardDTO.boardCategory}</td>
 					</tr>
 				</c:forEach>
 
 				<c:if test="${empty boardList}">
 					<tr>
-						<td colspan="5" class="text-center py-4">등록된 게시글이 없습니다.</td>
+						<td colspan="3" class="text-center py-4">등록된 게시글이 없습니다.</td>
 					</tr>
 				</c:if>
 			</tbody>

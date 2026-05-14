@@ -3,6 +3,7 @@ package com.club.app.file;
 import java.io.File;
 import java.util.UUID;
 
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
@@ -46,6 +47,14 @@ public class FileManager {
 		FileCopyUtils.copy(mf.getBytes(), file);
 
 		return fileName;
+	}
+	
+	public boolean fileDelete(String name, String fileName) throws Exception {
+
+		File file = new File(path, name);
+		file = new File(file, fileName);
+
+		return file.delete();
 	}
 
 }

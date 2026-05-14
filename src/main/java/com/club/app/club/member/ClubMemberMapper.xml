@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.club.app.club.member.ClubMemberMapper">
+
+	<select id="checkJoin" parameterType="ClubMemberDTO"
+		resultType="int">
+
+		SELECT COUNT(*)
+		FROM "TB_CLUB_MEMBER"
+		WHERE "CLUB_NUM" =
+		#{clubNum}
+		AND "MEMBER_NUM" = #{memberNum}
+
+	</select>
+
+	<insert id="join">
+
+		INSERT INTO "TB_CLUB_MEMBER"
+		(
+		"CLUB_NUM",
+		"MEMBER_NUM",
+		"ROLE_NUM"
+		)
+		VALUES
+		(
+		#{clubNum},
+		#{memberNum},
+		#{roleNum}
+		)
+
+	</insert>
+
+	<select id="getCurrentMember" parameterType="long"
+		resultType="long">
+		SELECT COUNT(*)
+		FROM "TB_CLUB_MEMBER"
+		WHERE "CLUB_NUM" = #{clubNum}
+	</select>
+
+	<select id="getClubMax" parameterType="long" resultType="long">
+		SELECT "CLUB_MAX"
+		FROM "TB_CLUB"
+		WHERE "CLUB_NUM" = #{clubNum}
+	</select>
+
+</mapper>
