@@ -38,6 +38,9 @@ public class SecurityConfig {
 				.requestMatchers("/club/create").authenticated()
 				.requestMatchers("/club/create/**").authenticated()
 
+				.requestMatchers("/clubSchedule/create").authenticated()
+				.requestMatchers("/clubSchedule/create/**").authenticated()
+
 				.anyRequest().permitAll()
 				;
 			})

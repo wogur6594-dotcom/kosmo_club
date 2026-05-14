@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.club.app.club.schedule.member.ClubScheduleMemberMapper">
+
+	<!-- 일정 참가 -->
+	<insert id="join" parameterType="ClubScheduleMemberDTO">
+
+		INSERT INTO
+		"TB_CLUB_SCHEDULE_MEMBER"
+		(
+		"SCHEDULE_NUM",
+		"MEMBER_NUM",
+		"JOIN_DATE"
+		)
+		VALUES
+		(
+		#{scheduleNum},
+		#{memberNum},
+		NOW()
+		)
+
+	</insert>
+
+
+	<!-- 이미 참가했는지 -->
+	<select id="checkJoin" parameterType="ClubScheduleMemberDTO"
+		resultType="long">
+
+		SELECT COUNT(*)
+		FROM "TB_CLUB_SCHEDULE_MEMBER"
+		WHERE
+		"SCHEDULE_NUM" = #{scheduleNum}
+		AND "MEMBER_NUM" = #{memberNum}
+
+	</select>
+
+
+	<!-- 참가 인원 -->
+	<select id="count" parameterType="java.lang.Long"
+		resultType="long">
+
+		SELECT COUNT(*)
+		FROM "TB_CLUB_SCHEDULE_MEMBER"
+		WHERE
+		"SCHEDULE_NUM" = #{value}
+
+	</select>
+
+	<!-- 참가 취소 -->
+	<delete id="cancel" parameterType="ClubScheduleMemberDTO">
+
+		DELETE FROM
+		"TB_CLUB_SCHEDULE_MEMBER"
+		WHERE "SCHEDULE_NUM" = #{scheduleNum}
+		AND
+		"MEMBER_NUM" = #{memberNum}
+
+	</delete>
+
+
+	<!-- 참가 여부 -->
+	<select id="isJoin" parameterType="ClubScheduleMemberDTO"
+		resultType="long">
+
+		SELECT COUNT(*)
+		FROM "TB_CLUB_SCHEDULE_MEMBER"
+		WHERE
+		"SCHEDULE_NUM" = #{scheduleNum}
+		AND "MEMBER_NUM" = #{memberNum}
+
+	</select>
+
+	<select id="memberList" parameterType="java.lang.Long"
+		resultType="MemberDTO">
+
+		SELECT
+		M.*
+		FROM "TB_CLUB_SCHEDULE_MEMBER" SM
+		INNER JOIN "TB_MEMBER" M
+		ON SM."MEMBER_NUM" = M."MEMBER_NUM"
+		WHERE SM."SCHEDULE_NUM" = #{value}
+		ORDER BY SM."JOIN_DATE" ASC
+
+	</select>
+
+</mapper>
