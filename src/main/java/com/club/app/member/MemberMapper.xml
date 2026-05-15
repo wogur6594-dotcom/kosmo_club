@@ -97,9 +97,20 @@
 		where "MEMBER_EMAIL" = #{memberEmail}
 	</select>
 
+	<select id="checkPhone" resultType="int">
+		select count(*)
+		from "TB_MEMBER"
+		where "MEMBER_PHONE" = #{memberPhone}
+	</select>
+
 	<select id="findEmail" resultType="MemberDTO">
 		SELECT * FROM "TB_MEMBER"
 		WHERE "MEMBER_EMAIL" = #{memberEmail}
+	</select>
+
+	<select id="detailByMemberNum" resultType="MemberDTO">
+		SELECT * FROM "TB_MEMBER"
+		WHERE "MEMBER_NUM = #{memberNum}
 	</select>
 
 </mapper>

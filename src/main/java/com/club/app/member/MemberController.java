@@ -68,6 +68,12 @@ public class MemberController {
 	public boolean checkEmail(MemberDTO memberDTO) throws Exception {
 	    return memberService.checkEmail(memberDTO);
 	}
+	
+	@GetMapping("checkPhone")
+	@ResponseBody
+	public boolean checkPhone(MemberDTO memberDTO) throws Exception {
+	    return memberService.checkPhone(memberDTO);
+	}
 
 	@GetMapping("login")
 	public void login(MemberDTO memberDTO) throws Exception {

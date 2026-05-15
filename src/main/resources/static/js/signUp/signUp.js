@@ -110,16 +110,16 @@ emailCheckBtn.addEventListener("click", () => {
         alert("이메일을 입력하세요.");
         return;
     }
-	
-	if (!emailRegex.test(eValue)) {
-	    isEmailChecked = false;
-	    isEmailAvailable = false;
 
-	    emailStatus.style.color = "red";
-	    document.getElementById("emailStatus").innerText = "올바른 이메일 형식이 아닙니다.";
+    if (!emailRegex.test(eValue)) {
+        isEmailChecked = false;
+        isEmailAvailable = false;
 
-	    return;
-	}
+        emailStatus.style.color = "red";
+        document.getElementById("emailStatus").innerText = "올바른 이메일 형식이 아닙니다.";
+
+        return;
+    }
 
     fetch(`/member/checkEmail?memberEmail=${eValue}`)
         .then(res => res.json())
@@ -137,13 +137,37 @@ emailCheckBtn.addEventListener("click", () => {
         });
 
 })
+// -----------------------------------전화번호 중복체크--------------------------------
+const phoneCheckBtn = document.getElementById("phoneCheckBtn");
+const phone = document.getElementById("memberPhone");
 
+let isPhoneChecked = false;
+let isPhoneAvailable = false;
 
+phone.addEventListener("change", () => {
+    isPhoneChecked = false;
+    isPhoneAvailable = false;
+});
 
+phoneCheckBtn.addEventListener("click", async () => {
 
+    const phoneValue = phone.value;
 
+    const response = await fetch(`/member/checkPhone?memberPhone=${phoneValue}`);
 
+    const result = await response.json();
 
+    isPhoneChecked = true;
+
+    if (result) {
+        alert("이미 사용중인 전화번호입니다.");
+        isPhoneAvailable = false;
+    } else {
+        alert("사용 가능한 전화번호입니다.");
+        isPhoneAvailable = true;
+    }
+
+});
 // ----------------------------------- submit 버튼 ----------------------------------
 
 form.addEventListener("submit", (e) => {
@@ -177,6 +201,12 @@ form.addEventListener("submit", (e) => {
         e.preventDefault();
         return;
     }
+	
+	if (!isPhoneAvailable) {
+	    alert("이미 사용중인 전화번호입니다");
+	    e.preventDefault();
+	    return;
+	}
 
 });
 
@@ -201,8 +231,8 @@ attach.addEventListener("change", (e) => {
 
         return;
     } else {
-		fileDiv.style.display='block'
-	}
+        fileDiv.style.display = 'block'
+    }
 
     document.getElementById("selectFile").innerText = file.name;
 
@@ -219,7 +249,7 @@ deleteFileBtn.addEventListener("click", () => {
 
     // label 원래대로
     document.getElementById("selectFile").innerText = "사진 선택";
-	
-	fileDiv.style.display='none'
+
+    fileDiv.style.display = 'none'
 
 });
