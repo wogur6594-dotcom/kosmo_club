@@ -1,5 +1,7 @@
 package com.club.app.club.member;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -18,5 +20,13 @@ public interface ClubMemberMapper {
 	public String getClubName(Long clubNum) throws Exception;
 
 	public int checkApprovedMember(ClubMemberDTO clubMemberDTO) throws Exception;
+
+	public List<ClubMemberDTO> waitList(Long clubNum) throws Exception;
+
+	public int approve(ClubMemberDTO clubMemberDTO) throws Exception;
+
+	public int checkWaitingMember(ClubMemberDTO clubMemberDTO) throws Exception;
+
+	public Long getRoleNum(ClubMemberDTO clubMemberDTO) throws Exception;
 
 }
