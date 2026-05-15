@@ -235,7 +235,7 @@
 									</h5>
 									<p class="card-text">${l.productPrice}원</p>
 									<c:set var="addr" value="${fn:split(l.productLocation, ' ')}" />
-									<p class="card-text">${addr[0]} ${addr[1]}</p>
+									<p class="card-text">${addr[0]}&nbsp;${addr[1]}</p>
 									<a href="./detail?productNum=${l.productNum}" class="btn btn-outline-secondary"> 자세히보기 </a>
 								</div>
 							</div>
@@ -243,28 +243,29 @@
 					</c:forEach>
 				</div>
 				<!-- ================= PAGINATION ================= -->
-				<div class="row justify-content-center mt-3">
-					<nav>
-						<ul class="pagination">
-							<li class="page-item ${pager.pre ? '' : 'disabled'}">
-								<a class="page-link" href="./list?page=${pager.pre ? pager.start-1 : pager.start}&search=${pager.search}&productType=${pager.productType}&productLocation=${pager.productLocation}"> « </a>
-							</li>
-							<c:forEach begin="${pager.start}" end="${pager.end}" var="i">
-								<li class="page-item">
-									<a class="page-link" href="./list?page=${i}&search=${pager.search}&productType=${pager.productType}&productLocation=${pager.productLocation}"> ${i} </a>
+				<c:if test="${pager.totalCount > 0}">
+					<div class="row justify-content-center mt-3">
+						<nav>
+							<ul class="pagination">
+								<li class="page-item ${pager.pre ? '' : 'disabled'}">
+									<a class="page-link" href="./list?page=${pager.pre ? pager.start-1 : pager.start}&search=${pager.search}&productLocation=${pager.productLocation}"> « </a>
 								</li>
-							</c:forEach>
-							<li class="page-item ${pager.next ? '' : 'disabled'}">
-								<a class="page-link" href="./list?page=${pager.next ? pager.end+1 : pager.end}&search=${pager.search}&productType=${pager.productType}&productLocation=${pager.productLocation}"> » </a>
-							</li>
-						</ul>
-					</nav>
-				</div>
+								<c:forEach begin="${pager.start}" end="${pager.end}" var="i">
+									<li class="page-item ${pager.page == i ? 'active' : ''}">
+										<a class="page-link" href="./list?page=${i}&search=${pager.search}&productLocation=${pager.productLocation}"> ${i} </a>
+									</li>
+								</c:forEach>
+								<li class="page-item ${pager.next ? '' : 'disabled'}">
+									<a class="page-link" href="./list?page=${pager.next ? pager.end+1 : pager.end}&search=${pager.search}&productLocation=${pager.productLocation}"> » </a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</c:if>
 			</div>
 		</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="/js/product/list.js"></script>
 </body>
 </html>

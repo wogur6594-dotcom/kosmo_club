@@ -25,6 +25,12 @@ style.innerHTML = `
 .category-box label:hover {
     background: #f5f5f5;
 }
+
+.card-img-top {
+    width: 100%;
+    height: 200px;   /* 원하는 고정 높이 */
+    object-fit: cover; /* 핵심 */
+}
 `;
 
 document.head.appendChild(style);

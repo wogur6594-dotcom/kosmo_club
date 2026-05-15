@@ -16,7 +16,7 @@ public class ProductPager {
 
 	// 검색 컬럼 v1: title v2: contents, v3: writer
 	private String kind;
-	
+
 	// 상품 필터
 	private List<String> productType;
 	private String productLocation;
@@ -32,6 +32,8 @@ public class ProductPager {
 
 	private Long start;
 	private Long end;
+	
+	private Long totalCount;
 
 	// 첫 블럭과 끝 블럭의 앞,뒤 블럭유무
 	private boolean pre = true; // true 블럭이 존재
@@ -52,6 +54,15 @@ public class ProductPager {
 	}
 
 	public void makePageNum(Long totalCount) {
+
+	    if (totalCount == null || totalCount == 0) {
+	        this.start = 1L;
+	        this.end = 1L;
+	        this.pre = false;
+	        this.next = false;
+	        return;
+	    }
+
 		// 1. 총 페이지 수
 		// 페이지 수가 null 일 수도 있어서 get으로 꺼내온 페이지 값 넣기
 		Long totalPage = (long) (Math.ceil((double) totalCount / this.getPerPage()));

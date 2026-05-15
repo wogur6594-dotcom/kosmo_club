@@ -1,5 +1,6 @@
 package com.club.app.product;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,8 +53,21 @@ public class ProductService {
 	}
 
 	public List<ProductDTO> list(ProductPager pager) throws Exception {
-		pager.makePageNum(productMapper.getCount(pager));
+
+		if (pager.getProductType() == null) {
+			pager.setProductType(new ArrayList<>());
+		}
+
+		if (pager.getProductLocation() == null) {
+			pager.setProductLocation("");
+		}
+
+		Long totalCount = productMapper.getCount(pager);
+		
+		pager.setTotalCount(totalCount);  
+		pager.makePageNum(totalCount);
 		pager.makeStartNum();
+
 		return productMapper.list(pager);
 	}
 
