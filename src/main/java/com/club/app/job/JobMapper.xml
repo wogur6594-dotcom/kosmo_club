@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.club.app.job.JobMapper">
+
+	<insert id="add" parameterType="JobDTO" useGeneratedKeys="true"
+		keyProperty="jobNum" keyColumn="JOB_NUM">
+		INSERT INTO "TB_JOB" (
+		"MEMBER_NUM",
+		"JOB_TITLE",
+		"JOB_CONTENTS",
+		"JOB_CATEGORY",
+		"JOB_TYPE",
+		"JOB_LOCATION",
+		"JOB_PAY",
+		"JOB_WORK_DAY",
+		"JOB_WORK_TIME",
+		"CREATE_DATE"
+		) VALUES (
+		#{memberNum},
+		#{jobTitle},
+		#{jobContents},
+		#{jobCategory},
+		#{jobType},
+		#{jobLocation},
+		#{jobPay},
+		#{jobWorkDay},
+		#{jobWorkTime},
+		NOW()
+		)
+	</insert>
+
+	<sql id="search_sql">
+		WHERE 1 = 1
+
+		<if test="search != null and search != ''">
+			AND (
+			J."JOB_TITLE" LIKE CONCAT('%', #{search}, '%')
+			OR
+			J."JOB_CONTENTS"
+			LIKE CONCAT('%', #{search}, '%')
+			OR J."JOB_LOCATION"
+			LIKE CONCAT('%',
+			#{search}, '%')
+			)
+		</if>
+
+		<if test="jobCategory != null and jobCategory.length > 0">
+			AND J."JOB_CATEGORY" IN
+			<foreach collection="jobCategory" item="category" open="("
+				separator="," close=")">
+				#{category}
+			</foreach>
+		</if>
+
+		<if test="jobType != null and jobType.length > 0">
+			AND J."JOB_TYPE" IN
+			<foreach collection="jobType" item="type" open="("
+				separator="," close=")">
+				#{type}
+			</foreach>
+		</if>
+
+	</sql>
+
+	<select id="getCount" parameterType="JobPager" resultType="Long">
+		SELECT COUNT(*)
+		FROM "TB_JOB" J
+		<include refid="search_sql"></include>
+	</select>
+
+	<select id="list" parameterType="JobPager" resultType="JobDTO">
+		SELECT
+		J."JOB_NUM",
+		J."MEMBER_NUM",
+		J."JOB_TITLE",
+		J."JOB_CONTENTS",
+		J."JOB_CATEGORY",
+		J."JOB_TYPE",
+		J."JOB_LOCATION",
+		J."JOB_PAY",
+		J."JOB_WORK_DAY",
+		J."JOB_WORK_TIME",
+		J."CREATE_DATE",
+		M."MEMBER_NAME",
+		F."FILE_NAME",
+		F."ORI_NAME"
+		FROM "TB_JOB" J
+		LEFT JOIN "TB_MEMBER" M
+		ON
+		J."MEMBER_NUM" = M."MEMBER_NUM"
+		LEFT JOIN "TB_JOB_FILE" F
+		ON J."JOB_NUM"
+		= F."JOB_NUM"
+		<include refid="search_sql"></include>
+		ORDER BY J."JOB_NUM" DESC
+		LIMIT #{perPage} OFFSET #{startNum}
+	</select>
+
+	<select id="detail" parameterType="JobDTO" resultType="JobDTO">
+		SELECT
+		J."JOB_NUM",
+		J."MEMBER_NUM",
+		J."JOB_TITLE",
+		J."JOB_CONTENTS",
+		J."JOB_CATEGORY",
+		J."JOB_TYPE",
+		J."JOB_LOCATION",
+		J."JOB_PAY",
+		J."JOB_WORK_DAY",
+		J."JOB_WORK_TIME",
+		J."CREATE_DATE",
+		M."MEMBER_NAME",
+		F."FILE_NAME",
+		F."ORI_NAME"
+		FROM "TB_JOB" J
+		LEFT JOIN "TB_MEMBER" M
+		ON J."MEMBER_NUM" = M."MEMBER_NUM"
+		LEFT JOIN "TB_JOB_FILE" F
+		ON J."JOB_NUM" = F."JOB_NUM"
+		WHERE J."JOB_NUM" = #{jobNum}
+	</select>
+
+	<update id="update" parameterType="JobDTO">
+		UPDATE "TB_JOB"
+		SET
+		"JOB_TITLE"
+		= #{jobTitle},
+		"JOB_CONTENTS" = #{jobContents},
+		"JOB_CATEGORY" =
+		#{jobCategory},
+		"JOB_TYPE" = #{jobType},
+		"JOB_LOCATION" =
+		#{jobLocation},
+		"JOB_PAY" = #{jobPay},
+		"JOB_WORK_DAY" = #{jobWorkDay},
+		"JOB_WORK_TIME" =
+		#{jobWorkTime}
+		WHERE
+		"JOB_NUM" = #{jobNum}
+		AND
+		"MEMBER_NUM" = #{memberNum}
+	</update>
+
+	<delete id="delete" parameterType="JobDTO">
+		DELETE FROM "TB_JOB"
+		WHERE
+		"JOB_NUM" = #{jobNum}
+		AND "MEMBER_NUM" = #{memberNum}
+	</delete>
+
+	<delete id="adminDelete" parameterType="JobDTO">
+		DELETE FROM "TB_JOB"
+		WHERE "JOB_NUM" = #{jobNum}
+	</delete>
+
+	<insert id="addFile" parameterType="JobFileDTO">
+		INSERT INTO "TB_JOB_FILE" (
+		"JOB_NUM",
+		"FILE_NAME",
+		"ORI_NAME"
+		) VALUES (
+		#{jobNum},
+		#{fileName},
+		#{oriName}
+		)
+	</insert>
+
+</mapper>

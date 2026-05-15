@@ -13,63 +13,41 @@ import com.club.app.security.LoginFailHandler;
 public class SecurityConfig {
 
 	private final LoginFailHandler loginFailHandler;
-	
+
 	SecurityConfig(LoginFailHandler loginFailHandler) {
 		this.loginFailHandler = loginFailHandler;
 	}
-	
+
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http
-			.cors(cors -> {
-				cors.disable();
-			})
-			.csrf(csrf -> {
-				csrf.disable();				
-			})
-			.authorizeHttpRequests(auth -> {
-				auth
-				.requestMatchers("/member/update","/member/detail", "/member/delete", "/member/pwChange", "/product/add").authenticated()
-				.requestMatchers("/", "/member/login", "/member/join","/product/list",
-						"/css/**", "/js/**", "/images/**", "/files/**")
-				.permitAll()
-
-				// 동호회 개설할때 로그인 해야함.. -> 일단 로그인 화면으로 이동하게 수정
-				.requestMatchers("/club/create").authenticated()
-				.requestMatchers("/club/create/**").authenticated()
-
-				.requestMatchers("/clubSchedule/create").authenticated()
-				.requestMatchers("/clubSchedule/create/**").authenticated()
-
-				.anyRequest().permitAll()
-				;
-			})
-			.formLogin(login -> {
-				login
-					.loginPage("/member/login")
-					.usernameParameter("memberId")
-					.passwordParameter("memberPw")
-					.loginProcessingUrl("/member/login")
-					.defaultSuccessUrl("/")
-					.failureHandler(loginFailHandler)
+		http.cors(cors -> {
+			cors.disable();
+		}).csrf(csrf -> {
+			csrf.disable();
+		}).authorizeHttpRequests(auth -> {
+			auth.requestMatchers("/member/update", "/member/detail", "/member/delete", "/member/pwChange",
+					"/product/add", "/job/create", "/job/create/**").authenticated()
+					.requestMatchers("/", "/member/login", "/member/join", "/product/list", "/css/**", "/js/**",
+							"/images/**", "/files/**", "/job/update", "/job/update/**", "/job/delete", "/job/delete/**")
 					.permitAll()
-					;
-			})
-	        .rememberMe(remember -> 
-	        	remember
-	                .rememberMeParameter("remember-me")
-	                .tokenValiditySeconds(60 * 60 * 24 * 7) // 1주
-	                .key("myRememberKey")
-	            )
-			.logout(logout -> {				
-				logout
-				.logoutUrl("/member/logout")
-				.invalidateHttpSession(true)
-				.deleteCookies("JSESSIONID")
-				.logoutSuccessUrl("/");
-			});
-			
+
+					// 동호회 개설할때 로그인 해야함.. -> 일단 로그인 화면으로 이동하게 수정
+					.requestMatchers("/club/create").authenticated().requestMatchers("/club/create/**").authenticated()
+
+					.requestMatchers("/clubSchedule/create").authenticated().requestMatchers("/clubSchedule/create/**")
+					.authenticated()
+
+					.anyRequest().permitAll();
+		}).formLogin(login -> {
+			login.loginPage("/member/login").usernameParameter("memberId").passwordParameter("memberPw")
+					.loginProcessingUrl("/member/login").defaultSuccessUrl("/").failureHandler(loginFailHandler)
+					.permitAll();
+		}).rememberMe(remember -> remember.rememberMeParameter("remember-me").tokenValiditySeconds(60 * 60 * 24 * 7) // 1주
+				.key("myRememberKey")).logout(logout -> {
+					logout.logoutUrl("/member/logout").invalidateHttpSession(true).deleteCookies("JSESSIONID")
+							.logoutSuccessUrl("/");
+				});
 
 		return http.build();
 	}

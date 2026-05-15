@@ -15,13 +15,13 @@
 					<a class="nav-link font-weight-bold" href="/product/list" style="color: #5a3d2b;"> 중고거래 </a>
 				</li>
 				<li class="nav-item mr-4">
-					<a class="nav-link font-weight-bold" href="/club/list" style="color: #a35400; border-bottom: 2px solid #a35400;"> Clubs </a>
+					<a class="nav-link font-weight-bold" href="/club/list" style="color: #a35400; border-bottom: 2px solid #a35400;"> 동호회 </a>
 				</li>
 				<li class="nav-item mr-4">
-					<a class="nav-link font-weight-bold" href="#" style="color: #5a3d2b;"> Real Estate </a>
+					<a class="nav-link font-weight-bold" href="#" style="color: #5a3d2b;"> ???? </a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link font-weight-bold" href="#" style="color: #5a3d2b;"> Jobs </a>
+					<a class="nav-link font-weight-bold" href="/job/list" style="color: #5a3d2b;"> 동네알바 </a>
 				</li>
 			</ul>
 			<sec:authorize access="!isAuthenticated()">
