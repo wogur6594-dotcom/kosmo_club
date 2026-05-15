@@ -13,7 +13,7 @@ import com.club.app.member.MemberDTO;
 
 @Controller
 public class ClubBoardCommentController {
-	
+
 	@Autowired
 	private ClubMemberService clubMemberService;
 
@@ -32,7 +32,7 @@ public class ClubBoardCommentController {
 		clubMemberDTO.setClubNum(clubNum);
 		clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
-		int check = clubMemberService.checkJoin(clubMemberDTO);
+		int check = clubMemberService.checkApprovedMember(clubMemberDTO);
 
 		if (check == 0) {
 			redirectAttributes.addFlashAttribute("message", "동호회 멤버만 댓글을 작성할 수 있습니다.");
@@ -42,7 +42,7 @@ public class ClubBoardCommentController {
 
 		clubBoardCommentDTO.setMemberNum(memberDTO.getMemberNum());
 
-		int result = clubBoardCommentService.add(clubBoardCommentDTO);
+		int result = clubBoardCommentService.add(clubBoardCommentDTO, clubNum);
 
 		if (result > 0) {
 			redirectAttributes.addFlashAttribute("message", "댓글이 등록되었습니다.");

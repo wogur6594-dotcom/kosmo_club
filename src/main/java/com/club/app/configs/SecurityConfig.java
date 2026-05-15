@@ -12,65 +12,90 @@ import com.club.app.security.LoginFailHandler;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	private final LoginFailHandler loginFailHandler;
-	
-	SecurityConfig(LoginFailHandler loginFailHandler) {
-		this.loginFailHandler = loginFailHandler;
-	}
-	
-	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    private final LoginFailHandler loginFailHandler;
 
-		http
-			.cors(cors -> {
-				cors.disable();
-			})
-			.csrf(csrf -> {
-				csrf.disable();				
-			})
-			.authorizeHttpRequests(auth -> {
-				auth
-				.requestMatchers("/member/update","/member/detail", "/member/delete", "/member/pwChange", "/product/add", "/product/detail").authenticated()
-				.requestMatchers("/", "/member/login", "/member/join","/product/list",
-						"/css/**", "/js/**", "/images/**", "/files/**")
-				.permitAll()
+    SecurityConfig(LoginFailHandler loginFailHandler) {
+        this.loginFailHandler = loginFailHandler;
+    }
 
-				// 동호회 개설할때 로그인 해야함.. -> 일단 로그인 화면으로 이동하게 수정
-				.requestMatchers("/club/create").authenticated()
-				.requestMatchers("/club/create/**").authenticated()
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-				.requestMatchers("/clubSchedule/create").authenticated()
-				.requestMatchers("/clubSchedule/create/**").authenticated()
+        http
+            .cors(cors -> {
+                cors.disable();
+            })
+            .csrf(csrf -> {
+                csrf.disable();
+            })
+            .authorizeHttpRequests(auth -> {
 
-				.anyRequest().permitAll()
-				;
-			})
-			.formLogin(login -> {
-				login
-					.loginPage("/member/login")
-					.usernameParameter("memberId")
-					.passwordParameter("memberPw")
-					.loginProcessingUrl("/member/login")
-					.defaultSuccessUrl("/")
-					.failureHandler(loginFailHandler)
-					.permitAll()
-					;
-			})
-	        .rememberMe(remember -> 
-	        	remember
-	                .rememberMeParameter("remember-me")
-	                .tokenValiditySeconds(60 * 60 * 24 * 7) // 1주
-	                .key("myRememberKey")
-	            )
-			.logout(logout -> {				
-				logout
-				.logoutUrl("/member/logout")
-				.invalidateHttpSession(true)
-				.deleteCookies("JSESSIONID")
-				.logoutSuccessUrl("/");
-			});
-			
+                auth
+                    // 로그인 필요한 페이지
+                    .requestMatchers(
+                        "/member/update",
+                        "/member/detail",
+                        "/member/delete",
+                        "/member/pwChange",
+                        "/product/add",
+                        "/job/create",
+                        "/job/create/**",
+                        "/club/create",
+                        "/club/create/**",
+                        "/clubSchedule/create",
+                        "/clubSchedule/create/**"
+                    ).authenticated()
 
-		return http.build();
-	}
+                    // 모두 허용
+                    .requestMatchers(
+                        "/",
+                        "/member/login",
+                        "/member/join",
+                        "/product/list",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**",
+                        "/files/**",
+                        "/job/update",
+                        "/job/update/**",
+                        "/job/delete",
+                        "/job/delete/**",
+                        "/job/deleteFile",
+                        "/job/deleteFile/**"
+                    ).permitAll()
+
+                    .anyRequest().permitAll();
+            })
+
+            .formLogin(login -> {
+
+                login
+                    .loginPage("/member/login")
+                    .usernameParameter("memberId")
+                    .passwordParameter("memberPw")
+                    .loginProcessingUrl("/member/login")
+                    .defaultSuccessUrl("/")
+                    .failureHandler(loginFailHandler)
+                    .permitAll();
+            })
+
+            .rememberMe(remember ->
+
+                remember
+                    .rememberMeParameter("remember-me")
+                    .tokenValiditySeconds(60 * 60 * 24 * 7)
+                    .key("myRememberKey")
+            )
+
+            .logout(logout -> {
+
+                logout
+                    .logoutUrl("/member/logout")
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID")
+                    .logoutSuccessUrl("/");
+            });
+
+        return http.build();
+    }
 }

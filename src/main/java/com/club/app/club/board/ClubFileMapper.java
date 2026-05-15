@@ -19,4 +19,5 @@ public interface ClubFileMapper {
 
 	public int deleteFile(Long fileNum) throws Exception;
 
+
 }

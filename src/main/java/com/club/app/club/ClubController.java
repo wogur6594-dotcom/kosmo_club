@@ -88,7 +88,7 @@ public class ClubController {
 			clubMemberDTO.setClubNum(clubDTO.getClubNum());
 			clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
-			isMember = clubMemberService.checkJoin(clubMemberDTO) > 0;
+			isMember = clubMemberService.checkApprovedMember(clubMemberDTO) > 0;
 		}
 
 		model.addAttribute("canDelete", canDelete);

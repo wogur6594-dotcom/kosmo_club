@@ -25,12 +25,12 @@ public class ClubMemberController {
 		}
 
 		clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
-		clubMemberDTO.setRoleNum(2L);
+		clubMemberDTO.setRoleNum(0L);
 
 		int result = clubMemberService.join(clubMemberDTO);
 
 		if (result > 0) {
-			redirectAttributes.addFlashAttribute("message", "가입이 완료되었습니다.");
+			redirectAttributes.addFlashAttribute("message", "가입 신청이 완료되었습니다.");
 		} else if (result == -1) {
 			redirectAttributes.addFlashAttribute("message", "정원이 초과되어 가입할 수 없습니다.");
 		} else {

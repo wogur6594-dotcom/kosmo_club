@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.club.app.notification.NotificationMapper">
+
+	<!-- 알림 등록 -->
+	<insert id="add" parameterType="NotificationDTO">
+
+		INSERT INTO "TB_NOTIFICATION"
+		(
+		"MEMBER_NUM",
+		"NOTIFICATION_CONTENTS",
+		"NOTIFICATION_URL"
+		)
+
+		VALUES
+		(
+		#{memberNum},
+		#{notificationContents},
+		#{notificationUrl}
+		)
+
+	</insert>
+
+
+	<!-- 알림 목록 -->
+	<select id="list" parameterType="long"
+		resultType="NotificationDTO">
+
+		SELECT
+		"NOTIFICATION_NUM",
+		"MEMBER_NUM",
+		"NOTIFICATION_CONTENTS",
+		"NOTIFICATION_URL",
+		"IS_READ",
+		"CREATE_DATE"
+
+		FROM "TB_NOTIFICATION"
+
+		WHERE "MEMBER_NUM" = #{memberNum}
+
+		ORDER BY
+		"NOTIFICATION_NUM" DESC
+
+	</select>
+
+
+	<!-- 안읽은 알림 개수 -->
+	<select id="unreadCount" parameterType="long" resultType="long">
+
+		SELECT
+		COUNT(*)
+
+		FROM "TB_NOTIFICATION"
+
+		WHERE "MEMBER_NUM" = #{memberNum}
+		AND
+		"IS_READ" = FALSE
+
+	</select>
+
+
+	<!-- 읽음 처리 -->
+	<update id="readUpdate" parameterType="long">
+
+		UPDATE "TB_NOTIFICATION"
+
+		SET "IS_READ" = TRUE
+
+		WHERE "NOTIFICATION_NUM" = #{notificationNum}
+
+	</update>
+
+	<select id="recentList" parameterType="long"
+		resultType="NotificationDTO">
+
+		SELECT
+		"NOTIFICATION_NUM",
+		"MEMBER_NUM",
+		"NOTIFICATION_CONTENTS",
+		"NOTIFICATION_URL",
+		"IS_READ",
+		"CREATE_DATE"
+
+		FROM "TB_NOTIFICATION"
+
+		WHERE "MEMBER_NUM" = #{memberNum}
+
+		ORDER BY "NOTIFICATION_NUM" DESC
+
+		LIMIT 5
+
+	</select>
+
+</mapper>
