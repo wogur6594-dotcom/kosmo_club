@@ -34,6 +34,8 @@ public class ProductPager {
 	private Long end;
 	
 	private Long totalCount;
+	
+	private Long memberNum;
 
 	// 첫 블럭과 끝 블럭의 앞,뒤 블럭유무
 	private boolean pre = true; // true 블럭이 존재

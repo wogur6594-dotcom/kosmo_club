@@ -37,14 +37,17 @@
 	</select>
 
 	<select id="list" resultMap="productMap">
-		SELECT p.*, f.* FROM (
-		SELECT * FROM "TB_PRODUCT"
+		SELECT *
+		FROM (
+		SELECT p.*
+		FROM "TB_PRODUCT" p
 		<include refid="search_sql"/>
-		ORDER BY "CREATETIME" DESC
+		ORDER BY p."CREATETIME" DESC
 		LIMIT #{perPage} OFFSET #{startNum}
 		) p
 		LEFT JOIN "TB_PRODUCTFILE" f
-		USING("PRODUCT_NUM")
+		ON p."PRODUCT_NUM" = f."PRODUCT_NUM"
+		ORDER BY p."CREATETIME" DESC
 	</select>
 
 	<resultMap id="productMap" type="ProductDTO">
@@ -105,5 +108,41 @@
 		DELETE FROM "TB_PRODUCT"
 		WHERE "PRODUCT_NUM" = #{productNum}
 	</delete>
+
+	<select id="myList" resultMap="productMap3">
+		SELECT *
+		FROM "TB_PRODUCT"
+		WHERE "MEMBER_NUM" = #{memberNum}
+		<if test="search != null and search != ''">
+			AND "PRODUCT_TITLE" LIKE CONCAT('%', #{search}, '%')
+		</if>
+		<if test="productType != null and productType.size() > 0">
+			AND "PRODUCT_TYPE" IN
+			<foreach collection="productType" item="type" open="(" separator="," close=")">
+				#{type}
+			</foreach>
+		</if>
+		<if test="productLocation != null and productLocation != ''">
+			AND "PRODUCT_LOCATION" LIKE CONCAT('%', #{productLocation}, '%')
+		</if>
+		ORDER BY "CREATETIME" DESC
+		LIMIT #{perPage} OFFSET #{startNum}
+	</select>
+
+	<resultMap id="productMap3" type="ProductDTO">
+		<id property="productNum" column="PRODUCT_NUM"/>
+		<result property="productTitle" column="PRODUCT_TITLE"/>
+		<result property="productPrice" column="PRODUCT_PRICE"/>
+		<result property="productLocation" column="PRODUCT_LOCATION"/>
+		<result property="productStatus" column="PRODUCT_STATUS"/>
+		<result property="productType" column="PRODUCT_TYPE"/>
+		<collection property="fileList" ofType="ProductFileDTO" select="getFileList" column="PRODUCT_NUM"/>
+	</resultMap>
+
+	<select id="getFileList" resultType="ProductFileDTO">
+		SELECT *
+		FROM "TB_PRODUCTFILE"
+		WHERE "PRODUCT_NUM" = #{productNum}
+	</select>
 
 </mapper>

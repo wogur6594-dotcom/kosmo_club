@@ -39,6 +39,7 @@ public class SecurityConfig {
                         "/member/pwChange",
                         "/product/add",
                         "/product/detail",
+                        "/product/myList",
                         "/job/create",
                         "/job/create/**",
                         "/club/create",
