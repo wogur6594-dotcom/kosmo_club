@@ -17,5 +17,11 @@ public interface ProductMapper {
     
     public Long getCount(ProductPager pager) throws Exception;
 
-    public ProductDTO detail(Long productId) throws Exception;
+    public ProductDTO detail(ProductDTO productDTO) throws Exception;
+    
+    public int edit(ProductDTO productDTO) throws Exception;
+    
+    public int deleteFile(Long fileNum) throws Exception;
+    
+    public void delete(ProductDTO productDTO) throws Exception;
 }

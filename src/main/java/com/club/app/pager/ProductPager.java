@@ -1,5 +1,7 @@
 package com.club.app.pager;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +16,10 @@ public class ProductPager {
 
 	// 검색 컬럼 v1: title v2: contents, v3: writer
 	private String kind;
+	
+	// 상품 필터
+	private List<String> productType;
+	private String productLocation;
 
 	// 페이지번호
 	private Long page;

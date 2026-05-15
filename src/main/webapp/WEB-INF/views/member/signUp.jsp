@@ -46,9 +46,11 @@
 		<form:errors path="memberPhone" cssStyle="color:red" />
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">Phone</span>
+				<span class="input-group-text" id="basic-addon1">전화번호</span>
 			</div>
-			<input type="text" class="form-control" name="memberPhone" placeholder="ex) 010-1234-1234">
+			<input type="text" id="memberPhone" name="memberPhone" class="form-control">
+			<button type="button" id="phoneCheckBtn">중복확인</button>
+		</div>
 		</div>
 		<form:errors path="memberEmail" cssStyle="color:red" />
 		<div class="input-group mb-3">
