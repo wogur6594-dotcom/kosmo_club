@@ -162,7 +162,13 @@ body {
 			alert("${msg}");
 		</script>
 	</c:if>
-	
+
+	<c:if test="${not empty message}">
+		<script>
+			alert("${message}");
+		</script>
+	</c:if>
+
 	<c:if test="${param.message eq 'memberOnly'}">
 		<script>
 			alert("동호회 멤버만 글 작성이 가능합니다.");
@@ -204,9 +210,37 @@ body {
 
 						<input type="hidden" name="clubNum" value="${dto.clubNum}">
 
-						<button type="submit" class="btn btn-sm btn-brown">가입하기</button>
+						<c:choose>
+							<c:when test="${isMember}">
+								<span class="badge badge-secondary ml-2">가입완료</span>
+							</c:when>
+
+							<c:when test="${isWaiting}">
+								<span class="badge badge-warning ml-2">승인 대기중</span>
+							</c:when>
+
+							<c:otherwise>
+								<form
+									action="${pageContext.request.contextPath}/clubMember/join"
+									method="post" style="display: inline;"
+									onsubmit="return confirm('이 동호회에 가입 신청하시겠습니까?');">
+
+									<input type="hidden" name="clubNum" value="${dto.clubNum}">
+
+									<button type="submit" class="btn btn-sm btn-brown">가입하기</button>
+								</form>
+							</c:otherwise>
+						</c:choose>
 					</form>
 				</c:if>
+				<!-- 가입승인 -->
+				<c:if test="${roleNum eq 1}">
+				<a href="/clubMember/waitList?clubNum=${dto.clubNum}"
+						class="btn btn-sm"
+						style="background-color: #a35400; color: white; border-radius: 12px; padding: 6px 16px;">
+						가입 신청 목록 </a>
+				</c:if>
+				<!-- 가입승인 끝 -->
 
 				<c:if test="${isMember}">
 					<!-- <span class="badge badge-secondary ml-2"> 가입완료 </span> -->
@@ -255,25 +289,20 @@ body {
 						style="background: #fff3e6; border-radius: 12px; padding: 10px; font-weight: 700; color: #b36200;">
 
 						${dto.currentMember} / ${dto.clubMax} 명</div>
-						
-	<c:choose>
 
-	<c:when test="${isMember}">
-		<a href="/clubChat/room?clubNum=${dto.clubNum}"
-			class="btn btn-sm btn-brown btn-block mt-2">
-			채팅하기
-		</a>
-	</c:when>
+					<c:choose>
 
-	<c:otherwise>
-		<button type="button"
-			class="btn btn-sm btn-brown btn-block mt-2"
-			onclick="alert('동호회 가입 회원만 채팅 가능합니다.');">
-			채팅하기
-		</button>
-	</c:otherwise>
+						<c:when test="${isMember}">
+							<a href="/clubChat/room?clubNum=${dto.clubNum}"
+								class="btn btn-sm btn-brown btn-block mt-2"> 채팅하기 </a>
+						</c:when>
 
-</c:choose>
+						<c:otherwise>
+							<button type="button" class="btn btn-sm btn-brown btn-block mt-2"
+								onclick="alert('동호회 가입 회원만 채팅 가능합니다.');">채팅하기</button>
+						</c:otherwise>
+
+					</c:choose>
 
 					<c:if test="${not empty dto.clubContents}">
 						<hr>
