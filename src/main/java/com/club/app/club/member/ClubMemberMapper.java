@@ -29,4 +29,14 @@ public interface ClubMemberMapper {
 
 	public Long getRoleNum(ClubMemberDTO clubMemberDTO) throws Exception;
 
+	public int kickMember(ClubMemberDTO clubMemberDTO) throws Exception;
+
+	public List<ClubMemberDTO> memberList(Long clubNum) throws Exception;
+
+	public int leave(ClubMemberDTO clubMemberDTO) throws Exception;
+
+	public int delegateOwnerToMember(ClubMemberDTO clubMemberDTO) throws Exception;
+
+	public int downgradeOwner(ClubMemberDTO clubMemberDTO) throws Exception;
+
 }

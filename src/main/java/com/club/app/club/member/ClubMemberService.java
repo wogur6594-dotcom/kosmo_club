@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.club.app.notification.NotificationDTO;
 import com.club.app.notification.NotificationService;
@@ -98,6 +99,27 @@ public class ClubMemberService {
 
 	public Long getRoleNum(ClubMemberDTO clubMemberDTO) throws Exception {
 		return clubMemberMapper.getRoleNum(clubMemberDTO);
+	}
+
+	public int kickMember(ClubMemberDTO clubMemberDTO) throws Exception {
+		return clubMemberMapper.kickMember(clubMemberDTO);
+	}
+
+	public List<ClubMemberDTO> memberList(Long clubNum) throws Exception {
+		return clubMemberMapper.memberList(clubNum);
+	}
+
+	public int leave(ClubMemberDTO clubMemberDTO) throws Exception {
+		return clubMemberMapper.leave(clubMemberDTO);
+	}
+
+	@Transactional
+	public void delegateOwner(ClubMemberDTO clubMemberDTO) throws Exception {
+
+		clubMemberMapper.downgradeOwner(clubMemberDTO);
+
+		clubMemberMapper.delegateOwnerToMember(clubMemberDTO);
+
 	}
 
 }
