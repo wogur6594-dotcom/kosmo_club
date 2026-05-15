@@ -1,5 +1,7 @@
 package com.club.app.club.member;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +45,7 @@ public class ClubMemberService {
 				NotificationDTO notificationDTO = new NotificationDTO();
 
 				notificationDTO.setMemberNum(ownerMemberNum);
-				notificationDTO.setNotificationContents("[" + clubName + "] 동호회에 새 회원이 가입했습니다.");
+				notificationDTO.setNotificationContents("[" + clubName + "] 동호회에 새 가입 신청이 있습니다.");
 				notificationDTO.setNotificationUrl("/club/detail?clubNum=" + clubMemberDTO.getClubNum());
 
 				notificationService.add(notificationDTO);
@@ -61,6 +63,41 @@ public class ClubMemberService {
 
 	public int checkApprovedMember(ClubMemberDTO clubMemberDTO) throws Exception {
 		return clubMemberMapper.checkApprovedMember(clubMemberDTO);
+	}
+
+	public List<ClubMemberDTO> waitList(Long clubNum) throws Exception {
+		return clubMemberMapper.waitList(clubNum);
+	}
+
+	public int approve(ClubMemberDTO clubMemberDTO) throws Exception {
+
+		int result = clubMemberMapper.approve(clubMemberDTO);
+
+		if (result > 0) {
+
+			String clubName = clubMemberMapper.getClubName(clubMemberDTO.getClubNum());
+
+			NotificationDTO notificationDTO = new NotificationDTO();
+
+			notificationDTO.setMemberNum(clubMemberDTO.getMemberNum());
+
+			notificationDTO.setNotificationContents("[" + clubName + "] 동호회 가입이 승인되었습니다.");
+
+			notificationDTO.setNotificationUrl("/club/detail?clubNum=" + clubMemberDTO.getClubNum());
+
+			notificationService.add(notificationDTO);
+
+		}
+
+		return result;
+	}
+
+	public int checkWaitingMember(ClubMemberDTO clubMemberDTO) throws Exception {
+		return clubMemberMapper.checkWaitingMember(clubMemberDTO);
+	}
+
+	public Long getRoleNum(ClubMemberDTO clubMemberDTO) throws Exception {
+		return clubMemberMapper.getRoleNum(clubMemberDTO);
 	}
 
 }
