@@ -25,7 +25,7 @@
 
 
 				<li class="nav-item dropdown mr-4">
-					<a class="nav-link dropdown-toggle font-weight-bold" href="#" id="tradeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #5a3d2b;"> 중고거래 </a>
+					<a class="nav-link dropdown-toggle font-weight-bold" href="#" id="tradeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #5a3d2b;">중고거래</a>
 					<div class="dropdown-menu" aria-labelledby="tradeDropdown">
 						<a class="dropdown-item" href="/product/list">상품목록</a>
 						<a class="dropdown-item" href="/product/myList">내 판매목록</a>
