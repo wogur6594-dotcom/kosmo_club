@@ -106,4 +106,28 @@
 		WHERE "PRODUCT_NUM" = #{productNum}
 	</delete>
 
+	<select id="myList" resultMap="productMap3">
+		SELECT *
+		FROM "TB_PRODUCT"
+		<include refid="search_sql"/>
+		ORDER BY "CREATETIME" DESC
+		LIMIT #{perPage} OFFSET #{startNum}
+	</select>
+
+	<resultMap id="productMap3" type="ProductDTO">
+		<id property="productNum" column="PRODUCT_NUM"/>
+		<result property="productTitle" column="PRODUCT_TITLE"/>
+		<result property="productPrice" column="PRODUCT_PRICE"/>
+		<result property="productLocation" column="PRODUCT_LOCATION"/>
+		<result property="productStatus" column="PRODUCT_STATUS"/>
+		<result property="productType" column="PRODUCT_TYPE"/>
+		<collection property="fileList" ofType="ProductFileDTO" select="getFileList" column="PRODUCT_NUM"/>
+	</resultMap>
+
+	<select id="getFileList" resultType="ProductFileDTO">
+		SELECT *
+		FROM "TB_PRODUCTFILE"
+		WHERE "PRODUCT_NUM" = #{productNum}
+	</select>
+
 </mapper>

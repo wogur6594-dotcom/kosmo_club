@@ -63,8 +63,8 @@ public class ProductService {
 		}
 
 		Long totalCount = productMapper.getCount(pager);
-		
-		pager.setTotalCount(totalCount);  
+
+		pager.setTotalCount(totalCount);
 		pager.makePageNum(totalCount);
 		pager.makeStartNum();
 
@@ -127,6 +127,23 @@ public class ProductService {
 
 		// 3. 삭제 (cascade면 상품만 삭제)
 		productMapper.delete(productDTO);
+	}
+
+	public List<ProductDTO> myList(ProductPager pager) throws Exception {
+
+		if (pager.getProductType() == null) {
+			pager.setProductType(new ArrayList<>());
+		}
+
+		if (pager.getProductLocation() == null) {
+			pager.setProductLocation("");
+		}
+
+		if (pager.getSearch() == null) {
+			pager.setSearch("");
+		}
+
+		return productMapper.myList(pager);
 	}
 
 }

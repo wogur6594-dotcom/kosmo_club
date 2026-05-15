@@ -159,15 +159,46 @@ public class ProductController {
 
 		return (result > 0) ? "success" : "fail";
 	}
-	
+
 	@PostMapping("delete")
 	public String delete(ProductDTO productDTO, Authentication auth) throws Exception {
 
-	    MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
 
-	    productService.delete(productDTO, loginUser.getMemberNum());
+		productService.delete(productDTO, loginUser.getMemberNum());
 
-	    return "redirect:/product/list";
+		return "redirect:/product/list";
+	}
+
+	@GetMapping("myList")
+	public String myList() throws Exception {
+		return "product/myList";
+	}
+
+	@GetMapping("myListAjax")
+	public String myListAjax(ProductPager pager, Authentication auth, Model model) throws Exception {
+
+		MemberDTO member = (MemberDTO) auth.getPrincipal();
+		pager.setMemberNum(member.getMemberNum());
+
+		long perPage = 9;
+		pager.setPerPage(perPage);
+
+		// ⭐ 핵심 수정 1: page null / 0 방어
+		long page = pager.getPage();
+
+		if (page < 1) {
+			page = 1;
+		}
+
+		// ⭐ 핵심 수정 2: OFFSET 정확 계산 (1-based 기준)
+		pager.setStartNum((page - 1) * perPage);
+
+		List<ProductDTO> list = productService.myList(pager);
+
+		model.addAttribute("list", list);
+
+		return "product/myListItem";
 	}
 
 }
