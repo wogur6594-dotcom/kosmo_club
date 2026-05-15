@@ -37,8 +37,8 @@
 		resultType="long">
 		SELECT COUNT(*)
 		FROM "TB_CLUB_MEMBER"
-		WHERE "CLUB_NUM" =
-		#{clubNum}
+		WHERE "CLUB_NUM" = #{clubNum}
+		AND "ROLE_NUM" IN (1, 2)
 	</select>
 
 	<select id="getClubMax" parameterType="long" resultType="long">
@@ -75,10 +75,67 @@
 
 		SELECT COUNT(*)
 		FROM "TB_CLUB_MEMBER"
-		WHERE "CLUB_NUM" = #{clubNum}
+		WHERE "CLUB_NUM" =
+		#{clubNum}
 		AND "MEMBER_NUM" = #{memberNum}
 		AND "ROLE_NUM" IN (1, 2)
 
+	</select>
+
+	<select id="waitList" parameterType="long"
+		resultType="ClubMemberDTO">
+
+		SELECT
+		CM."CLUB_NUM",
+		CM."MEMBER_NUM",
+		CM."ROLE_NUM",
+		M."MEMBER_ID",
+		M."MEMBER_NAME"
+
+		FROM "TB_CLUB_MEMBER" CM
+
+		JOIN "TB_MEMBER"
+		M
+		ON CM."MEMBER_NUM" = M."MEMBER_NUM"
+
+		WHERE CM."CLUB_NUM" = #{clubNum}
+		AND CM."ROLE_NUM" = 0
+
+	</select>
+
+
+	<update id="approve" parameterType="ClubMemberDTO">
+
+		UPDATE "TB_CLUB_MEMBER"
+
+		SET
+		"ROLE_NUM" = 2
+
+		WHERE "CLUB_NUM" = #{clubNum}
+		AND "MEMBER_NUM" =
+		#{memberNum}
+		AND "ROLE_NUM" = 0
+
+	</update>
+
+	<select id="checkWaitingMember" parameterType="ClubMemberDTO"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM "TB_CLUB_MEMBER"
+		WHERE "CLUB_NUM" =
+		#{clubNum}
+		AND "MEMBER_NUM" = #{memberNum}
+		AND "ROLE_NUM" = 0
+	</select>
+
+	<select id="getRoleNum" parameterType="ClubMemberDTO"
+		resultType="long">
+		SELECT "ROLE_NUM"
+		FROM "TB_CLUB_MEMBER"
+		WHERE "CLUB_NUM" =
+		#{clubNum}
+		AND "MEMBER_NUM" = #{memberNum}
+		LIMIT 1
 	</select>
 
 </mapper>

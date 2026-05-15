@@ -70,6 +70,9 @@ public class ClubController {
 		boolean canDelete = false;
 		boolean isMember = false;
 
+		boolean isWaiting = false;
+		Long roleNum = null;
+
 		if (authentication != null && authentication.isAuthenticated()
 				&& !authentication.getPrincipal().equals("anonymousUser")) {
 
@@ -89,10 +92,13 @@ public class ClubController {
 			clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
 			isMember = clubMemberService.checkApprovedMember(clubMemberDTO) > 0;
+			roleNum = clubMemberService.getRoleNum(clubMemberDTO);
 		}
 
 		model.addAttribute("canDelete", canDelete);
 		model.addAttribute("isMember", isMember);
+		model.addAttribute("isWaiting", isWaiting);
+		model.addAttribute("roleNum", roleNum);
 	}
 
 	@GetMapping("create")
