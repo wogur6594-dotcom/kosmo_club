@@ -21,18 +21,26 @@
 
 		SELECT
 		C.*,
+		M."MEMBER_NAME" AS "OWNER_NAME",
 		F."FILE_NUM",
 		F."FILE_NAME",
 		F."ORI_NAME",
 		(
 		SELECT COUNT(*)
-		FROM "TB_CLUB_MEMBER" CM
-		WHERE CM."CLUB_NUM" = C."CLUB_NUM"
-		AND
-		CM."ROLE_NUM" IN (1, 2)
-		) AS
-		"CURRENT_MEMBER"
+		FROM "TB_CLUB_MEMBER" CM2
+		WHERE CM2."CLUB_NUM" = C."CLUB_NUM"
+		AND CM2."ROLE_NUM" IN (1, 2)
+		) AS "CURRENT_MEMBER"
+
 		FROM "TB_CLUB" C
+
+		LEFT JOIN "TB_CLUB_MEMBER" CM
+		ON C."CLUB_NUM" = CM."CLUB_NUM"
+		AND CM."ROLE_NUM" = 1
+
+		LEFT JOIN "TB_MEMBER" M
+		ON CM."MEMBER_NUM" = M."MEMBER_NUM"
+
 		LEFT JOIN
 		(
 		SELECT DISTINCT ON ("CLUB_NUM")
@@ -43,8 +51,7 @@
 		FROM "TB_CLUBFILE"
 		ORDER BY "CLUB_NUM", "FILE_NUM" ASC
 		) F
-		ON
-		C."CLUB_NUM" = F."CLUB_NUM"
+		ON C."CLUB_NUM" = F."CLUB_NUM"
 
 		<where>
 			<if test="clubCategory != null and clubCategory != ''">

@@ -203,47 +203,67 @@ body {
 			</div>
 
 			<div>
-				<c:if test="${not isMember}">
-					<form action="${pageContext.request.contextPath}/clubMember/join"
-						method="post" style="display: inline;"
-						onsubmit="return confirm('이 동호회에 가입하시겠습니까?');">
+				<c:choose>
 
-						<input type="hidden" name="clubNum" value="${dto.clubNum}">
+					<c:when test="${isMember}">
+						<button type="button" class="btn btn-sm btn-secondary" disabled>
+							가입완료</button>
+					</c:when>
 
-						<c:choose>
-							<c:when test="${isMember}">
-								<span class="badge badge-secondary ml-2">가입완료</span>
-							</c:when>
+					<c:when test="${isWaiting}">
+						<button type="button" class="btn btn-sm btn-warning" disabled>
+							가입 대기중</button>
+					</c:when>
 
-							<c:when test="${isWaiting}">
-								<span class="badge badge-warning ml-2">승인 대기중</span>
-							</c:when>
+					<c:otherwise>
 
-							<c:otherwise>
-								<form
-									action="${pageContext.request.contextPath}/clubMember/join"
-									method="post" style="display: inline;"
-									onsubmit="return confirm('이 동호회에 가입 신청하시겠습니까?');">
+						<form action="${pageContext.request.contextPath}/clubMember/join"
+							method="post" style="display: inline;"
+							onsubmit="return confirm('이 동호회에 가입 신청하시겠습니까?');">
 
-									<input type="hidden" name="clubNum" value="${dto.clubNum}">
+							<input type="hidden" name="clubNum" value="${dto.clubNum}">
 
-									<button type="submit" class="btn btn-sm btn-brown">가입하기</button>
-								</form>
-							</c:otherwise>
-						</c:choose>
-					</form>
-				</c:if>
+							<button type="submit" class="btn btn-sm btn-brown">가입하기
+							</button>
+
+						</form>
+
+					</c:otherwise>
+
+				</c:choose>
 				<!-- 가입승인 -->
 				<c:if test="${roleNum eq 1}">
-				<a href="/clubMember/waitList?clubNum=${dto.clubNum}"
+					<a href="/clubMember/waitList?clubNum=${dto.clubNum}"
 						class="btn btn-sm"
 						style="background-color: #a35400; color: white; border-radius: 12px; padding: 6px 16px;">
 						가입 신청 목록 </a>
 				</c:if>
 				<!-- 가입승인 끝 -->
 
+				<!-- 강퇴 -->
+				<c:if test="${roleNum eq 1}">
+					<a href="/clubMember/memberList?clubNum=${dto.clubNum}"
+						class="btn btn-sm"
+						style="background-color: #5f4b3b; color: white; border-radius: 12px; padding: 6px 16px;">
+						회원 목록 </a>
+				</c:if>
+				<!-- 강퇴 끝 -->
+
 				<c:if test="${isMember}">
 					<!-- <span class="badge badge-secondary ml-2"> 가입완료 </span> -->
+				</c:if>
+
+				<c:if test="${isMember and roleNum eq 2}">
+					<form action="${pageContext.request.contextPath}/clubMember/leave"
+						method="post" style="display: inline;"
+						onsubmit="return confirm('정말 이 동호회에서 탈퇴하시겠습니까?');">
+
+						<input type="hidden" name="clubNum" value="${dto.clubNum}">
+
+						<button type="submit" class="btn btn-sm"
+							style="background-color: #6c757d; color: white; border-radius: 12px; padding: 6px 16px; border: none;">
+							탈퇴하기</button>
+					</form>
 				</c:if>
 
 				<a href="./list?page=${param.page}" class="btn btn-sm btn-gray">
