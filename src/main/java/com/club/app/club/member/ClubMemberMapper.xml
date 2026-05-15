@@ -37,7 +37,8 @@
 		resultType="long">
 		SELECT COUNT(*)
 		FROM "TB_CLUB_MEMBER"
-		WHERE "CLUB_NUM" = #{clubNum}
+		WHERE "CLUB_NUM" =
+		#{clubNum}
 		AND "ROLE_NUM" IN (1, 2)
 	</select>
 
@@ -137,5 +138,70 @@
 		AND "MEMBER_NUM" = #{memberNum}
 		LIMIT 1
 	</select>
+
+	<delete id="kickMember" parameterType="ClubMemberDTO">
+
+		DELETE FROM
+		"TB_CLUB_MEMBER"
+
+		WHERE "CLUB_NUM" = #{clubNum}
+		AND "MEMBER_NUM" =
+		#{memberNum}
+		AND "ROLE_NUM" = 2
+
+	</delete>
+
+	<select id="memberList" parameterType="long"
+		resultType="ClubMemberDTO">
+
+		SELECT
+		CM.*,
+		M."MEMBER_ID",
+		M."MEMBER_NAME"
+
+		FROM
+		"TB_CLUB_MEMBER" CM
+		JOIN "TB_MEMBER" M
+		ON CM."MEMBER_NUM" =
+		M."MEMBER_NUM"
+
+		WHERE CM."CLUB_NUM" = #{clubNum}
+		AND CM."ROLE_NUM" IN
+		(1,2)
+
+		ORDER BY CM."ROLE_NUM" ASC
+
+	</select>
+
+	<delete id="leave" parameterType="ClubMemberDTO">
+		DELETE FROM "TB_CLUB_MEMBER"
+		WHERE "CLUB_NUM" = #{clubNum}
+		AND "MEMBER_NUM" = #{memberNum}
+		AND
+		"ROLE_NUM" = 2
+	</delete>
+
+	<update id="delegateOwnerToMember" parameterType="ClubMemberDTO">
+
+		UPDATE "TB_CLUB_MEMBER"
+
+		SET "ROLE_NUM" = 1
+
+		WHERE "CLUB_NUM" = #{clubNum}
+		AND "MEMBER_NUM" = #{memberNum}
+		AND "ROLE_NUM" = 2
+
+	</update>
+
+	<update id="downgradeOwner" parameterType="ClubMemberDTO">
+
+		UPDATE "TB_CLUB_MEMBER"
+
+		SET "ROLE_NUM" = 2
+
+		WHERE "CLUB_NUM" = #{clubNum}
+		AND "ROLE_NUM" = 1
+
+	</update>
 
 </mapper>

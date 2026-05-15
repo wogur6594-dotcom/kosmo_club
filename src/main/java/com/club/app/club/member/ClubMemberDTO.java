@@ -11,4 +11,7 @@ public class ClubMemberDTO {
 	private Long memberNum;
 	private Long roleNum;
 
+	private String memberId;
+	private String memberName;
+
 }

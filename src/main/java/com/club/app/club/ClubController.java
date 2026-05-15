@@ -92,6 +92,7 @@ public class ClubController {
 			clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
 			isMember = clubMemberService.checkApprovedMember(clubMemberDTO) > 0;
+			isWaiting = clubMemberService.checkWaitingMember(clubMemberDTO) > 0;
 			roleNum = clubMemberService.getRoleNum(clubMemberDTO);
 		}
 

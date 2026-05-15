@@ -423,6 +423,10 @@ a:hover {
 							<h3
 								class="font-headline-sm text-headline-sm text-on-surface mb-xs">
 								${dto.clubName}</h3>
+								
+								<p
+								class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-md">
+								회장 : ${dto.ownerName}</p>
 
 							<p
 								class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-md">
