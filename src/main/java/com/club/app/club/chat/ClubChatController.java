@@ -36,7 +36,7 @@ public class ClubChatController {
 		clubMemberDTO.setClubNum(clubNum);
 		clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
-		int check = clubMemberService.checkJoin(clubMemberDTO);
+		int check = clubMemberService.checkApprovedMember(clubMemberDTO);
 
 		if (check == 0) {
 			redirectAttributes.addFlashAttribute("msg", "동호회 가입 회원만 채팅을 사용할 수 있습니다.");

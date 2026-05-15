@@ -193,7 +193,8 @@
 		resultType="ClubBoardDTO">
 		SELECT
 		CB."BOARD_NUM" AS "boardNum",
-		CB."CLUB_NUM" AS "clubNum",
+		CB."CLUB_NUM" AS
+		"clubNum",
 		CB."BOARD_TITLE" AS "boardTitle",
 		CB."BOARD_CONTENTS" AS
 		"boardContents",
@@ -205,10 +206,27 @@
 		FROM "TB_CLUB_BOARD" CB
 		JOIN "TB_MEMBER" M
 		ON CB."BOARD_WRITER" = M."MEMBER_ID"
-		WHERE CB."CLUB_NUM" = #{clubNum}
+		WHERE
+		CB."CLUB_NUM" = #{clubNum}
 		AND CB."BOARD_CATEGORY" = '공지'
-		ORDER BY CB."BOARD_NUM" DESC
+		ORDER BY
+		CB."BOARD_NUM" DESC
 		LIMIT 5
+	</select>
+
+	<select id="getWriterMemberNum" parameterType="long"
+		resultType="long">
+
+		SELECT
+		M."MEMBER_NUM"
+
+		FROM "TB_CLUB_BOARD" CB
+
+		JOIN "TB_MEMBER" M
+		ON CB."BOARD_WRITER" = M."MEMBER_ID"
+
+		WHERE CB."BOARD_NUM" = #{boardNum}
+
 	</select>
 
 </mapper>

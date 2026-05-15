@@ -28,4 +28,7 @@ public interface ClubBoardMapper {
 	public List<ClubBoardDTO> clubBoardList(Pager pager) throws Exception;
 	
 	public List<ClubBoardDTO> noticeList(Long clubNum) throws Exception;
+	
+	public Long getWriterMemberNum(Long boardNum) throws Exception;
+	
 }

@@ -117,9 +117,11 @@
 		F."ORI_NAME"
 		FROM "TB_JOB" J
 		LEFT JOIN "TB_MEMBER" M
-		ON J."MEMBER_NUM" = M."MEMBER_NUM"
+		ON
+		J."MEMBER_NUM" = M."MEMBER_NUM"
 		LEFT JOIN "TB_JOB_FILE" F
-		ON J."JOB_NUM" = F."JOB_NUM"
+		ON J."JOB_NUM"
+		= F."JOB_NUM"
 		WHERE J."JOB_NUM" = #{jobNum}
 	</select>
 
@@ -167,5 +169,21 @@
 		#{oriName}
 		)
 	</insert>
+
+	<select id="fileDetail" parameterType="JobDTO"
+		resultType="JobFileDTO">
+		SELECT
+		"FILE_NUM",
+		"JOB_NUM",
+		"FILE_NAME",
+		"ORI_NAME"
+		FROM "TB_JOB_FILE"
+		WHERE "JOB_NUM" = #{jobNum}
+	</select>
+
+	<delete id="deleteFile" parameterType="JobDTO">
+		DELETE FROM "TB_JOB_FILE"
+		WHERE "JOB_NUM" = #{jobNum}
+	</delete>
 
 </mapper>

@@ -102,4 +102,21 @@ public class JobController {
 
 		return "redirect:./list";
 	}
+
+	@PostMapping("deleteFile")
+	public String deleteFile(JobDTO jobDTO, Authentication authentication) throws Exception {
+
+		MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+
+		JobDTO origin = jobService.detail(jobDTO);
+
+		if (!origin.getMemberNum().equals(memberDTO.getMemberNum())) {
+			return "redirect:./detail?jobNum=" + jobDTO.getJobNum();
+		}
+
+		jobService.deleteFile(jobDTO);
+
+		return "redirect:./update?jobNum=" + jobDTO.getJobNum();
+	}
+
 }

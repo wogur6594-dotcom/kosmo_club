@@ -37,7 +37,7 @@ public class ClubScheduleMemberController {
 		clubMemberDTO.setClubNum(clubScheduleMemberDTO.getClubNum());
 		clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
-		int isClubMember = clubMemberService.checkJoin(clubMemberDTO);
+		int isClubMember = clubMemberService.checkApprovedMember(clubMemberDTO);
 
 		if (isClubMember == 0) {
 			redirectAttributes.addFlashAttribute("msg", "동호회 회원만 일정에 참가할 수 있습니다.");

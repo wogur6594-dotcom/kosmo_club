@@ -29,7 +29,8 @@ public class SecurityConfig {
 			auth.requestMatchers("/member/update", "/member/detail", "/member/delete", "/member/pwChange",
 					"/product/add", "/job/create", "/job/create/**").authenticated()
 					.requestMatchers("/", "/member/login", "/member/join", "/product/list", "/css/**", "/js/**",
-							"/images/**", "/files/**", "/job/update", "/job/update/**", "/job/delete", "/job/delete/**")
+							"/images/**", "/files/**", "/job/update", "/job/update/**", "/job/delete", "/job/delete/**",
+							"/job/deleteFile", "/job/deleteFile/**")
 					.permitAll()
 
 					// 동호회 개설할때 로그인 해야함.. -> 일단 로그인 화면으로 이동하게 수정

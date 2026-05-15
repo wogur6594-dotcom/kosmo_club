@@ -62,13 +62,43 @@ public class JobService {
 	}
 
 	public int update(JobDTO jobDTO) throws Exception {
-		return jobMapper.update(jobDTO);
+
+		int result = jobMapper.update(jobDTO);
+
+		if (jobDTO.getAttach() != null && !jobDTO.getAttach().isEmpty()) {
+
+			this.deleteFile(jobDTO);
+
+			File folder = new File(path + "job/");
+
+			if (!folder.exists()) {
+				folder.mkdirs();
+			}
+
+			String fileName = UUID.randomUUID() + "_" + jobDTO.getAttach().getOriginalFilename();
+
+			File file = new File(folder, fileName);
+
+			jobDTO.getAttach().transferTo(file);
+
+			JobFileDTO jobFileDTO = new JobFileDTO();
+
+			jobFileDTO.setJobNum(jobDTO.getJobNum());
+			jobFileDTO.setFileName(fileName);
+			jobFileDTO.setOriName(jobDTO.getAttach().getOriginalFilename());
+
+			jobMapper.addFile(jobFileDTO);
+		}
+
+		return result;
 	}
 
 	public int delete(JobDTO jobDTO, MemberDTO memberDTO) throws Exception {
 
 		boolean isAdmin = memberDTO.getAuthorities().stream()
 				.anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+		this.deleteFile(jobDTO);
 
 		if (isAdmin) {
 			return jobMapper.adminDelete(jobDTO);
@@ -77,6 +107,23 @@ public class JobService {
 		jobDTO.setMemberNum(memberDTO.getMemberNum());
 
 		return jobMapper.delete(jobDTO);
+	}
+
+	public int deleteFile(JobDTO jobDTO) throws Exception {
+
+		JobFileDTO jobFileDTO = jobMapper.fileDetail(jobDTO);
+
+		if (jobFileDTO != null) {
+			File file = new File(path + "job/", jobFileDTO.getFileName());
+
+			if (file.exists()) {
+				file.delete();
+			}
+
+			jobMapper.deleteFile(jobDTO);
+		}
+
+		return 1;
 	}
 
 }

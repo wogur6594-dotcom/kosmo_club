@@ -37,13 +37,48 @@
 		resultType="long">
 		SELECT COUNT(*)
 		FROM "TB_CLUB_MEMBER"
-		WHERE "CLUB_NUM" = #{clubNum}
+		WHERE "CLUB_NUM" =
+		#{clubNum}
 	</select>
 
 	<select id="getClubMax" parameterType="long" resultType="long">
-		SELECT "CLUB_MAX"
+		SELECT
+		"CLUB_MAX"
 		FROM "TB_CLUB"
 		WHERE "CLUB_NUM" = #{clubNum}
+	</select>
+
+	<select id="getClubOwnerMemberNum" parameterType="long"
+		resultType="long">
+
+		SELECT "MEMBER_NUM"
+		FROM "TB_CLUB_MEMBER"
+		WHERE "CLUB_NUM" =
+		#{clubNum}
+		AND "ROLE_NUM" = 1
+		LIMIT 1
+
+	</select>
+
+	<select id="getClubName" parameterType="long"
+		resultType="string">
+
+		SELECT "CLUB_NAME"
+		FROM "TB_CLUB"
+		WHERE "CLUB_NUM" =
+		#{clubNum}
+
+	</select>
+
+	<select id="checkApprovedMember" parameterType="ClubMemberDTO"
+		resultType="int">
+
+		SELECT COUNT(*)
+		FROM "TB_CLUB_MEMBER"
+		WHERE "CLUB_NUM" = #{clubNum}
+		AND "MEMBER_NUM" = #{memberNum}
+		AND "ROLE_NUM" IN (1, 2)
+
 	</select>
 
 </mapper>

@@ -38,7 +38,7 @@ public class ClubScheduleController {
 		clubMemberDTO.setClubNum(clubScheduleDTO.getClubNum());
 		clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
-		int check = clubMemberService.checkJoin(clubMemberDTO);
+		int check = clubMemberService.checkApprovedMember(clubMemberDTO);
 
 		if (check == 0) {
 			return "redirect:/club/detail?clubNum=" + clubScheduleDTO.getClubNum() + "&message=scheduleMemberOnly";
@@ -61,7 +61,7 @@ public class ClubScheduleController {
 		clubMemberDTO.setClubNum(clubScheduleDTO.getClubNum());
 		clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
-		int check = clubMemberService.checkJoin(clubMemberDTO);
+		int check = clubMemberService.checkApprovedMember(clubMemberDTO);
 
 		if (check == 0) {
 			return "redirect:/club/detail?clubNum=" + clubScheduleDTO.getClubNum() + "&message=scheduleMemberOnly";

@@ -100,7 +100,7 @@ public class ClubBoardController {
 			clubMemberDTO.setClubNum(clubBoardDTO.getClubNum());
 			clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
-			int check = clubMemberService.checkJoin(clubMemberDTO);
+			int check = clubMemberService.checkApprovedMember(clubMemberDTO);
 
 			if (check == 0) {
 				return "redirect:/club/detail?clubNum=" + clubBoardDTO.getClubNum() + "&message=boardMemberOnly";
@@ -140,7 +140,7 @@ public class ClubBoardController {
 			clubMemberDTO.setClubNum(clubBoardDTO.getClubNum());
 			clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
 
-			int check = clubMemberService.checkJoin(clubMemberDTO);
+			int check = clubMemberService.checkApprovedMember(clubMemberDTO);
 
 			if (check == 0) {
 				return "redirect:/club/detail?clubNum=" + clubBoardDTO.getClubNum() + "&message=memberOnly";

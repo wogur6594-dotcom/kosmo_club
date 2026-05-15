@@ -58,7 +58,7 @@ label {
 
 		<h2 class="page-title">알바 공고 수정</h2>
 
-		<form action="./update" method="post">
+		<form action="./update" method="post" enctype="multipart/form-data">
 
 			<input type="hidden" name="jobNum" value="${dto.jobNum}">
 
@@ -113,6 +113,36 @@ label {
 					class="form-control" value="${dto.jobWorkTime}" required>
 			</div>
 
+			<c:if test="${not empty dto.fileName}">
+				<div class="form-group">
+
+					<label>현재 이미지</label>
+
+					<div style="display: flex; align-items: flex-end; gap: 16px;">
+
+						<div style="position: relative; width: 180px;">
+
+							<img src="/files/job/${dto.fileName}"
+								style="width: 180px; height: 180px; object-fit: cover; border-radius: 12px; border: 1px solid #ddd;">
+
+							<button type="submit" form="deleteFileForm"
+								class="btn btn-danger btn-sm"
+								style="position: absolute; right: 8px; bottom: 8px; border-radius: 10px;">
+
+								삭제</button>
+
+						</div>
+
+					</div>
+
+				</div>
+			</c:if>
+
+			<div class="form-group">
+				<label>대표 이미지 변경</label> <input type="file" name="attach"
+					class="form-control-file">
+			</div>
+
 			<div class="form-group">
 				<label>상세 내용</label>
 				<textarea name="jobContents" class="form-control" rows="8" required>${dto.jobContents}</textarea>
@@ -124,6 +154,13 @@ label {
 			</div>
 
 		</form>
+		<c:if test="${not empty dto.fileName}">
+			<form id="deleteFileForm" action="./deleteFile" method="post">
+				<input type="hidden" name="jobNum" value="${dto.jobNum}">
+			</form>
+		</c:if>
+
+
 
 	</div>
 
