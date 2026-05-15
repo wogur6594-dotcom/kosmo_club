@@ -11,15 +11,24 @@
 	</insert>
 
 	<insert id="addFile" parameterType="ProductFileDTO">
-
 		insert into "TB_PRODUCTFILE"
 		values (default, #{productNum}, #{fileName}, #{oriName})
-
 	</insert>
 
 	<sql id="search_sql">
-		where
-			"PRODUCT_TITLE" LIKE CONCAT('%', #{search}, '%')
+		WHERE 1=1
+		<if test="search != null and search != ''">
+			AND "PRODUCT_TITLE" LIKE CONCAT('%', #{search}, '%')
+		</if>
+		<if test="productType != null and productType.size() > 0">
+			AND "PRODUCT_TYPE" IN
+			<foreach collection="productType" item="type" open="(" separator="," close=")">
+				#{type}
+			</foreach>
+		</if>
+		<if test="productLocation != null and productLocation != ''">
+			AND "PRODUCT_LOCATION" LIKE CONCAT('%', #{productLocation}, '%')
+		</if>
 	</sql>
 
 	<select id="getCount" resultType="Long" parameterType="pager">
@@ -28,12 +37,14 @@
 	</select>
 
 	<select id="list" resultMap="productMap">
-		select * from "TB_PRODUCT" p
-		left join "TB_PRODUCTFILE" f
-		using("PRODUCT_NUM")
-		<include refid="search_sql"></include>
-		order by "CREATETIME" DESC
-		limit #{perPage} offset #{startNum}
+		SELECT p.*, f.* FROM (
+		SELECT * FROM "TB_PRODUCT"
+		<include refid="search_sql"/>
+		ORDER BY "CREATETIME" DESC
+		LIMIT #{perPage} OFFSET #{startNum}
+		) p
+		LEFT JOIN "TB_PRODUCTFILE" f
+		USING("PRODUCT_NUM")
 	</select>
 
 	<resultMap id="productMap" type="ProductDTO">
@@ -49,9 +60,50 @@
 		</collection>
 	</resultMap>
 
-	<select id="detail" resultType="ProductDTO">
-		select * from "TB_PRODUCT"
+	<select id="detail" resultMap="productMap2">
+		select * from "TB_PRODUCT" p
+		left join "TB_PRODUCTFILE" f
+		using("PRODUCT_NUM")
 		where "PRODUCT_NUM" = #{productNum}
 	</select>
+
+	<resultMap id="productMap2" type="ProductDTO">
+		<id property="productNum" column="PRODUCT_NUM"/>
+		<result property="productTitle" column="PRODUCT_TITLE"/>
+		<result property="productContent" column="PRODUCT_CONTENT"/>
+		<result property="productPrice" column="PRODUCT_PRICE"/>
+		<result property="productType" column="PRODUCT_TYPE"/>
+		<result property="productLocation" column="PRODUCT_LOCATION"/>
+		<result property="productStatus" column="PRODUCT_STATUS"/>
+		<result property="memberNum" column="MEMBER_NUM"/>
+		<collection property="fileList" ofType="ProductFileDTO">
+			<result property="fileNum" column="FILE_NUM"/>
+			<result property="fileName" column="FILE_NAME"/>
+			<result property="oriName" column="ORI_NAME"/>
+		</collection>
+	</resultMap>
+
+	<update id="edit" parameterType="ProductDTO">
+		UPDATE "TB_PRODUCT"
+		SET
+		"PRODUCT_TITLE" = #{productTitle},
+		"PRODUCT_PRICE" = #{productPrice},
+		"PRODUCT_LOCATION" = #{productLocation},
+		"PRODUCT_TYPE" =
+		#{productType},
+		"PRODUCT_CONTENT" = #{productContent},
+		"PRODUCT_STATUS" = #{productStatus}
+		WHERE "PRODUCT_NUM" = #{productNum}
+	</update>
+
+	<delete id="deleteFile" parameterType="long">
+		DELETE FROM "TB_PRODUCTFILE"
+		WHERE "FILE_NUM" = #{fileNum}
+	</delete>
+
+	<delete id="delete" parameterType="ProductDTO">
+		DELETE FROM "TB_PRODUCT"
+		WHERE "PRODUCT_NUM" = #{productNum}
+	</delete>
 
 </mapper>

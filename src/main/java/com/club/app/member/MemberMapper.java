@@ -26,4 +26,8 @@ public interface MemberMapper {
 	public MemberDTO findEmail(MemberDTO memberDTO) throws Exception;
 	
 	public void deleteProfile(MemberProfileDTO memberProfileDTO) throws Exception;
+	
+	public MemberDTO detailByMemberNum(Long memberNum);
+	
+	public int checkPhone(MemberDTO memberDTO) throws Exception;
 }

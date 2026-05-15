@@ -40,6 +40,10 @@ public class MemberService implements UserDetailsService {
 		if (memberMapper.checkEmail(memberDTO) > 0) {
 			throw new RuntimeException("");
 		}
+		
+		if (memberMapper.checkPhone(memberDTO) > 0) {
+			throw new RuntimeException("");
+		}
 
 		// DB에 저장
 		memberDTO.setMemberPw(passwordEncoder.encode(memberDTO.getMemberPw()));
@@ -76,6 +80,11 @@ public class MemberService implements UserDetailsService {
 
 	public boolean checkEmail(MemberDTO memberDTO) throws Exception {
 		int result = memberMapper.checkEmail(memberDTO);
+		return result > 0;
+	}
+	
+	public boolean checkPhone(MemberDTO memberDTO) throws Exception {
+		int result = memberMapper.checkPhone(memberDTO);
 		return result > 0;
 	}
 
@@ -171,5 +180,10 @@ public class MemberService implements UserDetailsService {
 
 		// 3. 다른 사람이면 중복
 		return true;
+	}
+	
+
+	public MemberDTO detailByMemberNum(Long memberNum) throws Exception{
+	    return memberMapper.detailByMemberNum(memberNum);
 	}
 }

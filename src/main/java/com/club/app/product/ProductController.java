@@ -1,19 +1,29 @@
 package com.club.app.product;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.club.app.member.MemberDTO;
+import com.club.app.member.MemberService;
 import com.club.app.pager.ProductPager;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/product/*")
@@ -21,6 +31,9 @@ public class ProductController {
 
 	@Autowired
 	private ProductService productService;
+
+	@Autowired
+	private MemberService memberService;
 
 	// 리스트
 	@GetMapping("list")
@@ -39,8 +52,16 @@ public class ProductController {
 
 	// 등록 처리
 	@PostMapping("add")
-	public String add(ProductDTO productDTO, @RequestParam("attachs") MultipartFile[] attachs, Authentication auth)
-			throws Exception {
+	public String add(@Valid ProductDTO productDTO, BindingResult bindingResult,
+			@RequestParam("attachs") MultipartFile[] attachs, Authentication auth) throws Exception {
+
+		if (bindingResult.hasErrors()) {
+			return "product/add";
+		}
+
+		if (attachs.length > 10) {
+			bindingResult.rejectValue("attachs", "file.limit", "파일은 최대 10개까지 업로드 가능합니다.");
+		}
 
 		MemberDTO memberDTO = (MemberDTO) auth.getPrincipal();
 
@@ -49,6 +70,104 @@ public class ProductController {
 		productService.add(productDTO);
 
 		return "redirect:./list";
+	}
+
+	@GetMapping("detail")
+	public String detail(@ModelAttribute ProductDTO productDTO, Model model, Authentication auth) throws Exception {
+
+		ProductDTO dto = productService.detail(productDTO);
+
+		model.addAttribute("loginUser", auth.getPrincipal());
+		model.addAttribute("product", dto);
+
+		return "product/detail";
+	}
+
+	@GetMapping("edit")
+	public String editForm(ProductDTO productDTO, Authentication auth, Model model) throws Exception {
+
+		ProductDTO product = productService.detail(productDTO);
+
+		// auth에서 바로 꺼내기
+		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+
+		Long loginMemberNum = loginUser.getMemberNum();
+
+		// 권한 체크
+		if (!Objects.equals(product.getMemberNum(), loginMemberNum)) {
+			throw new AccessDeniedException("수정 권한 없음");
+		}
+
+		model.addAttribute("product", product);
+
+		return "product/edit";
+	}
+
+	@PostMapping("edit")
+	public String edit(ProductDTO productDTO, Authentication auth) throws Exception {
+
+		// 로그인 유저
+		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+
+		// 기존 데이터 조회 (권한 체크용)
+		ProductDTO product = productService.detail(productDTO);
+
+		if (!Objects.equals(product.getMemberNum(), loginUser.getMemberNum())) {
+			throw new AccessDeniedException("수정 권한 없음");
+		}
+
+		// 상품 정보 수정
+		productService.edit(productDTO);
+
+		// 이미지 추가 처리 (있으면)
+		if (productDTO.getAttachs() != null) {
+
+			for (MultipartFile file : productDTO.getAttachs()) {
+
+				if (file.isEmpty())
+					continue;
+
+				productService.addFile(file, productDTO.getProductNum());
+			}
+		}
+
+		return "redirect:/product/detail?productNum=" + productDTO.getProductNum();
+	}
+
+	@PostMapping("/addFile")
+	@ResponseBody
+	public ProductDTO addFile(@RequestParam("file") MultipartFile[] files, ProductDTO productDTO) throws Exception {
+
+		Long productNum = productDTO.getProductNum();
+
+		for (MultipartFile file : files) {
+
+			if (file.isEmpty())
+				continue;
+
+			productService.addFile(file, productNum);
+		}
+
+		return productService.detail(productDTO);
+	}
+
+	@PostMapping("/deleteFile")
+	@ResponseBody
+	public String deleteFile(@RequestParam("fileNum") Long fileNum) throws Exception {
+
+		int result = productService.deleteFile(fileNum);
+
+		return (result > 0) ? "success" : "fail";
+	}
+	
+	@PostMapping("delete")
+	public String delete(ProductDTO productDTO, Authentication auth) throws Exception {
+
+	    MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+
+	    productService.delete(productDTO, loginUser.getMemberNum());
+
+	    return "redirect:/product/list";
 	}
 
 }

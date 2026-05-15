@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,30 +13,40 @@
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 	<div class="container mt-5">
 		<h1 class="mb-4">상품 등록</h1>
-		<form action="./add" method="post" enctype="multipart/form-data">
+		<form:form action="./add" method="post" modelAttribute="productDTO" enctype="multipart/form-data">
+			<form:errors path="productTitle" cssStyle="color:red" />
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text">상품명</span>
 				</div>
 				<input type="text" class="form-control" name="productTitle" placeholder="상품명을 입력하세요">
 			</div>
+			<form:errors path="productPrice" cssStyle="color:red" />
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text">가격</span>
 				</div>
 				<input type="number" class="form-control" name="productPrice" placeholder="가격 입력">
 			</div>
-			<div class="input-group mb-3">
+			<form:errors path="productLocation" cssStyle="color:red" />
+			<!-- <div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text">지역</span>
 				</div>
 				<select class="form-control" name="productLocation">
-					<option value="">지역 선택</option>
+					<option>지역 선택</option>
 					<option value="서울시 구로구">서울시 구로구</option>
 					<option value="서울시 금천구">서울시 금천구</option>
 					<option value="서울시 양천구">서울시 양천구</option>
 					<option value="서울시 영등포구">서울시 영등포구</option>
 				</select>
+			</div> -->
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">거래 지역</span>
+				</div>
+				<input type="text" id="productLocation" name="productLocation" readonly>
+				<button type="button" onclick="searchAddress()">주소 검색</button>
 			</div>
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
@@ -58,18 +69,22 @@
 					<option value="기타">기타</option>
 				</select>
 			</div>
+			<form:errors path="productContent" cssStyle="color:red" />
 			<div class="form-group">
 				<label>상품 설명</label>
 				<textarea class="form-control" name="productContent" rows="7" placeholder="상품 설명을 입력하세요"></textarea>
 			</div>
+			<form:errors path="attachs" cssStyle="color:red" />
 			<div>
-				<input type="file" name="attachs" multiple>
-				<button type="submit">등록</button>
+				<input type="file" name="attachs" id="fileInput" multiple>
 			</div>
+			<div id="previewBox" class="mt-3 d-flex flex-wrap"></div>
 			<button type="submit" class="btn btn-outline-dark">등록하기</button>
-		</form>
+		</form:form>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="/js/product/add.js"></script>
 </body>
 </html>

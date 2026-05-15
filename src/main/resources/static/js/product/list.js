@@ -28,3 +28,23 @@ style.innerHTML = `
 `;
 
 document.head.appendChild(style);
+
+const checkboxes = document.querySelectorAll(
+    'input[name="productType"]'
+);
+
+checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+        checkbox.form.submit();
+    });
+});
+
+const filters = document.querySelectorAll(
+    'input[name="productType"], input[name="productLocation"]'
+);
+
+filters.forEach((filter) => {
+    filter.addEventListener("change", () => {
+        filter.form.submit();
+    });
+});
