@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.club.app.club.board.like.ClubBoardLikeMapper">
+
+	<insert id="add" parameterType="ClubBoardLikeDTO">
+		INSERT INTO "TB_CLUB_BOARD_LIKE"
+		(
+		"BOARD_NUM",
+		"MEMBER_NUM",
+		"CREATE_DATE"
+		) VALUES (
+		#{boardNum},
+		#{memberNum},
+		NOW()
+		)
+		ON CONFLICT ("BOARD_NUM", "MEMBER_NUM")
+		DO NOTHING
+	</insert>
+
+	<delete id="delete" parameterType="ClubBoardLikeDTO">
+		DELETE FROM
+		"TB_CLUB_BOARD_LIKE"
+		WHERE "BOARD_NUM" = #{boardNum}
+		AND "MEMBER_NUM" =
+		#{memberNum}
+	</delete>
+
+	<select id="check" parameterType="ClubBoardLikeDTO"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM "TB_CLUB_BOARD_LIKE"
+		WHERE "BOARD_NUM" =
+		#{boardNum}
+		AND "MEMBER_NUM" = #{memberNum}
+	</select>
+
+	<select id="count" parameterType="long" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM "TB_CLUB_BOARD_LIKE"
+		WHERE "BOARD_NUM" = #{boardNum}
+	</select>
+
+</mapper>

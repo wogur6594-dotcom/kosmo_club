@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.club.app.club.ClubDTO;
 import com.club.app.club.ClubService;
 import com.club.app.club.board.comment.ClubBoardCommentService;
+import com.club.app.club.board.like.ClubBoardLikeDTO;
+import com.club.app.club.board.like.ClubBoardLikeService;
 import com.club.app.club.member.ClubMemberDTO;
 import com.club.app.club.member.ClubMemberService;
 import com.club.app.member.MemberDTO;
@@ -34,6 +36,9 @@ public class ClubBoardController {
 	private ClubBoardService clubBoardService;
 
 	@Autowired
+	private ClubBoardLikeService clubBoardLikeService;
+
+	@Autowired
 	private ClubService clubService;
 
 	@PostMapping("mainImage")
@@ -54,7 +59,8 @@ public class ClubBoardController {
 	}
 
 	@GetMapping("detail")
-	public String detail(ClubBoardDTO clubBoardDTO, Pager pager, Model model) throws Exception {
+	public String detail(ClubBoardDTO clubBoardDTO, Pager pager, Model model,
+			@AuthenticationPrincipal MemberDTO memberDTO) throws Exception {
 
 		pager.setClubNum(clubBoardDTO.getClubNum());
 
@@ -64,13 +70,35 @@ public class ClubBoardController {
 
 		pager.setPerPage(5L);
 
-		model.addAttribute("dto", clubBoardService.detail(clubBoardDTO));
+		clubBoardService.hitUpdate(clubBoardDTO.getBoardNum());
+
+		ClubBoardDTO dto = clubBoardService.detail(clubBoardDTO);
+
+		model.addAttribute("dto", dto);
 
 		model.addAttribute("boardList", clubBoardService.clubBoardList(pager));
 
 		model.addAttribute("pager", pager);
 
 		model.addAttribute("commentList", clubBoardCommentService.list(clubBoardDTO.getBoardNum()));
+
+		int likeCount = clubBoardLikeService.count(clubBoardDTO.getBoardNum());
+
+		model.addAttribute("likeCount", likeCount);
+
+		int likeCheck = 0;
+
+		if (memberDTO != null) {
+
+			ClubBoardLikeDTO clubBoardLikeDTO = new ClubBoardLikeDTO();
+
+			clubBoardLikeDTO.setBoardNum(clubBoardDTO.getBoardNum());
+			clubBoardLikeDTO.setMemberNum(memberDTO.getMemberNum());
+
+			likeCheck = clubBoardLikeService.check(clubBoardLikeDTO);
+		}
+
+		model.addAttribute("likeCheck", likeCheck);
 
 		return "clubboard/detail";
 	}

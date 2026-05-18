@@ -5,6 +5,45 @@
 
 <mapper namespace="com.club.app.club.board.ClubBoardMapper">
 
+	<sql id="clubBoardSearch">
+		<if test="search != null and search != ''">
+			<choose>
+				<when test="kind == 'title'">
+					AND CB."BOARD_TITLE" ILIKE '%' || #{search} || '%'
+				</when>
+
+				<when test="kind == 'contents'">
+					AND CB."BOARD_CONTENTS" ILIKE '%' || #{search} ||
+					'%'
+				</when>
+
+				<when test="kind == 'titleContents'">
+					AND (
+					CB."BOARD_TITLE" ILIKE '%' || #{search} || '%'
+					OR
+					CB."BOARD_CONTENTS" ILIKE '%' || #{search} || '%'
+					)
+				</when>
+
+				<when test="kind == 'writer'">
+					AND M."MEMBER_NAME" ILIKE '%' || #{search} || '%'
+				</when>
+
+				<when test="kind == 'category'">
+					AND CB."BOARD_CATEGORY" = #{search}
+				</when>
+
+				<otherwise>
+					AND (
+					CB."BOARD_TITLE" ILIKE '%' || #{search} || '%'
+					OR
+					CB."BOARD_CONTENTS" ILIKE '%' || #{search} || '%'
+					)
+				</otherwise>
+			</choose>
+		</if>
+	</sql>
+
 	<!-- 게시글 개수 -->
 	<select id="getCount" parameterType="Pager" resultType="long">
 		SELECT
@@ -49,23 +88,32 @@
 		AS "boardWriter",
 		CB."BOARD_CATEGORY" AS "boardCategory",
 		CB."CREATE_DATE" AS "createDate",
-		CB."CLUB_NUM" AS "clubNum",
+		CB."HIT" AS "hit",
+		CB."CLUB_NUM" AS
+		"clubNum",
 		M."MEMBER_NAME" AS "memberName"
 		FROM "TB_CLUB_BOARD" CB
-		JOIN "TB_MEMBER"
+		JOIN
+		"TB_MEMBER"
 		M
 		ON CB."BOARD_WRITER" = M."MEMBER_ID"
-		WHERE CB."BOARD_NUM" =
+		WHERE
+		CB."BOARD_NUM" =
 		#{boardNum}
 
 	</select>
 
 	<!-- 동호회 게시판 -->
-	<select id="getClubBoardCount" resultType="long">
+	<select id="getClubBoardCount" parameterType="Pager"
+		resultType="long">
 		SELECT COUNT(*)
-		FROM
-		"TB_CLUB_BOARD"
-		WHERE "CLUB_NUM" = #{clubNum}
+		FROM "TB_CLUB_BOARD" CB
+		JOIN "TB_MEMBER" M
+		ON
+		CB."BOARD_WRITER" = M."MEMBER_ID"
+		WHERE CB."CLUB_NUM" = #{clubNum}
+
+		<include refid="clubBoardSearch" />
 	</select>
 
 	<select id="clubBoardList" parameterType="Pager"
@@ -89,32 +137,67 @@
 		CB."CREATE_DATE"
 		AS "createDate",
 
+		CB."HIT" AS "hit",
+
 		(
 		SELECT COUNT(*)
-		FROM "TB_CLUB_BOARD_FILE" BF
+		FROM
+		"TB_CLUB_BOARD_FILE" BF
 		WHERE
 		BF."BOARD_NUM" =
 		CB."BOARD_NUM"
-		) AS "fileCount",
+		) AS
+		"fileCount",
 
 		(
 		SELECT COUNT(*)
 		FROM
 		"TB_CLUB_BOARD_COMMENT" BC
-		WHERE BC."BOARD_NUM" =
+		WHERE
+		BC."BOARD_NUM" =
 		CB."BOARD_NUM"
 		) AS
 		"commentCount"
 
-		FROM "TB_CLUB_BOARD" CB
+		FROM "TB_CLUB_BOARD"
+		CB
 
 		JOIN "TB_MEMBER" M
 		ON
 		CB."BOARD_WRITER" = M."MEMBER_ID"
 
-		WHERE CB."CLUB_NUM" = #{clubNum}
+		WHERE
+		CB."CLUB_NUM" = #{clubNum}
 
-		ORDER BY CB."BOARD_NUM" DESC
+		<include refid="clubBoardSearch" />
+
+		<choose>
+
+			<when test="sort == 'hit'">
+				ORDER BY CB."HIT" DESC NULLS LAST,
+				CB."BOARD_NUM" DESC
+			</when>
+
+			<when test="sort == 'comment'">
+				ORDER BY "commentCount" DESC,
+				CB."BOARD_NUM" DESC
+			</when>
+
+			<when test="sort == 'like'">
+				ORDER BY
+				(
+				SELECT COUNT(*)
+				FROM "TB_CLUB_BOARD_LIKE" BL
+				WHERE BL."BOARD_NUM" = CB."BOARD_NUM"
+				) DESC,
+				CB."BOARD_NUM" DESC
+			</when>
+
+			<otherwise>
+				ORDER BY CB."BOARD_NUM" DESC
+			</otherwise>
+
+		</choose>
 
 		LIMIT #{perPage}
 		OFFSET #{startNum}
@@ -202,13 +285,19 @@
 		CB."BOARD_CATEGORY" AS "boardCategory",
 		CB."CREATE_DATE" AS
 		"createDate",
+		CB."HIT" AS "hit",
 		M."MEMBER_NAME" AS "memberName"
-		FROM "TB_CLUB_BOARD" CB
+		FROM
+		"TB_CLUB_BOARD" CB
 		JOIN "TB_MEMBER" M
-		ON CB."BOARD_WRITER" = M."MEMBER_ID"
+		ON
+		CB."BOARD_WRITER" =
+		M."MEMBER_ID"
 		WHERE
 		CB."CLUB_NUM" = #{clubNum}
-		AND CB."BOARD_CATEGORY" = '공지'
+		AND
+		CB."BOARD_CATEGORY" =
+		'공지'
 		ORDER BY
 		CB."BOARD_NUM" DESC
 		LIMIT 5
@@ -236,18 +325,114 @@
 
 		SELECT
 		B."BOARD_NUM" AS "boardNum",
-		B."CLUB_NUM" AS "clubNum",
+		B."CLUB_NUM" AS
+		"clubNum",
 		B."BOARD_WRITER" AS "boardWriter",
-		B."BOARD_TITLE" AS "boardTitle",
+		B."BOARD_TITLE" AS
+		"boardTitle",
 		B."BOARD_CONTENTS" AS "boardContents",
-		B."BOARD_CATEGORY" AS "boardCategory",
+		B."BOARD_CATEGORY"
+		AS "boardCategory",
 		B."CREATE_DATE" AS "createDate",
+		B."HIT" AS "hit",
 		C."CLUB_NAME" AS "clubName"
 		FROM "TB_CLUB_BOARD" B
-		INNER JOIN "TB_CLUB" C
-		ON B."CLUB_NUM" = C."CLUB_NUM"
+		INNER JOIN "TB_CLUB"
+		C
+		ON
+		B."CLUB_NUM"
+		= C."CLUB_NUM"
 		WHERE B."BOARD_WRITER" = #{memberId}
-		ORDER BY B."BOARD_NUM" DESC
+		ORDER BY
+		B."BOARD_NUM" DESC
+
+	</select>
+
+	<update id="hitUpdate" parameterType="long">
+
+		UPDATE "TB_CLUB_BOARD"
+		SET
+		"HIT" = COALESCE("HIT", 0) + 1
+		WHERE "BOARD_NUM" = #{boardNum}
+
+	</update>
+
+	<select id="popularList" parameterType="long"
+		resultType="ClubBoardDTO">
+
+		SELECT
+		CB."BOARD_NUM" AS "boardNum",
+		CB."CLUB_NUM" AS
+		"clubNum",
+		CB."BOARD_TITLE" AS "boardTitle",
+		CB."BOARD_CONTENTS" AS
+		"boardContents",
+		CB."BOARD_WRITER" AS "boardWriter",
+		CB."BOARD_CATEGORY" AS "boardCategory",
+		CB."CREATE_DATE" AS
+		"createDate",
+		CB."HIT" AS "hit",
+		M."MEMBER_NAME" AS "memberName",
+
+		(
+		SELECT COUNT(*)
+		FROM "TB_CLUB_BOARD_COMMENT" BC
+		WHERE BC."BOARD_NUM" =
+		CB."BOARD_NUM"
+		) AS "commentCount",
+
+		(
+		SELECT COUNT(*)
+		FROM
+		"TB_CLUB_BOARD_LIKE" BL
+		WHERE BL."BOARD_NUM" =
+		CB."BOARD_NUM"
+		) AS
+		"likeCount"
+
+		FROM "TB_CLUB_BOARD" CB
+
+		JOIN "TB_MEMBER" M
+		ON
+		CB."BOARD_WRITER" = M."MEMBER_ID"
+
+		WHERE CB."CLUB_NUM" = #{clubNum}
+
+		AND (
+		(
+		SELECT COUNT(*)
+		FROM "TB_CLUB_BOARD_LIKE" BL
+		WHERE BL."BOARD_NUM" =
+		CB."BOARD_NUM"
+		) >= 5
+
+		AND
+
+		(
+		SELECT COUNT(*)
+		FROM "TB_CLUB_BOARD_COMMENT" BC
+		WHERE BC."BOARD_NUM" = CB."BOARD_NUM"
+		) >= 3
+		)
+
+		ORDER BY
+		(
+		(
+		SELECT COUNT(*)
+		FROM "TB_CLUB_BOARD_LIKE" BL
+		WHERE BL."BOARD_NUM" = CB."BOARD_NUM"
+		) * 5
+		+
+		(
+		SELECT COUNT(*)
+		FROM "TB_CLUB_BOARD_COMMENT" BC
+		WHERE BC."BOARD_NUM" =
+		CB."BOARD_NUM"
+		) * 3
+		) DESC,
+		CB."BOARD_NUM" DESC
+
+		LIMIT 5
 
 	</select>
 

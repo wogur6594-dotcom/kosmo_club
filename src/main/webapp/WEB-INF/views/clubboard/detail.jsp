@@ -111,6 +111,10 @@ body {
 						${fn:replace(fn:substring(dto.createDate.toString(), 0, 16), 'T', ' ')}
 					</div>
 
+					<div>
+						<strong>조회수 :</strong> ${dto.hit}
+					</div>
+
 				</div>
 
 			</div>
@@ -137,9 +141,48 @@ body {
 
 				${dto.boardContents}</div>
 
+
+			<hr>
+
+			<div class="mb-3">
+
+				<c:choose>
+
+					<c:when test="${likeCheck == 0}">
+
+						<form
+							action="${pageContext.request.contextPath}/clubboard/like/add"
+							method="post" style="display: inline;">
+
+							<input type="hidden" name="boardNum" value="${dto.boardNum}">
+
+							<button type="submit" class="btn btn-outline-danger">❤
+								좋아요 ${likeCount}</button>
+
+						</form>
+
+					</c:when>
+
+					<c:otherwise>
+
+						<form
+							action="${pageContext.request.contextPath}/clubboard/like/delete"
+							method="post" style="display: inline;">
+
+							<input type="hidden" name="boardNum" value="${dto.boardNum}">
+
+							<button type="submit" class="btn btn-danger">❤ 좋아요 취소
+								${likeCount}</button>
+
+						</form>
+
+					</c:otherwise>
+
+				</c:choose>
+
+			</div>
+
 			<!-- 댓글 -->
-
-
 
 			<c:forEach items="${commentList}" var="comment">
 
@@ -187,7 +230,8 @@ body {
 			<div
 				class="d-flex justify-content-between align-items-center mt-4 mb-5">
 
-				<a href="/club/detail?clubNum=${dto.clubNum}&page=${param.page}"
+				<a
+					href="/club/detail?clubNum=${dto.clubNum}&page=${param.page}&kind=${param.kind}&search=${param.search}#boardArea"
 					class="btn-soft-gray"> 동호회로 돌아가기 </a>
 
 				<sec:authorize access="isAuthenticated()">

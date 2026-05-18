@@ -41,11 +41,16 @@ public class ClubBoardDTO {
 	private List<ClubFileDTO> list;
 
 	private MultipartFile[] attaches;
-	
+
 	private String clubName;
-	
+
 	private Long memberNum;
-	
+
 	private String memberId;
+
+	private Long hit;
 	
+	private Long likeCount;
+
+
 }

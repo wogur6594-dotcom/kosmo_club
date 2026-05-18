@@ -65,6 +65,8 @@ public class ClubController {
 
 		model.addAttribute("noticeList", clubBoardService.noticeList(clubDTO.getClubNum()));
 
+		model.addAttribute("popularList", clubBoardService.popularList(clubDTO.getClubNum()));
+
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		boolean canDelete = false;
