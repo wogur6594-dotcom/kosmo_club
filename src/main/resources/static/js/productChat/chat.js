@@ -112,7 +112,7 @@ function renderMessage(data) {
     `;
 
     box.appendChild(div);
-    box.scrollTop = box.scrollHeight;
+    scrollToBottom();
 }
 
 /* =========================
@@ -157,6 +157,29 @@ function formatTime(time) {
     return "";
 }
 
+function initMessageTimes() {
+
+    document.querySelectorAll(".msg .time").forEach(el => {
+
+        const raw = el.dataset.time;
+
+        if (raw) {
+            el.innerText = formatTime(raw);
+        }
+    });
+}
+
+function scrollToBottom() {
+
+    let box = document.getElementById("chatBox");
+
+    if (!box) return;
+
+    requestAnimationFrame(() => {
+        box.scrollTop = box.scrollHeight;
+    });
+}
+
 /* =========================
    이벤트
 ========================= */
@@ -170,5 +193,12 @@ window.addEventListener("focus", sendReadEvent);
    시작
 ========================= */
 window.onload = function() {
+
     connectSocket();
+
+    // 🔥 JSP로 이미 렌더된 메시지 처리 후 스크롤
+    setTimeout(() => {
+		initMessageTimes();
+        scrollToBottom();
+    }, 0);
 };
