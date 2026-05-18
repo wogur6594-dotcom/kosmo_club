@@ -76,7 +76,7 @@
 						<button class="btn btn-secondary" disabled>구매불가</button>
 					</c:when>
 					<c:otherwise>
-						<button class="btn btn-outline-warning">구매채팅</button>
+						<a href="/productChat/create?productNum=${product.productNum}" class="btn btn-outline-warning">구매 채팅</a>
 					</c:otherwise>
 				</c:choose>
 			</div>

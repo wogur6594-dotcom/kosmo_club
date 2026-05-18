@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.club.app.productChat.ChatMapper">
+
+
+	<!-- 채팅방 조회 -->
+	<select id="findRoom" parameterType="chatRoomDTO" resultType="chatRoomDTO">
+		SELECT *
+		FROM "TB_PRODUCTCHAT"
+		WHERE "PRODUCT_NUM" = #{productNum}
+		AND "BUYER_NUM" = #{buyerNum}
+		AND "SELLER_NUM" = #{sellerNum}
+	</select>
+
+	<!-- 채팅방 생성 -->
+	<insert id="createRoom" parameterType="chatRoomDTO" useGeneratedKeys="true" keyProperty="chatroomNum">
+		INSERT INTO "TB_PRODUCTCHAT"
+		("PRODUCT_NUM", "BUYER_NUM", "SELLER_NUM")
+		VALUES (#{productNum},
+		#{buyerNum}, #{sellerNum})
+	</insert>
+
+	<!-- 채팅방 번호 조회 -->
+	<select id="findById" parameterType="long" resultType="chatRoomDTO">
+		SELECT * FROM "TB_PRODUCTCHAT"
+		WHERE "CHATROOM_NUM" = #{chatroomNum}
+	</select>
+
+	<!-- 내 채팅방 목록 -->
+	<select id="list" parameterType="long" resultType="chatRoomDTO">
+		SELECT
+		c.*,
+		p."PRODUCT_TITLE" AS productName,
+
+		CASE
+		WHEN c."BUYER_NUM" = #{memberNum}
+		THEN seller."MEMBER_ID"
+		ELSE buyer."MEMBER_ID"
+		END AS otherName,
+
+		mp."FILE_NAME" AS otherProfileImage
+
+		FROM "TB_PRODUCTCHAT" c
+
+		JOIN "TB_PRODUCT" p
+		ON c."PRODUCT_NUM" = p."PRODUCT_NUM"
+
+		JOIN "TB_MEMBER" buyer
+		ON c."BUYER_NUM" = buyer."MEMBER_NUM"
+
+		JOIN "TB_MEMBER" seller
+		ON
+		c."SELLER_NUM" = seller."MEMBER_NUM"
+
+		LEFT JOIN "MEMBER_PROFILE" mp
+		ON mp."MEMBER_NUM" =
+		CASE
+		WHEN c."BUYER_NUM" = #{memberNum}
+		THEN c."SELLER_NUM"
+		ELSE c."BUYER_NUM"
+		END
+
+		WHERE c."BUYER_NUM" = #{memberNum}
+		OR c."SELLER_NUM" = #{memberNum}
+
+		ORDER BY c."CREATETIME" DESC
+	</select>
+
+	<!-- 메시지 저장 -->
+	<insert id="addMessage" parameterType="chatMessageDTO">
+		INSERT INTO "TB_PRODUCTMESSAGE"
+		("CHATROOM_NUM", "SENDER_NUM", "MESSAGE_CONTENT")
+		VALUES ( #{chatroomNum}, #{senderNum}, #{messageContent})
+	</insert>
+
+	<!-- 메시지 목록 -->
+	<select id="messageList" parameterType="long" resultType="chatMessageDTO">
+		SELECT m.*,
+		m."SENDER_NUM",
+		u."MEMBER_ID" AS senderName
+		FROM "TB_PRODUCTMESSAGE" m
+		JOIN "TB_MEMBER" u
+		ON m."SENDER_NUM" = u."MEMBER_NUM"
+		WHERE m."CHATROOM_NUM" = #{chatroomNum}
+		ORDER BY m."CREATETIME" ASC
+	</select>
+
+	<delete id="deleteChatRoom" parameterType="long">
+		DELETE FROM "TB_PRODUCTCHAT"
+		WHERE "CHATROOM_NUM" = #{chatroomNum}
+	</delete>
+
+</mapper>

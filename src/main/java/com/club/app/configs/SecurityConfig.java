@@ -45,7 +45,8 @@ public class SecurityConfig {
                         "/club/create",
                         "/club/create/**",
                         "/clubSchedule/create",
-                        "/clubSchedule/create/**"
+                        "/clubSchedule/create/**",
+                        "/productChat/**"
                     ).authenticated()
 
                     // 모두 허용
