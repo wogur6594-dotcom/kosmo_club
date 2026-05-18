@@ -3,6 +3,7 @@ package com.club.app.productChat;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface ChatMapper {
@@ -24,6 +25,8 @@ public interface ChatMapper {
 
 	// 메시지 목록
 	public List<ChatMessageDTO> messageList(Long chatroomNum) throws Exception;
-	
+
 	public int deleteChatRoom(Long chatroomNum);
+
+	public int markAsRead(@Param("chatroomNum") Long chatroomNum, @Param("memberNum") Long memberNum);
 }

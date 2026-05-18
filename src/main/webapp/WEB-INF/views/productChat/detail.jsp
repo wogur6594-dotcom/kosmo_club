@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,33 +22,36 @@
 			${product.productTitle} 채팅방
 			<a href="/product/detail?productNum=${product.productNum}" class="btn btn-sm btn-primary ml-2"> 상품보기 </a>
 		</h3>
-
 		<div class="chat-box" id="chatBox">
-
 			<c:forEach items="${messages}" var="m">
 
 				<div class="msg ${m.senderNum == loginUser.memberNum ? 'me' : 'other'}">
 
-					<!-- 🔥 보낸 사람 -->
 					<div class="sender">${m.senderName}</div>
 
-					<!-- 🔥 메시지 -->
 					<div class="content">${m.messageContent}</div>
+
+					<div class="meta">
+
+						<span class="time" data-time="${m.createtime}"></span>
+
+						<!-- 🔥 sender + unread -->
+						<c:if test="${m.senderNum == loginUser.memberNum && !m.isRead}">
+							<span class="unread-badge">1</span>
+						</c:if>
+
+					</div>
 
 				</div>
 
 			</c:forEach>
-
 		</div>
-
 		<!-- 입력 -->
 		<div class="input-area">
 			<input type="text" id="message" placeholder="메시지 입력">
 			<button onclick="sendMessage()">전송</button>
 		</div>
-
 	</div>
-
 	<!-- 🔥 JS 변수 전달 -->
 	<script>
 		const chatroomNum = "${chatroomNum}";

@@ -16,9 +16,11 @@ public class ChatMessageDTO {
 
     private String messageContent;
 
-    private Boolean isRead;
+    private Boolean isRead = false;
 
-    private LocalDateTime createTime;
+    private LocalDateTime createtime;
     
     private String senderName;
+    
+    private String type; 
 }

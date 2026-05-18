@@ -36,12 +36,16 @@ public class ChatService {
 	public List<ChatMessageDTO> messageList(Long chatroomNum) throws Exception {
 		return chatMapper.messageList(chatroomNum);
 	}
-	
+
 	public ChatRoomDTO findById(Long chatroomNum) throws Exception {
-	    return chatMapper.findById(chatroomNum);
+		return chatMapper.findById(chatroomNum);
 	}
-	
+
 	public int deleteChatRoom(Long chatroomNum) throws Exception {
-	    return chatMapper.deleteChatRoom(chatroomNum);
+		return chatMapper.deleteChatRoom(chatroomNum);
+	}
+
+	public int markAsRead(Long chatroomNum, Long memberNum) throws Exception {
+		return chatMapper.markAsRead(chatroomNum, memberNum);
 	}
 }

@@ -1,5 +1,6 @@
 package com.club.app.productChat;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,25 +43,44 @@ public class ProductChatHandler extends TextWebSocketHandler {
 
 		ChatMessageDTO dto = objectMapper.readValue(message.getPayload(), ChatMessageDTO.class);
 
-		// 🔥 로그인 사용자 서버에서 처리 (JS 의존 제거)
 		Authentication auth = (Authentication) session.getPrincipal();
 		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
 
-		dto.setSenderNum(loginUser.getMemberNum());
-
-		// DB 저장
-		chatService.addMessage(dto);
-
 		Long roomNum = dto.getChatroomNum();
+
+		// =========================
+		// 🔥 READ 이벤트
+		// =========================
+		if ("read".equals(dto.getType())) {
+
+			chatService.markAsRead(roomNum, loginUser.getMemberNum());
+
+			dto.setSenderNum(loginUser.getMemberNum());
+			dto.setIsRead(true);
+
+			for (WebSocketSession s : roomSessions.get(roomNum)) {
+				if (s.isOpen()) {
+					s.sendMessage(new TextMessage(objectMapper.writeValueAsString(dto)));
+				}
+			}
+			return;
+		}
+
+		// =========================
+		// 🔥 MESSAGE 이벤트
+		// =========================
+		dto.setSenderNum(loginUser.getMemberNum());
+		dto.setSenderName(loginUser.getMemberId());
+		dto.setCreatetime(LocalDateTime.now());
+		dto.setIsRead(false); // 🔥 중요
+
+		chatService.addMessage(dto);
 
 		List<WebSocketSession> sessions = roomSessions.get(roomNum);
 
 		if (sessions != null) {
-
 			for (WebSocketSession s : sessions) {
-
 				if (s.isOpen()) {
-
 					s.sendMessage(new TextMessage(objectMapper.writeValueAsString(dto)));
 				}
 			}

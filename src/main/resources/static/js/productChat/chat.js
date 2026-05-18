@@ -1,64 +1,174 @@
-let socket = new WebSocket(
-    "ws://localhost:80/ws/productChat?chatroomNum=" + chatroomNum
-);
+let socket;
+let messageQueue = [];
 
-socket.onopen = function() {
-    console.log("채팅 연결 성공");
-};
+/* =========================
+   연결
+========================= */
+function connectSocket() {
 
-socket.onmessage = function(event) {
-    let msg = JSON.parse(event.data);
-    renderMessage(msg);
-};
+    socket = new WebSocket(
+        "ws://localhost:80/ws/productChat?chatroomNum=" + chatroomNum
+    );
 
-function sendMessage() {
+    socket.onopen = function() {
+        console.log("채팅 연결 성공");
 
-    let message = document.getElementById("message").value;
+        messageQueue.forEach(m => socket.send(JSON.stringify(m)));
+        messageQueue = [];
 
-    if (!message.trim()) return;
-
-    let data = {
-        chatroomNum: Number(chatroomNum),
-        messageContent: message
+        sendReadEvent();
     };
 
-    socket.send(JSON.stringify(data));
+    socket.onmessage = function(event) {
 
-    document.getElementById("message").value = "";
+        let msg = JSON.parse(event.data);
+
+        // =========================
+        // read 이벤트
+        // =========================
+        if (msg.type === "read") {
+            markAsReadUI();
+            return;
+        }
+
+        renderMessage(msg);
+    };
+
+    socket.onclose = function() {
+        setTimeout(connectSocket, 2000);
+    };
 }
 
+/* =========================
+   메시지 전송
+========================= */
+function sendMessage() {
+
+    let input = document.getElementById("message");
+
+    if (!input.value.trim()) return;
+
+    safeSend({
+        type: "message",
+        chatroomNum: Number(chatroomNum),
+        messageContent: input.value
+    });
+
+    input.value = "";
+}
+
+/* =========================
+   read 이벤트
+========================= */
+function sendReadEvent() {
+
+    safeSend({
+        type: "read",
+        chatroomNum: Number(chatroomNum)
+    });
+}
+
+/* =========================
+   안전 전송
+========================= */
+function safeSend(data) {
+
+    if (!socket || socket.readyState !== 1) {
+        messageQueue.push(data);
+        return;
+    }
+
+    socket.send(JSON.stringify(data));
+}
+
+/* =========================
+   메시지 렌더링
+========================= */
 function renderMessage(data) {
 
     let box = document.getElementById("chatBox");
 
     let div = document.createElement("div");
 
+    const isMe = Number(data.senderNum) === Number(loginUserNum);
+
     div.classList.add("msg");
+    div.classList.add(isMe ? "me" : "other");
 
-    if (Number(data.senderNum) === Number(loginUserNum)) {
-        div.classList.add("me");
-    } else {
-        div.classList.add("other");
-    }
+    const time = formatTime(data.createtime);
 
-    // 🔥 이름 + 메시지 같이 표시 (실시간용)
     div.innerHTML = `
         <div class="sender">${data.senderName ?? ""}</div>
-        <div class="content">${data.messageContent}</div>
+
+        <div class="content">${data.messageContent ?? ""}</div>
+
+        <div class="meta">
+            <span class="time">${time}</span>
+
+            ${isMe && !data.isRead
+            ? `<span class="unread-badge">1</span>`
+            : ``}
+        </div>
     `;
 
     box.appendChild(div);
-
     box.scrollTop = box.scrollHeight;
 }
 
-document.getElementById("message").addEventListener("keydown", function(e) {
-    if (e.key === "Enter") {
-        sendMessage();
+/* =========================
+   read UI 처리
+========================= */
+function markAsReadUI() {
+
+    document.querySelectorAll(".msg.me .unread-badge")
+        .forEach(el => el.remove());
+}
+
+/* =========================
+   시간
+========================= */
+function formatTime(time) {
+
+    if (!time) return "";
+
+    // LocalDateTime 안전 처리
+    if (typeof time === "string") {
+
+        // 1) 마이크로초 제거
+        time = time.split(".")[0];
+
+        // 2) T 기준 파싱
+        const [date, t] = time.split("T");
+
+        if (t) {
+            const [h, m] = t.split(":");
+            return `${h}:${m}`;
+        }
     }
+
+    let d = new Date(time);
+
+    if (!isNaN(d.getTime())) {
+        return String(d.getHours()).padStart(2, '0')
+            + ":" +
+            String(d.getMinutes()).padStart(2, '0');
+    }
+
+    return "";
+}
+
+/* =========================
+   이벤트
+========================= */
+document.getElementById("message").addEventListener("keydown", e => {
+    if (e.key === "Enter") sendMessage();
 });
 
-window.onload = function () {
-    let box = document.getElementById("chatBox");
-    box.scrollTop = box.scrollHeight;
+window.addEventListener("focus", sendReadEvent);
+
+/* =========================
+   시작
+========================= */
+window.onload = function() {
+    connectSocket();
 };

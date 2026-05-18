@@ -15,7 +15,7 @@ public class ChatRoomDTO {
     private Long buyerNum;
     private Long sellerNum;
 
-    private LocalDateTime createTime;
+    private LocalDateTime createtime;
 
     // 상품 정보 표시용
     private String productName;

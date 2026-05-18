@@ -92,4 +92,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE "CHATROOM_NUM" = #{chatroomNum}
 	</delete>
 
+	<update id="markAsRead">
+		UPDATE "TB_PRODUCTMESSAGE"
+		SET "IS_READ" = true
+		WHERE "CHATROOM_NUM" = #{chatroomNum}
+		AND "SENDER_NUM" != #{memberNum}
+		AND "IS_READ" = false
+	</update>
+
 </mapper>
