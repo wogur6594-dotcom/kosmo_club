@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.club.app.job.bookmark.JobBookmarkMapper">
+
+	<insert id="add" parameterType="JobBookmarkDTO">
+		INSERT INTO "TB_JOB_BOOKMARK" (
+		"JOB_NUM",
+		"MEMBER_NUM",
+		"CREATE_DATE"
+		) VALUES (
+		#{jobNum},
+		#{memberNum},
+		NOW()
+		)
+		ON CONFLICT ("JOB_NUM", "MEMBER_NUM")
+		DO NOTHING
+	</insert>
+
+	<delete id="delete" parameterType="JobBookmarkDTO">
+		DELETE FROM "TB_JOB_BOOKMARK"
+		WHERE "JOB_NUM" = #{jobNum}
+		AND "MEMBER_NUM" = #{memberNum}
+	</delete>
+
+	<select id="check" parameterType="JobBookmarkDTO"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM "TB_JOB_BOOKMARK"
+		WHERE "JOB_NUM" =
+		#{jobNum}
+		AND "MEMBER_NUM" = #{memberNum}
+	</select>
+
+	<select id="myList" parameterType="JobBookmarkDTO"
+		resultType="JobBookmarkDTO">
+		SELECT
+		B."BOOKMARK_NUM",
+		B."JOB_NUM",
+		B."MEMBER_NUM",
+		B."CREATE_DATE",
+		J."JOB_TITLE",
+		J."JOB_CATEGORY",
+		J."JOB_TYPE",
+		J."JOB_LOCATION",
+		J."JOB_PAY",
+		J."JOB_WORK_DAY",
+		J."JOB_WORK_TIME",
+		J."JOB_MAX_MEMBER",
+		(
+		SELECT COUNT(*)
+		FROM "TB_JOB_APPLY" A
+		WHERE A."JOB_NUM" = J."JOB_NUM"
+		AND A."APPLY_STATUS" = 'ACCEPT'
+		) AS "CURRENT_APPLY_MEMBER",
+		M."MEMBER_NAME",
+		F."FILE_NAME",
+		F."ORI_NAME"
+		FROM "TB_JOB_BOOKMARK" B
+		INNER JOIN "TB_JOB" J
+		ON B."JOB_NUM" =
+		J."JOB_NUM"
+		LEFT JOIN "TB_MEMBER" M
+		ON J."MEMBER_NUM" = M."MEMBER_NUM"
+		LEFT JOIN "TB_JOB_FILE" F
+		ON J."JOB_NUM" = F."JOB_NUM"
+		WHERE
+		B."MEMBER_NUM" = #{memberNum}
+		ORDER BY B."BOOKMARK_NUM" DESC
+	</select>
+
+</mapper>

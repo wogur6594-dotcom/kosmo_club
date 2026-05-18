@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.club.app.club.member.ClubMemberDTO;
 import com.club.app.file.FileDTO;
 import com.club.app.member.MemberDTO;
 import com.club.app.pager.Pager;
@@ -29,11 +30,11 @@ public interface ClubMapper {
 
 	// D - delete
 	public int delete(ClubDTO clubDTO) throws Exception;
-	
+
 	public Long isClubOwner(ClubDTO clubDTO) throws Exception;
 
 	public Long isAdmin(MemberDTO memberDTO) throws Exception;
 
-	
+	public List<ClubDTO> myClubList(ClubMemberDTO clubMemberDTO) throws Exception;
 
 }

@@ -126,4 +126,8 @@ public class JobService {
 		return 1;
 	}
 
+	public List<JobDTO> myJobList(JobDTO jobDTO) throws Exception {
+		return jobMapper.myJobList(jobDTO);
+	}
+
 }

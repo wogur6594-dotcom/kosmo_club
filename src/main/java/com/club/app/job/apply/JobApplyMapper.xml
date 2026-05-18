@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.club.app.job.apply.JobApplyMapper">
+
+	<insert id="apply" parameterType="JobApplyDTO">
+		INSERT INTO "TB_JOB_APPLY" (
+		"JOB_NUM",
+		"MEMBER_NUM",
+		"APPLY_STATUS",
+		"APPLY_DATE"
+		) VALUES (
+		#{jobNum},
+		#{memberNum},
+		'WAIT',
+		NOW()
+		)
+	</insert>
+
+	<select id="checkApply" parameterType="JobApplyDTO"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM "TB_JOB_APPLY"
+		WHERE "JOB_NUM" =
+		#{jobNum}
+		AND "MEMBER_NUM" = #{memberNum}
+		AND "APPLY_STATUS" != 'CANCEL'
+	</select>
+
+	<update id="cancel" parameterType="JobApplyDTO">
+		UPDATE "TB_JOB_APPLY"
+		SET
+		"APPLY_STATUS" = 'CANCEL'
+		WHERE "JOB_NUM" = #{jobNum}
+		AND "MEMBER_NUM" =
+		#{memberNum}
+		AND "APPLY_STATUS" = 'WAIT'
+	</update>
+
+	<select id="applicantList" parameterType="JobApplyDTO"
+		resultType="JobApplyDTO">
+		SELECT
+		A."APPLY_NUM",
+		A."JOB_NUM",
+		A."MEMBER_NUM",
+		A."APPLY_STATUS",
+		A."APPLY_DATE",
+		M."MEMBER_NAME",
+		M."MEMBER_PHONE",
+		M."MEMBER_EMAIL",
+		J."JOB_TITLE"
+		FROM "TB_JOB_APPLY" A
+		INNER JOIN
+		"TB_MEMBER" M
+		ON A."MEMBER_NUM" =
+		M."MEMBER_NUM"
+		INNER JOIN "TB_JOB" J
+		ON
+		A."JOB_NUM" = J."JOB_NUM"
+		WHERE
+		A."JOB_NUM" = #{jobNum}
+		AND
+		A."APPLY_STATUS" != 'CANCEL'
+		ORDER BY
+		A."APPLY_NUM" DESC
+	</select>
+
+	<update id="updateStatus" parameterType="JobApplyDTO">
+		UPDATE "TB_JOB_APPLY"
+		SET "APPLY_STATUS" = #{applyStatus}
+		WHERE "APPLY_NUM" = #{applyNum}
+	</update>
+
+	<select id="myApplyList" parameterType="JobApplyDTO"
+		resultType="JobApplyDTO">
+		SELECT
+		A."APPLY_NUM",
+		A."JOB_NUM",
+		A."MEMBER_NUM",
+		A."APPLY_STATUS",
+		A."APPLY_DATE",
+		J."JOB_TITLE",
+		J."JOB_LOCATION",
+		J."JOB_PAY",
+		J."JOB_WORK_DAY",
+		J."JOB_WORK_TIME"
+		FROM "TB_JOB_APPLY" A
+		INNER JOIN "TB_JOB" J
+		ON A."JOB_NUM" = J."JOB_NUM"
+		WHERE A."MEMBER_NUM"
+		= #{memberNum}
+		AND A."APPLY_STATUS" != 'CANCEL'
+		ORDER BY A."APPLY_NUM"
+		DESC
+	</select>
+
+	<select id="jobApplyDetail" parameterType="JobApplyDTO"
+		resultType="JobApplyDTO">
+		SELECT
+		A."APPLY_NUM",
+		A."JOB_NUM",
+		A."MEMBER_NUM",
+		A."APPLY_STATUS"
+		FROM "TB_JOB_APPLY" A
+		WHERE A."APPLY_NUM" = #{applyNum}
+	</select>
+
+	<select id="checkApplyAll" parameterType="JobApplyDTO"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM "TB_JOB_APPLY"
+		WHERE "JOB_NUM" =
+		#{jobNum}
+		AND "MEMBER_NUM" = #{memberNum}
+	</select>
+
+	<update id="reApply" parameterType="JobApplyDTO">
+		UPDATE "TB_JOB_APPLY"
+		SET
+		"APPLY_STATUS" = 'WAIT',
+		"APPLY_DATE" = NOW()
+		WHERE "JOB_NUM" =
+		#{jobNum}
+		AND "MEMBER_NUM" = #{memberNum}
+		AND "APPLY_STATUS" = 'CANCEL'
+	</update>
+
+	<select id="myApplyStatus" parameterType="JobApplyDTO"
+		resultType="JobApplyDTO">
+		SELECT
+		"APPLY_NUM",
+		"JOB_NUM",
+		"MEMBER_NUM",
+		"APPLY_STATUS",
+		"APPLY_DATE"
+		FROM "TB_JOB_APPLY"
+		WHERE "JOB_NUM" = #{jobNum}
+		AND "MEMBER_NUM" = #{memberNum}
+		AND "APPLY_STATUS" != 'CANCEL'
+	</select>
+	
+
+</mapper>

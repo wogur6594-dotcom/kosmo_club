@@ -17,6 +17,7 @@
 		"JOB_PAY",
 		"JOB_WORK_DAY",
 		"JOB_WORK_TIME",
+		"JOB_MAX_MEMBER",
 		"CREATE_DATE"
 		) VALUES (
 		#{memberNum},
@@ -28,6 +29,7 @@
 		#{jobPay},
 		#{jobWorkDay},
 		#{jobWorkTime},
+		#{jobMaxMember},
 		NOW()
 		)
 	</insert>
@@ -83,11 +85,20 @@
 		J."JOB_PAY",
 		J."JOB_WORK_DAY",
 		J."JOB_WORK_TIME",
+		J."JOB_MAX_MEMBER",
+		(
+		SELECT COUNT(*)
+		FROM "TB_JOB_APPLY" A
+		WHERE A."JOB_NUM" = J."JOB_NUM"
+		AND
+		A."APPLY_STATUS" = 'ACCEPT'
+		) AS "CURRENT_APPLY_MEMBER",
 		J."CREATE_DATE",
 		M."MEMBER_NAME",
 		F."FILE_NAME",
 		F."ORI_NAME"
-		FROM "TB_JOB" J
+		FROM
+		"TB_JOB" J
 		LEFT JOIN "TB_MEMBER" M
 		ON
 		J."MEMBER_NUM" = M."MEMBER_NUM"
@@ -111,18 +122,28 @@
 		J."JOB_PAY",
 		J."JOB_WORK_DAY",
 		J."JOB_WORK_TIME",
+		J."JOB_MAX_MEMBER",
+		(
+		SELECT COUNT(*)
+		FROM "TB_JOB_APPLY" A
+		WHERE A."JOB_NUM" = J."JOB_NUM"
+		AND
+		A."APPLY_STATUS" = 'ACCEPT'
+		) AS "CURRENT_APPLY_MEMBER",
 		J."CREATE_DATE",
 		M."MEMBER_NAME",
 		F."FILE_NAME",
 		F."ORI_NAME"
-		FROM "TB_JOB" J
+		FROM
+		"TB_JOB" J
 		LEFT JOIN "TB_MEMBER" M
 		ON
 		J."MEMBER_NUM" = M."MEMBER_NUM"
 		LEFT JOIN "TB_JOB_FILE" F
 		ON J."JOB_NUM"
 		= F."JOB_NUM"
-		WHERE J."JOB_NUM" = #{jobNum}
+		WHERE J."JOB_NUM"
+		= #{jobNum}
 	</select>
 
 	<update id="update" parameterType="JobDTO">
@@ -139,7 +160,8 @@
 		"JOB_PAY" = #{jobPay},
 		"JOB_WORK_DAY" = #{jobWorkDay},
 		"JOB_WORK_TIME" =
-		#{jobWorkTime}
+		#{jobWorkTime},
+		"JOB_MAX_MEMBER" = #{jobMaxMember}
 		WHERE
 		"JOB_NUM" = #{jobNum}
 		AND
@@ -177,7 +199,8 @@
 		"JOB_NUM",
 		"FILE_NAME",
 		"ORI_NAME"
-		FROM "TB_JOB_FILE"
+		FROM
+		"TB_JOB_FILE"
 		WHERE "JOB_NUM" = #{jobNum}
 	</select>
 
@@ -185,5 +208,58 @@
 		DELETE FROM "TB_JOB_FILE"
 		WHERE "JOB_NUM" = #{jobNum}
 	</delete>
+
+	<select id="myJobList" parameterType="JobDTO"
+		resultType="JobDTO">
+		SELECT
+		J."JOB_NUM",
+		J."MEMBER_NUM",
+		J."JOB_TITLE",
+		J."JOB_CONTENTS",
+		J."JOB_CATEGORY",
+		J."JOB_TYPE",
+		J."JOB_LOCATION",
+		J."JOB_PAY",
+		J."JOB_WORK_DAY",
+		J."JOB_WORK_TIME",
+		J."JOB_MAX_MEMBER",
+		(
+		SELECT COUNT(*)
+		FROM "TB_JOB_APPLY" A
+		WHERE A."JOB_NUM" = J."JOB_NUM"
+		AND A."APPLY_STATUS" = 'ACCEPT'
+		) AS "CURRENT_APPLY_MEMBER",
+		(
+		SELECT COUNT(*)
+		FROM "TB_JOB_APPLY" A
+		WHERE A."JOB_NUM" = J."JOB_NUM"
+		AND A."APPLY_STATUS" != 'CANCEL'
+		) AS "APPLY_COUNT",
+
+		(
+		SELECT M2."MEMBER_NAME"
+		FROM "TB_JOB_APPLY" A2
+		INNER JOIN "TB_MEMBER" M2
+		ON A2."MEMBER_NUM" = M2."MEMBER_NUM"
+		WHERE A2."JOB_NUM" = J."JOB_NUM"
+		AND A2."APPLY_STATUS" = 'WAIT'
+		ORDER BY A2."APPLY_NUM" DESC
+		LIMIT 1
+		) AS "RECENT_APPLICANT_NAME",
+		J."CREATE_DATE",
+		M."MEMBER_NAME",
+		F."FILE_NAME",
+		F."ORI_NAME"
+		FROM "TB_JOB" J
+		LEFT JOIN "TB_MEMBER" M
+		ON
+		J."MEMBER_NUM" = M."MEMBER_NUM"
+		LEFT JOIN "TB_JOB_FILE" F
+		ON J."JOB_NUM"
+		= F."JOB_NUM"
+		WHERE J."MEMBER_NUM" = #{memberNum}
+		ORDER BY J."JOB_NUM"
+		DESC
+	</select>
 
 </mapper>

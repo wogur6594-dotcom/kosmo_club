@@ -218,4 +218,19 @@ public class ClubBoardController {
 		return "redirect:./update?boardNum=" + boardNum + "&clubNum=" + clubNum;
 	}
 
+	@GetMapping("myBoardList")
+	public String myBoardList(@AuthenticationPrincipal MemberDTO memberDTO, ClubBoardDTO clubBoardDTO, Model model)
+			throws Exception {
+
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
+
+		clubBoardDTO.setMemberId(memberDTO.getMemberId());
+
+		model.addAttribute("list", clubBoardService.myBoardList(clubBoardDTO));
+
+		return "clubboard/myBoardList";
+	}
+
 }

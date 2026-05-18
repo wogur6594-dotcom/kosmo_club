@@ -111,6 +111,37 @@ body {
 	background-color: #e9ecef;
 	color: #212529;
 }
+
+.apply-status-box {
+	margin-top: 18px;
+	padding: 16px 18px;
+	border-radius: 14px;
+	font-weight: 700;
+}
+
+.apply-wait {
+	background-color: #fff3e8;
+	color: #d9480f;
+	border: 1px solid #ffd8a8;
+}
+
+.apply-accept {
+	background-color: #e6fcf5;
+	color: #087f5b;
+	border: 1px solid #96f2d7;
+}
+
+.apply-reject {
+	background-color: #fff5f5;
+	color: #c92a2a;
+	border: 1px solid #ffc9c9;
+}
+
+.apply-closed {
+	background-color: #f1f3f5;
+	color: #495057;
+	border: 1px solid #dee2e6;
+}
 </style>
 </head>
 
@@ -159,6 +190,34 @@ body {
 				<div class="info-value">${dto.jobLocation}</div>
 			</div>
 
+			<div class="info-row">
+				<div class="info-label">모집현황</div>
+
+				<div class="info-value">
+
+					<c:choose>
+
+						<c:when test="${dto.currentApplyMember ge dto.jobMaxMember}">
+
+							<span class="badge badge-danger"> 모집완료 </span>
+
+				(${dto.currentApplyMember} / ${dto.jobMaxMember})
+
+			</c:when>
+
+						<c:otherwise>
+
+							<span class="badge badge-success"> 모집중 </span>
+
+				(${dto.currentApplyMember} / ${dto.jobMaxMember})
+
+			</c:otherwise>
+
+					</c:choose>
+
+				</div>
+			</div>
+
 		</div>
 
 		<h5 class="font-weight-bold">상세 내용</h5>
@@ -198,6 +257,117 @@ body {
 						</form>
 					</c:if>
 				</sec:authorize>
+
+				<hr>
+
+				<c:if test="${dto.memberNum ne loginMemberNum}">
+
+					<c:choose>
+
+						<c:when test="${bookmarkCheck == 0}">
+
+							<form action="${pageContext.request.contextPath}/jobBookmark/add"
+								method="post" style="display: inline;">
+
+								<input type="hidden" name="jobNum" value="${dto.jobNum}">
+
+								<button type="submit" class="btn btn-outline-warning mr-2">
+									관심 공고 추가</button>
+
+							</form>
+
+						</c:when>
+
+						<c:otherwise>
+
+							<form
+								action="${pageContext.request.contextPath}/jobBookmark/delete"
+								method="post" style="display: inline;">
+
+								<input type="hidden" name="jobNum" value="${dto.jobNum}">
+
+								<button type="submit" class="btn btn-warning mr-2">관심
+									공고 취소</button>
+
+							</form>
+
+						</c:otherwise>
+
+					</c:choose>
+
+				</c:if>
+
+				<c:choose>
+
+					<c:when test="${isWriter}">
+						<a
+							href="${pageContext.request.contextPath}/jobApply/applicantList?jobNum=${dto.jobNum}"
+							class="btn btn-dark"> 지원자 보기 </a>
+					</c:when>
+
+					<c:when test="${isApply and applyStatus eq 'WAIT'}">
+						<form action="${pageContext.request.contextPath}/jobApply/cancel"
+							method="post" style="display: inline;"
+							onsubmit="return confirm('지원 취소하시겠습니까?');">
+
+							<input type="hidden" name="jobNum" value="${dto.jobNum}">
+
+							<button type="submit" class="btn btn-secondary">지원 취소</button>
+						</form>
+					</c:when>
+
+					<c:otherwise>
+						<form action="${pageContext.request.contextPath}/jobApply/apply"
+							method="post" style="display: inline;"
+							onsubmit="return confirm('이 공고에 지원하시겠습니까?');">
+
+							<input type="hidden" name="jobNum" value="${dto.jobNum}">
+
+
+							<c:if test="${isApply}">
+
+								<c:choose>
+
+									<c:when test="${applyStatus eq 'WAIT'}">
+										<div class="apply-status-box apply-wait">지원 완료 · 현재 승인
+											대기중입니다.</div>
+									</c:when>
+
+									<c:when test="${applyStatus eq 'ACCEPT'}">
+										<div class="apply-status-box apply-accept">승인 완료 · 채용이
+											승인되었습니다.</div>
+									</c:when>
+
+									<c:when test="${applyStatus eq 'REJECT'}">
+										<div class="apply-status-box apply-reject">거절됨 · 해당 공고
+											지원이 거절되었습니다.</div>
+									</c:when>
+
+								</c:choose>
+
+							</c:if>
+
+							<c:choose>
+
+								<c:when test="${dto.currentApplyMember ge dto.jobMaxMember}">
+
+									<button type="button" class="btn btn-danger" disabled>
+
+										모집완료</button>
+
+								</c:when>
+
+								<c:otherwise>
+
+									<button type="submit" class="btn btn-warning">지원하기</button>
+
+								</c:otherwise>
+
+							</c:choose>
+						</form>
+					</c:otherwise>
+
+				</c:choose>
 
 			</sec:authorize>
 

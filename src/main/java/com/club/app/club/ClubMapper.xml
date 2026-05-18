@@ -28,30 +28,37 @@
 		(
 		SELECT COUNT(*)
 		FROM "TB_CLUB_MEMBER" CM2
-		WHERE CM2."CLUB_NUM" = C."CLUB_NUM"
+		WHERE
+		CM2."CLUB_NUM" = C."CLUB_NUM"
 		AND CM2."ROLE_NUM" IN (1, 2)
-		) AS "CURRENT_MEMBER"
+		) AS
+		"CURRENT_MEMBER"
 
 		FROM "TB_CLUB" C
 
 		LEFT JOIN "TB_CLUB_MEMBER" CM
-		ON C."CLUB_NUM" = CM."CLUB_NUM"
+		ON
+		C."CLUB_NUM" = CM."CLUB_NUM"
 		AND CM."ROLE_NUM" = 1
 
-		LEFT JOIN "TB_MEMBER" M
+		LEFT JOIN "TB_MEMBER"
+		M
 		ON CM."MEMBER_NUM" = M."MEMBER_NUM"
 
 		LEFT JOIN
 		(
-		SELECT DISTINCT ON ("CLUB_NUM")
+		SELECT DISTINCT ON
+		("CLUB_NUM")
 		"FILE_NUM",
 		"FILE_NAME",
 		"ORI_NAME",
 		"CLUB_NUM"
-		FROM "TB_CLUBFILE"
+		FROM
+		"TB_CLUBFILE"
 		ORDER BY "CLUB_NUM", "FILE_NUM" ASC
 		) F
-		ON C."CLUB_NUM" = F."CLUB_NUM"
+		ON C."CLUB_NUM" =
+		F."CLUB_NUM"
 
 		<where>
 			<if test="clubCategory != null and clubCategory != ''">
@@ -195,6 +202,48 @@
 		WHERE
 		"CLUB_NUM" = #{clubNum}
 	</delete>
+
+	<select id="myClubList" parameterType="ClubMemberDTO"
+		resultMap="clubFileResultMap">
+
+		SELECT
+		C.*,
+
+		F."FILE_NUM",
+		F."FILE_NAME",
+		F."ORI_NAME",
+
+		(
+		SELECT COUNT(*)
+		FROM "TB_CLUB_MEMBER" CM2
+		WHERE CM2."CLUB_NUM" =
+		C."CLUB_NUM"
+		AND CM2."ROLE_NUM" IN (1,2)
+		) AS "CURRENT_MEMBER"
+
+		FROM "TB_CLUB" C
+
+		INNER JOIN "TB_CLUB_MEMBER" CM
+		ON C."CLUB_NUM" = CM."CLUB_NUM"
+
+		LEFT JOIN
+		(
+		SELECT DISTINCT ON ("CLUB_NUM")
+		"FILE_NUM",
+		"FILE_NAME",
+		"ORI_NAME",
+		"CLUB_NUM"
+		FROM "TB_CLUBFILE"
+		ORDER BY "CLUB_NUM", "FILE_NUM" ASC
+		) F
+		ON C."CLUB_NUM" = F."CLUB_NUM"
+
+		WHERE CM."MEMBER_NUM" = #{memberNum}
+		AND CM."ROLE_NUM" IN (1,2)
+
+		ORDER BY C."CLUB_NUM" DESC
+
+	</select>
 
 
 </mapper>

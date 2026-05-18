@@ -27,4 +27,6 @@ public interface JobMapper {
 
 	public int deleteFile(JobDTO jobDTO) throws Exception;
 
+	public List<JobDTO> myJobList(JobDTO jobDTO) throws Exception;
+
 }

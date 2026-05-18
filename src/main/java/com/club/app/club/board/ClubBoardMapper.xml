@@ -222,10 +222,32 @@
 
 		FROM "TB_CLUB_BOARD" CB
 
-		JOIN "TB_MEMBER" M
+		JOIN "TB_MEMBER"
+		M
 		ON CB."BOARD_WRITER" = M."MEMBER_ID"
 
-		WHERE CB."BOARD_NUM" = #{boardNum}
+		WHERE CB."BOARD_NUM" =
+		#{boardNum}
+
+	</select>
+
+	<select id="myBoardList" parameterType="ClubBoardDTO"
+		resultType="ClubBoardDTO">
+
+		SELECT
+		B."BOARD_NUM" AS "boardNum",
+		B."CLUB_NUM" AS "clubNum",
+		B."BOARD_WRITER" AS "boardWriter",
+		B."BOARD_TITLE" AS "boardTitle",
+		B."BOARD_CONTENTS" AS "boardContents",
+		B."BOARD_CATEGORY" AS "boardCategory",
+		B."CREATE_DATE" AS "createDate",
+		C."CLUB_NAME" AS "clubName"
+		FROM "TB_CLUB_BOARD" B
+		INNER JOIN "TB_CLUB" C
+		ON B."CLUB_NUM" = C."CLUB_NUM"
+		WHERE B."BOARD_WRITER" = #{memberId}
+		ORDER BY B."BOARD_NUM" DESC
 
 	</select>
 
