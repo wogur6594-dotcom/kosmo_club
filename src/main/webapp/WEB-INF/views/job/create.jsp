@@ -112,6 +112,11 @@ label {
 			</div>
 
 			<div class="form-group">
+				<label>모집 인원</label> <input type="number" name="jobMaxMember"
+					class="form-control" min="1" value="${dto.jobMaxMember}">
+			</div>
+
+			<div class="form-group">
 				<label>대표 이미지</label> <input type="file" name="attach"
 					class="form-control-file">
 			</div>

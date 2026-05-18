@@ -163,6 +163,34 @@ body {
 	border-color: #ff6f0f;
 	color: white;
 }
+
+.opacity-50 {
+	opacity: 0.68;
+}
+
+.btn-job-main {
+	background-color: #ff6f0f;
+	color: white;
+	border-radius: 10px;
+	font-weight: 700;
+}
+
+.btn-job-main:hover {
+	background-color: #e85f00;
+	color: white;
+}
+
+.btn-job-sub {
+	background-color: #fff3e8;
+	color: #ff6f0f;
+	border-radius: 10px;
+	font-weight: 700;
+}
+
+.btn-job-sub:hover {
+	background-color: #ffe1c2;
+	color: #e85f00;
+}
 </style>
 </head>
 
@@ -185,6 +213,17 @@ body {
 		</form>
 
 		<h1 class="page-title">동네알바</h1>
+
+		<sec:authorize access="isAuthenticated()">
+			<div class="mb-4 text-right">
+
+				<a href="${pageContext.request.contextPath}/job/myJobList"
+					class="btn btn-sm btn-job-main"> 내 공고 관리 </a> <a
+					href="${pageContext.request.contextPath}/jobApply/myList"
+					class="btn btn-sm btn-job-sub"> 내 지원내역 </a>
+
+			</div>
+		</sec:authorize>
 
 		<div class="d-flex">
 
@@ -235,11 +274,13 @@ body {
 
 					<c:otherwise>
 						<c:forEach items="${list}" var="dto">
-							<div class="job-item">
+							<div
+								class="job-item
+	${dto.currentApplyMember ge dto.jobMaxMember ? 'opacity-50' : ''}">
 
 								<a href="./detail?jobNum=${dto.jobNum}" class="job-title">
 									${dto.jobTitle} </a>
-									
+
 								<!-- 썸네일 이미지 -->
 								<c:if test="${not empty dto.fileName}">
 									<img src="/files/job/${dto.fileName}"
@@ -254,8 +295,29 @@ body {
 										${dto.jobWorkDay} · ${dto.jobWorkTime} </span>
 								</div>
 
-								<div class="mt-2">
-									<span class="badge-soft">${dto.jobCategory}</span>
+								<div class="mt-2 d-flex align-items-center flex-wrap">
+
+									<span class="badge-soft mr-2"> ${dto.jobCategory} </span>
+
+									<c:choose>
+
+										<c:when test="${dto.currentApplyMember ge dto.jobMaxMember}">
+
+											<span class="badge badge-danger mr-2"> 모집완료 </span>
+
+										</c:when>
+
+										<c:otherwise>
+
+											<span class="badge badge-success mr-2"> 모집중 </span>
+
+										</c:otherwise>
+
+									</c:choose>
+
+									<span class="text-muted small"> 지원자
+										${dto.currentApplyMember} / ${dto.jobMaxMember} </span>
+
 								</div>
 
 							</div>

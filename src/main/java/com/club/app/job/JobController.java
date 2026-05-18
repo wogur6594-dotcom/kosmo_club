@@ -3,12 +3,17 @@ package com.club.app.job;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.club.app.job.apply.JobApplyDTO;
+import com.club.app.job.apply.JobApplyService;
+import com.club.app.job.bookmark.JobBookmarkDTO;
+import com.club.app.job.bookmark.JobBookmarkService;
 import com.club.app.member.MemberDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +24,10 @@ import lombok.RequiredArgsConstructor;
 public class JobController {
 
 	private final JobService jobService;
+
+	private final JobApplyService jobApplyService;
+
+	private final JobBookmarkService jobBookmarkService;
 
 	@GetMapping("list")
 	public String list(JobPager jobPager, Model model) throws Exception {
@@ -56,11 +65,44 @@ public class JobController {
 	}
 
 	@GetMapping("detail")
-	public String detail(JobDTO jobDTO, Model model) throws Exception {
+	public String detail(JobDTO jobDTO, Model model, @AuthenticationPrincipal MemberDTO memberDTO) throws Exception {
 
 		jobDTO = jobService.detail(jobDTO);
 
 		model.addAttribute("dto", jobDTO);
+
+		boolean isApply = false;
+		boolean isWriter = false;
+		String applyStatus = null;
+		int bookmarkCheck = 0;
+
+		if (memberDTO != null) {
+			JobApplyDTO jobApplyDTO = new JobApplyDTO();
+			jobApplyDTO.setJobNum(jobDTO.getJobNum());
+			jobApplyDTO.setMemberNum(memberDTO.getMemberNum());
+
+			JobApplyDTO myApply = jobApplyService.myApplyStatus(jobApplyDTO);
+
+			if (myApply != null) {
+				isApply = true;
+				applyStatus = myApply.getApplyStatus();
+			}
+
+			if (jobDTO.getMemberNum().equals(memberDTO.getMemberNum())) {
+				isWriter = true;
+			}
+
+			JobBookmarkDTO jobBookmarkDTO = new JobBookmarkDTO();
+			jobBookmarkDTO.setJobNum(jobDTO.getJobNum());
+			jobBookmarkDTO.setMemberNum(memberDTO.getMemberNum());
+
+			bookmarkCheck = jobBookmarkService.check(jobBookmarkDTO);
+		}
+
+		model.addAttribute("isApply", isApply);
+		model.addAttribute("isWriter", isWriter);
+		model.addAttribute("applyStatus", applyStatus);
+		model.addAttribute("bookmarkCheck", bookmarkCheck);
 
 		return "job/detail";
 	}
@@ -117,6 +159,20 @@ public class JobController {
 		jobService.deleteFile(jobDTO);
 
 		return "redirect:./update?jobNum=" + jobDTO.getJobNum();
+	}
+
+	@GetMapping("myJobList")
+	public String myJobList(@AuthenticationPrincipal MemberDTO memberDTO, JobDTO jobDTO, Model model) throws Exception {
+
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
+
+		jobDTO.setMemberNum(memberDTO.getMemberNum());
+
+		model.addAttribute("list", jobService.myJobList(jobDTO));
+
+		return "job/myJobList";
 	}
 
 }

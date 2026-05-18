@@ -51,7 +51,23 @@ public class ClubMemberController {
 	}
 
 	@GetMapping("waitList")
-	public String waitList(@RequestParam("clubNum") Long clubNum, Model model) throws Exception {
+	public String waitList(@RequestParam("clubNum") Long clubNum, @AuthenticationPrincipal MemberDTO memberDTO,
+			Model model, RedirectAttributes redirectAttributes) throws Exception {
+
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
+
+		ClubDTO checkDTO = new ClubDTO();
+		checkDTO.setClubNum(clubNum);
+		checkDTO.setMemberNum(memberDTO.getMemberNum());
+
+		Long ownerCheck = clubService.isClubOwner(checkDTO);
+
+		if (ownerCheck == 0) {
+			redirectAttributes.addFlashAttribute("message", "회장만 가입 신청 목록을 확인할 수 있습니다.");
+			return "redirect:/club/detail?clubNum=" + clubNum;
+		}
 
 		List<ClubMemberDTO> list = clubMemberService.waitList(clubNum);
 
@@ -62,7 +78,23 @@ public class ClubMemberController {
 	}
 
 	@PostMapping("approve")
-	public String approve(ClubMemberDTO clubMemberDTO, RedirectAttributes redirectAttributes) throws Exception {
+	public String approve(ClubMemberDTO clubMemberDTO, @AuthenticationPrincipal MemberDTO memberDTO,
+			RedirectAttributes redirectAttributes) throws Exception {
+
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
+
+		ClubDTO checkDTO = new ClubDTO();
+		checkDTO.setClubNum(clubMemberDTO.getClubNum());
+		checkDTO.setMemberNum(memberDTO.getMemberNum());
+
+		Long ownerCheck = clubService.isClubOwner(checkDTO);
+
+		if (ownerCheck == 0) {
+			redirectAttributes.addFlashAttribute("message", "회장만 가입 승인을 할 수 있습니다.");
+			return "redirect:/club/detail?clubNum=" + clubMemberDTO.getClubNum();
+		}
 
 		int result = clubMemberService.approve(clubMemberDTO);
 
@@ -98,7 +130,23 @@ public class ClubMemberController {
 	}
 
 	@GetMapping("memberList")
-	public String memberList(@RequestParam("clubNum") Long clubNum, Model model) throws Exception {
+	public String memberList(@RequestParam("clubNum") Long clubNum, @AuthenticationPrincipal MemberDTO memberDTO,
+			Model model, RedirectAttributes redirectAttributes) throws Exception {
+
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
+
+		ClubDTO checkDTO = new ClubDTO();
+		checkDTO.setClubNum(clubNum);
+		checkDTO.setMemberNum(memberDTO.getMemberNum());
+
+		Long ownerCheck = clubService.isClubOwner(checkDTO);
+
+		if (ownerCheck == 0) {
+			redirectAttributes.addFlashAttribute("message", "회장만 회원 목록을 확인할 수 있습니다.");
+			return "redirect:/club/detail?clubNum=" + clubNum;
+		}
 
 		model.addAttribute("list", clubMemberService.memberList(clubNum));
 		model.addAttribute("clubNum", clubNum);

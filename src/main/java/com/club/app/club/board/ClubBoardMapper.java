@@ -31,4 +31,6 @@ public interface ClubBoardMapper {
 	
 	public Long getWriterMemberNum(Long boardNum) throws Exception;
 	
+	public List<ClubBoardDTO> myBoardList(ClubBoardDTO clubBoardDTO) throws Exception;
+	
 }

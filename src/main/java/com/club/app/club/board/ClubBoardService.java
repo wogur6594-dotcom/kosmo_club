@@ -115,4 +115,9 @@ public class ClubBoardService {
 	public List<ClubBoardDTO> noticeList(Long clubNum) throws Exception {
 		return clubBoardMapper.noticeList(clubNum);
 	}
+	
+	public List<ClubBoardDTO> myBoardList(ClubBoardDTO clubBoardDTO) throws Exception {
+		return clubBoardMapper.myBoardList(clubBoardDTO);
+	}
+	
 }

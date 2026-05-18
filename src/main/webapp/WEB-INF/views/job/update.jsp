@@ -113,6 +113,11 @@ label {
 					class="form-control" value="${dto.jobWorkTime}" required>
 			</div>
 
+			<div class="form-group">
+				<label>모집 인원</label> <input type="number" name="jobMaxMember"
+					class="form-control" min="1" value="${dto.jobMaxMember}">
+			</div>
+
 			<c:if test="${not empty dto.fileName}">
 				<div class="form-group">
 

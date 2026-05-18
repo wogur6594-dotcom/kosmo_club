@@ -154,4 +154,20 @@ public class ClubController {
 		return "redirect:./list";
 	}
 
+	@GetMapping("myClubList")
+	public String myClubList(@AuthenticationPrincipal MemberDTO memberDTO, Model model) throws Exception {
+
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
+
+		ClubMemberDTO clubMemberDTO = new ClubMemberDTO();
+
+		clubMemberDTO.setMemberNum(memberDTO.getMemberNum());
+
+		model.addAttribute("list", clubService.myClubList(clubMemberDTO));
+
+		return "club/myClubList";
+	}
+
 }
