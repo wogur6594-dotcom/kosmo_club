@@ -151,6 +151,46 @@ body {
 		order: 3;
 	}
 }
+
+.table tbody tr:hover {
+	background-color: #fff7ef;
+	transition: 0.15s;
+}
+
+.search-control {
+	height: 42px;
+	border-radius: 10px;
+}
+
+.search-btn {
+	height: 42px;
+	min-width: 58px;
+	padding: 0 16px;
+	line-height: 42px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+}
+
+.board-filter-box {
+	margin-bottom: 16px;
+}
+
+.board-filter-box .btn {
+	padding: 5px 13px;
+	font-size: 14px;
+	border-radius: 11px;
+	margin-bottom: 8px;
+	font-weight: 700;
+	font-size: 14px;
+	border-radius: 11px;
+	border-radius: 11px;
+}
+
+.btn-brown {
+	box-shadow: 0 2px 8px rgba(179, 98, 0, 0.25);
+}
 </style>
 
 </head>
@@ -343,12 +383,119 @@ body {
 
 					<div class="position-relative mb-4 text-center">
 
-						<h3 class="section-title mb-0">${dto.clubName}게시판</h3>
+						<h3 class="section-title mb-0">${dto.clubName}  게시판</h3>
 
 						<a href="../clubboard/create?clubNum=${dto.clubNum}"
 							class="btn btn-sm btn-brown"
 							style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">
 							글쓰기 </a>
+
+					</div>
+
+					<form action="./detail" method="get" class="mb-3">
+
+						<input type="hidden" name="clubNum" value="${dto.clubNum}">
+						<input type="hidden" name="sort" value="${pager.sort}">
+
+						<div class="d-flex">
+
+							<select name="kind" class="form-control search-control mr-2"
+								style="max-width: 140px;">
+
+								<option value="title" ${pager.kind eq 'title' ? 'selected' : ''}>
+									제목</option>
+
+
+
+								<option value="contents"
+									${pager.kind eq 'contents' ? 'selected' : ''}>내용</option>
+
+								<option value="titleContents"
+									${pager.kind eq 'titleContents' ? 'selected' : ''}>
+									제목+내용</option>
+
+								<option value="writer"
+									${pager.kind eq 'writer' ? 'selected' : ''}>작성자</option>
+
+								<option value="category"
+									${pager.kind eq 'category' ? 'selected' : ''}>카테고리</option>
+
+							</select> <input type="text" name="search" value="${pager.search}"
+								class="form-control search-control mr-2" placeholder="검색어 입력">
+
+							<button type="submit" class="btn btn-brown search-btn">검색</button>
+
+						</div>
+
+					</form>
+
+					<!-- 정렬 -->
+					<div class="board-filter-box d-flex flex-wrap align-items-center">
+
+						<a
+							href="./detail?clubNum=${dto.clubNum}&sort=latest&page=1&kind=${pager.kind}&search=${pager.search}#boardArea"
+							class="btn btn-sm mr-2 ${empty pager.sort || pager.sort eq 'latest' ? 'btn-brown' : 'btn-gray'}">
+							최신순 </a> <a
+							href="./detail?clubNum=${dto.clubNum}&sort=hit&page=1&kind=${pager.kind}&search=${pager.search}#boardArea"
+							class="btn btn-sm mr-2 ${pager.sort eq 'hit' ? 'btn-brown' : 'btn-gray'}">
+							조회순 </a> <a
+							href="./detail?clubNum=${dto.clubNum}&sort=comment&page=1&kind=${pager.kind}&search=${pager.search}#boardArea"
+							class="btn btn-sm mr-2 ${pager.sort eq 'comment' ? 'btn-brown' : 'btn-gray'}">
+							댓글순 </a> <a
+							href="./detail?clubNum=${dto.clubNum}&sort=like&page=1&kind=${pager.kind}&search=${pager.search}#boardArea"
+							class="btn btn-sm ${pager.sort eq 'like' ? 'btn-brown' : 'btn-gray'}">
+							좋아요순 </a>
+
+					</div>
+					<!-- 정렬끝 -->
+
+					<!-- 카테고리 필터 -->
+					<div class="board-filter-box d-flex flex-wrap align-items-center">
+
+						<a
+							href="./detail?clubNum=${dto.clubNum}&page=1&sort=${pager.sort}#boardArea"
+							class="btn btn-sm mr-2 ${empty pager.search ? 'btn-brown' : 'btn-gray'}">
+							전체 </a> <a
+							href="./detail?clubNum=${dto.clubNum}&page=1&sort=${pager.sort}&kind=category&search=자유#boardArea"
+							class="btn btn-sm mr-2 ${pager.kind eq 'category' and pager.search eq '자유' ? 'btn-brown' : 'btn-gray'}">
+							자유 </a> <a
+							href="./detail?clubNum=${dto.clubNum}&page=1&sort=${pager.sort}&kind=category&search=공지#boardArea"
+							class="btn btn-sm mr-2 ${pager.kind eq 'category' and pager.search eq '공지' ? 'btn-brown' : 'btn-gray'}">
+							공지 </a> <a
+							href="./detail?clubNum=${dto.clubNum}&page=1&sort=${pager.sort}&kind=category&search=일정#boardArea"
+							class="btn btn-sm mr-2 ${pager.kind eq 'category' and pager.search eq '일정' ? 'btn-brown' : 'btn-gray'}">
+							일정 </a> <a
+							href="./detail?clubNum=${dto.clubNum}&page=1&sort=${pager.sort}&kind=category&search=후기#boardArea"
+							class="btn btn-sm ${pager.kind eq 'category' and pager.search eq '후기' ? 'btn-brown' : 'btn-gray'}">
+							후기 </a>
+
+					</div>
+					<!-- 카테고리 필터 끝 -->
+
+					<div class="mb-3 px-2"
+						style="font-size: 14px; color: #8c7b6d; font-weight: 700;">
+
+						총 ${pager.totalCount}개의 게시글 ·
+
+						<c:choose>
+
+							<c:when test="${pager.sort eq 'hit'}">
+			조회순 정렬
+		</c:when>
+
+							<c:when test="${pager.sort eq 'comment'}">
+			댓글순 정렬
+		</c:when>
+
+							<c:when test="${pager.sort eq 'like'}">
+			좋아요순 정렬
+		</c:when>
+
+							<c:otherwise>
+			최신순 정렬
+		</c:otherwise>
+
+						</c:choose>
 
 					</div>
 
@@ -370,7 +517,7 @@ body {
 									<td><span class="badge badge-success"
 										style="font-size: 10px; padding: 3px 6px; margin-right: 5px;">
 											${boardDTO.boardCategory} </span> <a
-										href="../clubboard/detail?boardNum=${boardDTO.boardNum}&clubNum=${dto.clubNum}"
+										href="../clubboard/detail?boardNum=${boardDTO.boardNum}&clubNum=${dto.clubNum}&page=${pager.page}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}"
 										class="board-title-link"> ${boardDTO.boardTitle} </a> <c:if
 											test="${boardDTO.fileCount > 0}">
 											<span
@@ -405,14 +552,14 @@ body {
 
 								<c:if test="${pager.pre}">
 									<li class="page-item"><a class="page-link"
-										href="./detail?clubNum=${dto.clubNum}&page=${pager.start-1}#boardArea"
+										href="./detail?clubNum=${dto.clubNum}&page=${pager.start-1}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}#boardArea"
 										style="background-color: #f1f1f1; color: #333; border: none; border-radius: 10px; margin: 0 3px;">
 											이전 </a></li>
 								</c:if>
 
 								<c:forEach begin="${pager.start}" end="${pager.end}" var="i">
 									<li class="page-item"><a class="page-link"
-										href="./detail?clubNum=${dto.clubNum}&page=${i}#boardArea"
+										href="./detail?clubNum=${dto.clubNum}&page=${i}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}#boardArea"
 										style="
 											background-color: ${pager.page eq i ? '#ff8a00' : '#f1f1f1'};
 											color: ${pager.page eq i ? 'white' : '#333'};
@@ -424,7 +571,7 @@ body {
 
 								<c:if test="${pager.next}">
 									<li class="page-item"><a class="page-link"
-										href="./detail?clubNum=${dto.clubNum}&page=${pager.end+1}#boardArea"
+										href="./detail?clubNum=${dto.clubNum}&page=${pager.end+1}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}#boardArea"
 										style="background-color: #f1f1f1; color: #333; border: none; border-radius: 10px; margin: 0 3px;">
 											다음 </a></li>
 								</c:if>
@@ -480,7 +627,47 @@ body {
 						class="btn btn-sm btn-gray btn-block mt-3"> 전체 일정 보기 </a>
 				</div>
 
+				<div class="side-card p-3 mb-2">
+
+					<h5 class="section-title mb-3">🔥 인기글</h5>
+
+					<c:choose>
+
+						<c:when test="${empty popularList}">
+
+							<p class="text-muted mb-0">아직 인기글이 없습니다.</p>
+
+						</c:when>
+
+						<c:otherwise>
+
+							<c:forEach items="${popularList}" var="popular">
+
+								<div class="mb-3 pb-2 border-bottom">
+
+									<a
+										href="../clubboard/detail?boardNum=${popular.boardNum}&clubNum=${dto.clubNum}&page=${pager.page}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}"
+										class="board-title-link" style="font-weight: 700;">
+
+										${popular.boardTitle} </a>
+
+									<div class="small text-muted mt-1">❤ ${popular.likeCount}
+										· 💬 ${popular.commentCount} · 👁 ${popular.hit}</div>
+
+								</div>
+
+							</c:forEach>
+
+						</c:otherwise>
+
+					</c:choose>
+
+				</div>
+
 				<div class="side-card p-3">
+
+
+
 					<div class="d-flex justify-content-between align-items-center mb-3">
 						<h5 class="section-title mb-0">공지</h5>
 
@@ -493,7 +680,7 @@ body {
 						<c:when test="${not empty noticeList}">
 							<c:forEach items="${noticeList}" var="notice">
 								<a
-									href="../clubboard/detail?boardNum=${notice.boardNum}&clubNum=${dto.clubNum}"
+									href="../clubboard/detail?boardNum=${notice.boardNum}&clubNum=${dto.clubNum}&page=${pager.page}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}"
 									class="notice-item"> ${notice.boardTitle} </a>
 							</c:forEach>
 						</c:when>

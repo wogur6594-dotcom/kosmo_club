@@ -23,7 +23,9 @@ public class ClubBoardService {
 
 	public List<ClubBoardDTO> clubBoardList(Pager pager) throws Exception {
 
-		Long totalCount = clubBoardMapper.getCount(pager);
+		Long totalCount = clubBoardMapper.getClubBoardCount(pager);
+
+		pager.setTotalCount(totalCount);
 
 		pager.makePageNum(totalCount);
 		pager.makeStartNum();
@@ -115,9 +117,17 @@ public class ClubBoardService {
 	public List<ClubBoardDTO> noticeList(Long clubNum) throws Exception {
 		return clubBoardMapper.noticeList(clubNum);
 	}
-	
+
 	public List<ClubBoardDTO> myBoardList(ClubBoardDTO clubBoardDTO) throws Exception {
 		return clubBoardMapper.myBoardList(clubBoardDTO);
 	}
-	
+
+	public int hitUpdate(Long boardNum) throws Exception {
+		return clubBoardMapper.hitUpdate(boardNum);
+	}
+
+	public List<ClubBoardDTO> popularList(Long clubNum) throws Exception {
+		return clubBoardMapper.popularList(clubNum);
+	}
+
 }

@@ -9,6 +9,8 @@ import lombok.ToString;
 @ToString
 public class Pager {
 
+	private String sort;
+
 	private Long clubNum;
 
 	private String clubCategory;
@@ -90,6 +92,16 @@ public class Pager {
 	public void makeStartNum() {
 		// 1, 0: 2, 5
 		this.startNum = (this.getPage() - 1) * this.getPerPage();
+	}
+
+	private Long totalCount;
+
+	public Long getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(Long totalCount) {
+		this.totalCount = totalCount;
 	}
 
 }
