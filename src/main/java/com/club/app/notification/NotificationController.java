@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.club.app.member.MemberDTO;
+import com.club.app.productChat.ChatService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class NotificationController {
 
 	private final NotificationService notificationService;
+	private final ChatService chatService;
 
 	@GetMapping("list")
 	public String list(@AuthenticationPrincipal MemberDTO memberDTO, Model model) throws Exception {
@@ -29,13 +31,12 @@ public class NotificationController {
 		}
 
 		List<NotificationDTO> list = notificationService.list(memberDTO.getMemberNum());
-public class NotificationController {
 
-	private final NotificationService notificationService;
-	private final com.club.app.productChat.ChatService chatService;
+		model.addAttribute("list", list);
 
-	@GetMapping("list")
-// ...
+		return "notification/list";
+	}
+
 	@GetMapping("read")
 	public String read(@RequestParam("notificationNum") Long notificationNum,
 			@RequestParam(value = "url", required = false) String url, RedirectAttributes redirectAttributes)
