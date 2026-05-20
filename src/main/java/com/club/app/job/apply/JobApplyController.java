@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.club.app.job.JobDTO;
+import com.club.app.job.JobService;
 import com.club.app.member.MemberDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class JobApplyController {
 
 	private final JobApplyService jobApplyService;
+	private final JobService jobService;
 
 	@PostMapping("apply")
 	public String apply(JobApplyDTO jobApplyDTO, @AuthenticationPrincipal MemberDTO memberDTO,
@@ -62,7 +65,30 @@ public class JobApplyController {
 	}
 
 	@PostMapping("status")
-	public String status(JobApplyDTO jobApplyDTO, RedirectAttributes redirectAttributes) throws Exception {
+	public String status(JobApplyDTO jobApplyDTO, @AuthenticationPrincipal MemberDTO memberDTO,
+			RedirectAttributes redirectAttributes) throws Exception {
+
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
+
+		JobApplyDTO originApply = jobApplyService.jobApplyDetail(jobApplyDTO);
+
+		if (originApply == null) {
+			redirectAttributes.addFlashAttribute("message", "존재하지 않는 지원 내역입니다.");
+			return "redirect:/job/list";
+		}
+
+		JobDTO jobDTO = new JobDTO();
+		jobDTO.setJobNum(originApply.getJobNum());
+		jobDTO = jobService.detail(jobDTO);
+
+		if (jobDTO == null || !jobDTO.getMemberNum().equals(memberDTO.getMemberNum())) {
+			redirectAttributes.addFlashAttribute("message", "공고 작성자만 지원 상태를 변경할 수 있습니다.");
+			return "redirect:/job/detail?jobNum=" + originApply.getJobNum();
+		}
+
+		jobApplyDTO.setJobNum(originApply.getJobNum());
 
 		int result = jobApplyService.updateStatus(jobApplyDTO);
 
@@ -74,14 +100,27 @@ public class JobApplyController {
 			redirectAttributes.addFlashAttribute("message", "지원 상태 변경에 실패했습니다.");
 		}
 
-		return "redirect:/jobApply/applicantList?jobNum=" + jobApplyDTO.getJobNum();
+		return "redirect:/jobApply/applicantList?jobNum=" + originApply.getJobNum();
 	}
 
 	@GetMapping("applicantList")
-	public String applicantList(JobApplyDTO jobApplyDTO, Model model) throws Exception {
+	public String applicantList(JobApplyDTO jobApplyDTO, @AuthenticationPrincipal MemberDTO memberDTO, Model model,
+			RedirectAttributes redirectAttributes) throws Exception {
+
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
+
+		JobDTO jobDTO = new JobDTO();
+		jobDTO.setJobNum(jobApplyDTO.getJobNum());
+		jobDTO = jobService.detail(jobDTO);
+
+		if (jobDTO == null || !jobDTO.getMemberNum().equals(memberDTO.getMemberNum())) {
+			redirectAttributes.addFlashAttribute("message", "공고 작성자만 지원자 목록을 볼 수 있습니다.");
+			return "redirect:/job/list";
+		}
 
 		model.addAttribute("list", jobApplyService.applicantList(jobApplyDTO));
-
 		model.addAttribute("jobNum", jobApplyDTO.getJobNum());
 
 		return "jobApply/applicantList";

@@ -12,118 +12,64 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<style>
-body {
-	background-color: #fff7f3;
-}
-
-.bookmark-box {
-	max-width: 1100px;
-	margin: 50px auto;
-	background-color: white;
-	border-radius: 18px;
-	padding: 35px;
-	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-}
-
-.page-title {
-	font-weight: 800;
-	color: #3f2d20;
-	margin-bottom: 30px;
-}
-
-.job-card {
-	border: 1px solid #f0e2d7;
-	border-radius: 14px;
-	padding: 20px;
-	margin-bottom: 18px;
-	transition: 0.2s;
-	background-color: #fffdfa;
-}
-
-.job-card:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-}
-
-.job-title {
-	font-size: 1.2rem;
-	font-weight: 700;
-	color: #3f2d20;
-	text-decoration: none;
-}
-
-.job-title:hover {
-	color: #ff6f0f;
-	text-decoration: none;
-}
-
-.badge-soft {
-	background-color: #ffe7cf;
-	color: #c96a00;
-	font-weight: 700;
-	padding: 6px 10px;
-	border-radius: 10px;
-	font-size: 0.8rem;
-}
-
-.empty-box {
-	text-align: center;
-	padding: 80px 20px;
-	color: #888;
-	font-size: 1.1rem;
-}
-</style>
-
+<link rel="stylesheet" href="/css/job.css">
 </head>
+
 <body>
 
-	<div class="container">
+	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
-		<div class="bookmark-box">
+	<div class="bookmark-box">
 
-			<h2 class="page-title">관심 공고</h2>
+		<div class="manage-head">
+			<div>
+				<h1 class="page-title">관심 공고</h1>
+				<p class="manage-desc">관심 등록한 동네알바 공고를 확인할 수 있습니다.</p>
+			</div>
 
-			<c:choose>
+			<div class="manage-head-btns">
+				<a href="${pageContext.request.contextPath}/jobApply/myList"
+					class="btn-back-link"> 뒤로가기 </a>
+			</div>
+		</div>
 
-				<c:when test="${empty list}">
+		<c:choose>
 
-					<div class="empty-box">관심 등록한 공고가 없습니다.</div>
+			<c:when test="${empty list}">
+				<div class="empty-box">관심 등록한 공고가 없습니다.</div>
+			</c:when>
 
-				</c:when>
+			<c:otherwise>
 
-				<c:otherwise>
+				<c:forEach items="${list}" var="dto">
 
-					<c:forEach items="${list}" var="dto">
+					<div class="bookmark-card">
 
-						<div class="job-card">
+						<div class="bookmark-card-main">
 
-							<div
-								class="d-flex justify-content-between align-items-center mb-2">
+							<a
+								href="${pageContext.request.contextPath}/job/detail?jobNum=${dto.jobNum}"
+								class="job-title"> ${dto.jobTitle} </a>
 
-								<a href="/job/detail?jobNum=${dto.jobNum}" class="job-title">
+							<div class="meta">${dto.jobLocation} · ${dto.jobType}</div>
 
-									${dto.jobTitle} </a> <span class="badge-soft">
-									${dto.jobCategory} </span>
+							<div class="pay">${dto.jobPay}</div>
 
-							</div>
-
-							<div class="text-muted mb-2">${dto.jobLocation} ·
-								${dto.jobType}</div>
-
-							<div class="font-weight-bold mb-2">${dto.jobPay}</div>
-
-							<div class="text-muted">작성자 : ${dto.memberName}</div>
+							<div class="meta">작성자 : ${dto.memberName}</div>
 
 						</div>
 
-					</c:forEach>
+						<div class="bookmark-card-side">
+							<span class="badge-soft">${dto.jobCategory}</span>
+						</div>
 
-				</c:otherwise>
+					</div>
 
-			</c:choose>
+				</c:forEach>
 
-		</div>
+			</c:otherwise>
+
+		</c:choose>
 
 	</div>
 

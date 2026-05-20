@@ -6,48 +6,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="/css/job.css">
 <title>알바 공고 수정</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<style>
-body {
-	background-color: #fff7f3;
-}
 
-.update-box {
-	max-width: 760px;
-	margin: 55px auto;
-	background-color: white;
-	border-radius: 18px;
-	padding: 35px;
-	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-}
-
-.page-title {
-	font-weight: 800;
-	color: #3f2d20;
-	margin-bottom: 30px;
-}
-
-.btn-orange {
-	background-color: #ff6f0f;
-	color: white;
-	border-radius: 10px;
-	font-weight: 700;
-}
-
-.btn-orange:hover {
-	background-color: #e85f00;
-	color: white;
-}
-
-label {
-	font-weight: 700;
-	color: #4a3527;
-}
-</style>
 </head>
 
 <body>

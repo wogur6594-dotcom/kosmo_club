@@ -12,59 +12,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<style>
-body {
-	background-color: #fff7f3;
-}
-
-.list-box {
-	max-width: 900px;
-	margin: 50px auto;
-	background: white;
-	padding: 35px;
-	border-radius: 18px;
-	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-}
-
-.title {
-	font-size: 28px;
-	font-weight: 800;
-	margin-bottom: 30px;
-	color: #3f2d20;
-}
-
-.table th {
-	background-color: #fff3e8;
-}
-
-.badge-wait {
-	background: #ffe8cc;
-	color: #d9480f;
-	padding: 6px 10px;
-	border-radius: 8px;
-	font-size: 12px;
-	font-weight: 700;
-}
-
-.badge-accept {
-	background: #d3f9d8;
-	color: #2b8a3e;
-	padding: 6px 10px;
-	border-radius: 8px;
-	font-size: 12px;
-	font-weight: 700;
-}
-
-.badge-reject {
-	background: #ffe3e3;
-	color: #c92a2a;
-	padding: 6px 10px;
-	border-radius: 8px;
-	font-size: 12px;
-	font-weight: 700;
-}
-</style>
-
+<link rel="stylesheet" href="/css/job.css">
 </head>
 
 <body>

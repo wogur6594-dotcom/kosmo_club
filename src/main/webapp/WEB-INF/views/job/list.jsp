@@ -14,184 +14,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<style>
-body {
-	background-color: #ffffff;
-	color: #212529;
-}
-
-.job-container {
-	max-width: 1200px;
-	margin: 40px auto;
-}
-
-.search-box {
-	border: 1px solid #e5e5e5;
-	border-radius: 28px;
-	padding: 10px 18px;
-	display: flex;
-	align-items: center;
-	margin-bottom: 35px;
-}
-
-.search-box select {
-	border: none;
-	outline: none;
-	font-weight: 600;
-	margin-right: 12px;
-}
-
-.search-box input {
-	border: none;
-	outline: none;
-	flex: 1;
-}
-
-.search-box button {
-	border: none;
-	background-color: #343a40;
-	color: white;
-	width: 38px;
-	height: 38px;
-	border-radius: 50%;
-	font-weight: 700;
-}
-
-.page-title {
-	font-size: 28px;
-	font-weight: 800;
-	margin-bottom: 35px;
-}
-
-.filter-box {
-	width: 230px;
-	padding-right: 25px;
-}
-
-.filter-title {
-	font-weight: 800;
-	margin-bottom: 20px;
-}
-
-.filter-section {
-	border-bottom: 1px solid #eee;
-	padding-bottom: 20px;
-	margin-bottom: 22px;
-}
-
-.filter-section h6 {
-	font-weight: 800;
-	margin-bottom: 15px;
-}
-
-.filter-section label {
-	display: block;
-	margin-bottom: 10px;
-	color: #343a40;
-}
-
-.job-list {
-	flex: 1;
-}
-
-.job-item {
-	position: relative;
-	padding: 24px 0;
-	border-bottom: 1px solid #eee;
-}
-
-.job-title {
-	font-size: 21px;
-	font-weight: 800;
-	color: #111;
-	margin-bottom: 8px;
-}
-
-.job-title:hover {
-	color: #ff6f0f;
-	text-decoration: none;
-}
-
-.job-meta {
-	color: #868e96;
-	font-size: 14px;
-	margin-bottom: 8px;
-}
-
-.job-pay {
-	font-weight: 800;
-	color: #212529;
-}
-
-.job-time {
-	color: #6c757d;
-}
-
-.badge-soft {
-	background-color: #fff3e8;
-	color: #ff6f0f;
-	font-size: 12px;
-	padding: 5px 8px;
-	border-radius: 4px;
-}
-
-.floating-write-btn {
-	position: fixed;
-	right: 70px;
-	bottom: 60px;
-	background-color: #ff6f0f;
-	color: white;
-	padding: 14px 24px;
-	border-radius: 12px;
-	font-weight: 800;
-	z-index: 999;
-	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-}
-
-.floating-write-btn:hover {
-	color: white;
-	text-decoration: none;
-	background-color: #e85f00;
-}
-
-.pagination .page-link {
-	color: #ff6f0f;
-}
-
-.pagination .active .page-link {
-	background-color: #ff6f0f;
-	border-color: #ff6f0f;
-	color: white;
-}
-
-.opacity-50 {
-	opacity: 0.68;
-}
-
-.btn-job-main {
-	background-color: #ff6f0f;
-	color: white;
-	border-radius: 10px;
-	font-weight: 700;
-}
-
-.btn-job-main:hover {
-	background-color: #e85f00;
-	color: white;
-}
-
-.btn-job-sub {
-	background-color: #fff3e8;
-	color: #ff6f0f;
-	border-radius: 10px;
-	font-weight: 700;
-}
-
-.btn-job-sub:hover {
-	background-color: #ffe1c2;
-	color: #e85f00;
-}
-</style>
+<link rel="stylesheet" href="/css/job.css">
 </head>
 
 <body>
@@ -200,37 +23,48 @@ body {
 
 	<div class="job-container">
 
-		<form action="./list" method="get" class="search-box">
-			<select name="kind">
-				<option value="all">알바 전체</option>
-				<option value="title">제목</option>
-				<option value="contents">내용</option>
-				<option value="location">지역</option>
-			</select> <input type="text" name="search" value="${pager.search}"
-				placeholder="검색어를 입력해주세요">
+		<div class="job-top-bar">
 
-			<button type="submit">→</button>
-		</form>
+			<form action="./list" method="get" class="search-box">
 
-		<h1 class="page-title">동네알바</h1>
+				<div class="search-group">
 
-		<sec:authorize access="isAuthenticated()">
-			<div class="mb-4 text-right">
+					<select name="kind">
+						<option value="all">알바 전체</option>
+						<option value="title">제목</option>
+						<option value="contents">내용</option>
+						<option value="location">지역</option>
+					</select> <input type="text" name="search" value="${pager.search}"
+						placeholder="검색어를 입력해주세요">
 
-				<a href="${pageContext.request.contextPath}/job/myJobList"
-					class="btn btn-sm btn-job-main"> 내 공고 관리 </a> <a
-					href="${pageContext.request.contextPath}/jobApply/myList"
-					class="btn btn-sm btn-job-sub"> 내 지원내역 </a>
+					<button type="submit">→</button>
 
-			</div>
-		</sec:authorize>
+				</div>
 
-		<div class="d-flex">
+			</form>
+
+			<sec:authorize access="isAuthenticated()">
+				<div class="job-user-menu">
+
+					<a href="${pageContext.request.contextPath}/job/myJobList"
+						class="btn btn-sm btn-job-main"> 내 공고 관리 </a> <a
+						href="${pageContext.request.contextPath}/jobApply/myList"
+						class="btn btn-sm btn-job-sub"> 내 지원내역 </a>
+
+				</div>
+			</sec:authorize>
+
+		</div>
+
+
+
+		<div class="job-layout">
 
 			<aside class="filter-box">
-				<div class="d-flex justify-content-between">
+
+				<div class="filter-head">
 					<div class="filter-title">필터</div>
-					<a href="./list" class="text-muted small">초기화</a>
+					<a href="./list" class="filter-reset">초기화</a>
 				</div>
 
 				<div class="filter-section">
@@ -260,67 +94,62 @@ body {
 						</c:forEach>
 					</div>
 
-					<button type="submit" class="btn btn-sm btn-dark btn-block">
-						필터 적용</button>
+					<button type="submit" class="job-filter-btn">필터 적용</button>
 				</form>
+
 			</aside>
 
 			<main class="job-list">
 
 				<c:choose>
 					<c:when test="${empty list}">
-						<div class="text-center text-muted mt-5">등록된 알바 공고가 없습니다.</div>
+						<div class="empty-box">등록된 알바 공고가 없습니다.</div>
 					</c:when>
 
 					<c:otherwise>
 						<c:forEach items="${list}" var="dto">
+
 							<div
-								class="job-item
-	${dto.currentApplyMember ge dto.jobMaxMember ? 'opacity-50' : ''}">
+								class="job-item ${dto.currentApplyMember ge dto.jobMaxMember ? 'opacity-50' : ''}">
 
-								<a href="./detail?jobNum=${dto.jobNum}" class="job-title">
-									${dto.jobTitle} </a>
+								<div class="job-item-content">
 
-								<!-- 썸네일 이미지 -->
+									<a href="./detail?jobNum=${dto.jobNum}" class="job-title">
+										${dto.jobTitle} </a>
+
+									<div class="job-meta">${dto.memberName}·
+										${dto.jobLocation} · ${dto.createDateFormat}</div>
+
+									<div class="job-time">· ${dto.jobType} ·
+										${dto.jobWorkDay} · ${dto.jobWorkTime}</div>
+
+									<div class="job-badge-area">
+
+										<span class="badge-soft">${dto.jobCategory}</span>
+
+										<c:choose>
+											<c:when test="${dto.currentApplyMember ge dto.jobMaxMember}">
+												<span class="badge-closed">모집완료</span>
+											</c:when>
+
+											<c:otherwise>
+												<span class="badge-open">모집중</span>
+											</c:otherwise>
+										</c:choose>
+
+										<span class="job-apply-count"> 지원자
+											${dto.currentApplyMember} / ${dto.jobMaxMember} </span>
+
+									</div>
+
+								</div>
+
 								<c:if test="${not empty dto.fileName}">
-									<img src="/files/job/${dto.fileName}"
-										style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; float: right;">
+									<img src="/files/job/${dto.fileName}" class="job-thumb">
 								</c:if>
 
-								<div class="job-meta">${dto.memberName}·
-									${dto.jobLocation} · ${dto.createDateFormat}</div>
-
-								<div>
-									<span class="job-time"> · ${dto.jobType} ·
-										${dto.jobWorkDay} · ${dto.jobWorkTime} </span>
-								</div>
-
-								<div class="mt-2 d-flex align-items-center flex-wrap">
-
-									<span class="badge-soft mr-2"> ${dto.jobCategory} </span>
-
-									<c:choose>
-
-										<c:when test="${dto.currentApplyMember ge dto.jobMaxMember}">
-
-											<span class="badge badge-danger mr-2"> 모집완료 </span>
-
-										</c:when>
-
-										<c:otherwise>
-
-											<span class="badge badge-success mr-2"> 모집중 </span>
-
-										</c:otherwise>
-
-									</c:choose>
-
-									<span class="text-muted small"> 지원자
-										${dto.currentApplyMember} / ${dto.jobMaxMember} </span>
-
-								</div>
-
 							</div>
+
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>
@@ -352,11 +181,12 @@ body {
 				</c:if>
 
 			</main>
+
 		</div>
 	</div>
 
 	<sec:authorize access="isAuthenticated()">
-		<a href="/job/create" class="floating-write-btn"> + 공고 쓰기 </a>
+		<a href="/job/create" class="floating-write-btn">+ 공고 쓰기</a>
 	</sec:authorize>
 
 </body>
