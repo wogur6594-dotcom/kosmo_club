@@ -73,6 +73,22 @@ body {
 	color: #888;
 	font-size: 1.1rem;
 }
+
+.btn-back {
+	background-color: #f1ebe6;
+	color: #5f4b3b;
+	border-radius: 12px;
+	font-weight: 800;
+	padding: 8px 18px;
+	border: none;
+	transition: 0.2s;
+}
+
+.btn-back:hover {
+	background-color: #e3d8ce;
+	color: #3f2d20;
+	text-decoration: none;
+}
 </style>
 
 </head>
@@ -108,7 +124,7 @@ body {
 
 							</div>
 
-							<div class="text-muted mb-2">${dto.jobLocation} ·
+							<div class="text-muted mb-2">${dto.jobLocation}·
 								${dto.jobType}</div>
 
 							<div class="font-weight-bold mb-2">${dto.jobPay}</div>
@@ -122,7 +138,12 @@ body {
 				</c:otherwise>
 
 			</c:choose>
+			<div class="text-right mt-4">
 
+				<a href="javascript:history.back();" class="btn btn-back"> 뒤로가기
+				</a>
+
+			</div>
 		</div>
 
 	</div>

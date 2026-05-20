@@ -97,6 +97,49 @@ body {
 	color: #868e96;
 	padding: 60px 0;
 }
+
+.btn-back {
+	background-color: #f1ebe6;
+	color: #5f4b3b;
+	border-radius: 12px;
+	font-weight: 800;
+	padding: 8px 18px;
+	border: none;
+	transition: 0.2s;
+}
+
+.btn-back:hover {
+	background-color: #e3d8ce;
+	color: #3f2d20;
+	text-decoration: none;
+}
+.my-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 30px;
+}
+
+.my-head .page-title {
+	margin-bottom: 0;
+}
+
+.btn-bookmark {
+	background-color: #fff3e6;
+	color: #a35400;
+	border: 1px solid #ead1bb;
+	border-radius: 999px;
+	font-weight: 800;
+	padding: 9px 18px;
+	text-decoration: none;
+	transition: 0.2s;
+}
+
+.btn-bookmark:hover {
+	background-color: #ffe5cc;
+	color: #8b4700;
+	text-decoration: none;
+}
 </style>
 </head>
 
@@ -106,7 +149,14 @@ body {
 
 	<div class="my-box">
 
-		<h1 class="page-title">내 지원내역</h1>
+		<div class="my-head">
+
+			<h1 class="page-title">내 지원내역</h1>
+
+			<a href="${pageContext.request.contextPath}/jobBookmark/myList"
+				class="btn-bookmark"> 관심 공고 </a>
+
+		</div>
 
 		<c:choose>
 			<c:when test="${empty list}">
@@ -137,7 +187,7 @@ body {
 									<span class="badge-reject">거절</span>
 								</c:otherwise>
 							</c:choose>
-<!-- 대기중 취소 -->
+							<!-- 대기중 취소 -->
 							<c:if test="${dto.applyStatus eq 'WAIT'}">
 								<form
 									action="${pageContext.request.contextPath}/jobApply/cancel"
@@ -150,10 +200,10 @@ body {
 										지원 취소</button>
 								</form>
 							</c:if>
-<!-- 대기중 취소 끝 -->
+							<!-- 대기중 취소 끝 -->
 						</div>
 
-						<div class="meta">${dto.jobLocation}· ${dto.jobWorkDay} ·
+						<div class="meta">${dto.jobLocation}·${dto.jobWorkDay}·
 							${dto.jobWorkTime}</div>
 
 						<div class="pay">${dto.jobPay}</div>
@@ -165,6 +215,11 @@ body {
 				</c:forEach>
 			</c:otherwise>
 		</c:choose>
+		<div class="text-right mt-4">
+
+			<a href="javascript:history.back();" class="btn btn-back"> 뒤로가기 </a>
+
+		</div>
 
 	</div>
 
