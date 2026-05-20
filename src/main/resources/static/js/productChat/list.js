@@ -38,11 +38,23 @@ function updateRoomItem(msg) {
 
     const roomEl = document.getElementById("room-" + msg.chatroomNum);
     
-    if (!roomEl) return; // 목록에 없는 방이면 무시 (또는 새로고침 유도)
+    if (!roomEl) {
+        // 목록에 없는 방에서 메시지가 오면 (새로운 채팅방 생성 등) 목록을 최신화하기 위해 새로고침
+        location.reload();
+        return;
+    }
 
     // 1. 마지막 메시지 업데이트
     const lastMsgEl = roomEl.querySelector(".last-message");
-    if (lastMsgEl) lastMsgEl.innerText = msg.messageContent;
+    if (lastMsgEl) {
+        if (msg.type === "image") {
+            lastMsgEl.innerText = "(사진)";
+        } else if (msg.type === "map") {
+            lastMsgEl.innerText = "(장소 공유)";
+        } else {
+            lastMsgEl.innerText = msg.messageContent;
+        }
+    }
 
     // 2. 시간 업데이트
     const timeEl = roomEl.querySelector(".last-time");

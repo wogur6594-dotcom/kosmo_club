@@ -4,9 +4,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.club.app.productChat.ChatMapper">
 
+	<resultMap id="chatRoomMap" type="chatRoomDTO">
+		<id property="chatroomNum" column="CHATROOM_NUM"/>
+		<result property="productNum" column="PRODUCT_NUM"/>
+		<result property="buyerNum" column="BUYER_NUM"/>
+		<result property="sellerNum" column="SELLER_NUM"/>
+		<result property="createtime" column="CREATETIME"/>
+		<result property="productName" column="productName"/>
+		<result property="otherName" column="otherName"/>
+		<result property="otherProfileImage" column="otherProfileImage"/>
+		<result property="lastMessage" column="lastMessage"/>
+		<result property="lastMessageTime" column="lastMessageTime"/>
+		<result property="unreadCount" column="unreadCount"/>
+	</resultMap>
 
 	<!-- 채팅방 조회 -->
-	<select id="findRoom" parameterType="chatRoomDTO" resultType="chatRoomDTO">
+	<select id="findRoom" parameterType="chatRoomDTO" resultMap="chatRoomMap">
 		SELECT *
 		FROM "TB_PRODUCTCHAT"
 		WHERE "PRODUCT_NUM" = #{productNum}
@@ -23,13 +36,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 
 	<!-- 채팅방 번호 조회 -->
-	<select id="findById" parameterType="long" resultType="chatRoomDTO">
+	<select id="findById" parameterType="long" resultMap="chatRoomMap">
 		SELECT * FROM "TB_PRODUCTCHAT"
 		WHERE "CHATROOM_NUM" = #{chatroomNum}
 	</select>
 
 	<!-- 내 채팅방 목록 -->
-	<select id="list" parameterType="long" resultType="chatRoomDTO">
+	<select id="list" parameterType="long" resultMap="chatRoomMap">
 		SELECT
 		c.*,
 		p."PRODUCT_TITLE" AS productName,

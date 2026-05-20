@@ -52,67 +52,74 @@
 			</div>
 			<div class="col-md-6">
 
-				<form action="/product/edit" method="post" enctype="multipart/form-data">
+				<form:form action="/product/edit" method="post" modelAttribute="productDTO" enctype="multipart/form-data">
 
-					<input type="hidden" name="productNum" value="${product.productNum}">
+					<form:hidden path="productNum" />
+					<form:errors path="productTitle" cssStyle="color:red" />
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
 							<span class="input-group-text">상품명</span>
 						</div>
-						<input type="text" class="form-control" name="productTitle" value="${product.productTitle}">
+						<form:input path="productTitle" class="form-control" placeholder="상품명을 입력하세요" />
 					</div>
+					
+					<form:errors path="productPrice" cssStyle="color:red" />
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
 							<span class="input-group-text">가격</span>
 						</div>
-						<input type="number" class="form-control" name="productPrice" value="${product.productPrice}">
+						<form:input path="productPrice" type="number" class="form-control" placeholder="가격 입력" />
 					</div>
+					
+					<form:errors path="productLocation" cssStyle="color:red" />
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
 							<span class="input-group-text">지역</span>
 						</div>
-						<select class="form-control" name="productLocation">
-							<option value="서울시 구로구" ${product.productLocation == '서울시 구로구' ? 'selected' : ''}>서울시 구로구</option>
-							<option value="서울시 금천구" ${product.productLocation == '서울시 금천구' ? 'selected' : ''}>서울시 금천구</option>
-							<option value="서울시 양천구" ${product.productLocation == '서울시 양천구' ? 'selected' : ''}>서울시 양천구</option>
-							<option value="서울시 영등포구" ${product.productLocation == '서울시 영등포구' ? 'selected' : ''}>서울시 영등포구</option>
-						</select>
+						<form:input path="productLocation" id="productLocation" class="form-control" readonly="true" />
+						<div class="input-group-append">
+							<button type="button" class="btn btn-outline-secondary" onclick="searchAddress()">주소 검색</button>
+						</div>
 					</div>
+					
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
 							<span class="input-group-text">상품종류</span>
 						</div>
-						<select class="form-control" name="productType">
-							<option value="디지털기기" ${product.productType == '디지털기기' ? 'selected' : ''}>디지털기기</option>
-							<option value="생활가전" ${product.productType == '생활가전' ? 'selected' : ''}>생활가전</option>
-							<option value="가구/인테리어" ${product.productType == '가구/인테리어' ? 'selected' : ''}>가구/인테리어</option>
-							<option value="생활/주방" ${product.productType == '생활/주방' ? 'selected' : ''}>생활/주방</option>
-							<option value="유아물품" ${product.productType == '유아물품' ? 'selected' : ''}>유아물품</option>
-							<option value="의류" ${product.productType == '의류' ? 'selected' : ''}>의류</option>
-							<option value="잡화" ${product.productType == '잡화' ? 'selected' : ''}>잡화</option>
-							<option value="뷰티/미용" ${product.productType == '뷰티/미용' ? 'selected' : ''}>뷰티/미용</option>
-							<option value="스포츠/레저" ${product.productType == '스포츠/레저' ? 'selected' : ''}>스포츠/레저</option>
-							<option value="취미/게임/음반" ${product.productType == '취미/게임/음반' ? 'selected' : ''}>취미/게임/음반</option>
-							<option value="티켓/e쿠폰" ${product.productType == '티켓/e쿠폰' ? 'selected' : ''}>티켓/e쿠폰</option>
-							<option value="식품" ${product.productType == '식품' ? 'selected' : ''}>식품</option>
-							<option value="기타" ${product.productType == '기타' ? 'selected' : ''}>기타</option>
-						</select>
+						<form:select path="productType" class="form-control">
+							<form:option value="디지털기기">디지털기기</form:option>
+							<form:option value="생활가전">생활가전</form:option>
+							<form:option value="가구/인테리어">가구/인테리어</form:option>
+							<form:option value="생활/주방">생활/주방</form:option>
+							<form:option value="유아물품">유아물품</form:option>
+							<form:option value="의류">의류</form:option>
+							<form:option value="잡화">잡화</form:option>
+							<form:option value="뷰티/미용">뷰티/미용</form:option>
+							<form:option value="스포츠/레저">스포츠/레저</form:option>
+							<form:option value="취미/게임/음반">취미/게임/음반</form:option>
+							<form:option value="티켓/e쿠폰">티켓/e쿠폰</form:option>
+							<form:option value="식품">식품</form:option>
+							<form:option value="기타">기타</form:option>
+						</form:select>
 					</div>
+					
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
 							<span class="input-group-text">판매상태</span>
 						</div>
-						<select class="form-control" name="productStatus">
-							<option>판매중</option>
-							<option value="거래중">거래중</option>
-							<option value="판매완료">판매완료</option>
-						</select>
+						<form:select path="productStatus" class="form-control">
+							<form:option value="판매중">판매중</form:option>
+							<form:option value="거래중">거래중</form:option>
+							<form:option value="판매완료">판매완료</form:option>
+						</form:select>
 					</div>
+					
+					<form:errors path="productContent" cssStyle="color:red" />
 					<div class="form-group">
 						<label>상품 설명</label>
-						<textarea class="form-control" name="productContent" rows="7">${product.productContent}</textarea>
+						<form:textarea path="productContent" class="form-control" rows="7" />
 					</div>
-					<input type="hidden" name="productNum" value="${product.productNum}">
+					
 					<label>이미지 바로 추가</label>
 					<div class="form-group">
 						<input type="hidden" id="productNum" value="${product.productNum}">
@@ -122,11 +129,12 @@
 					<div id="previewBox" class="d-flex flex-wrap mt-2"></div>
 					<button type="submit" class="btn btn-success">수정 완료</button>
 					<a href="/product/detail?productNum=${product.productNum}" class="btn btn-secondary">취소</a>
-				</form>
+				</form:form>
 			</div>
 		</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="/js/product/edit.js"></script>
 </body>
 </html>

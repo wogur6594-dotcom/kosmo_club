@@ -90,3 +90,16 @@ $(document).ready(function() {
     });
 
 });
+
+// -------------------카카오 주소 검색 api----------------------------
+function searchAddress() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 전체 주소
+            let fullAddr = data.address;
+
+            // 입력창에 자동 세팅
+            document.getElementById("productLocation").value = fullAddr;
+        }
+    }).open();
+}

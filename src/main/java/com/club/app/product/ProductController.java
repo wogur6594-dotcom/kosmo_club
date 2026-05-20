@@ -98,13 +98,21 @@ public class ProductController {
 			throw new AccessDeniedException("수정 권한 없음");
 		}
 
-		model.addAttribute("product", product);
+		model.addAttribute("productDTO", product);
+		model.addAttribute("product", product); // Carousel 등 기존 참조 유지
 
 		return "product/edit";
 	}
 
 	@PostMapping("edit")
-	public String edit(ProductDTO productDTO, Authentication auth) throws Exception {
+	public String edit(@Valid @ModelAttribute("productDTO") ProductDTO productDTO, BindingResult bindingResult, Authentication auth, Model model) throws Exception {
+
+		if (bindingResult.hasErrors()) {
+			// 데이터 재조회 (파일 목록 등을 위해)
+			ProductDTO product = productService.detail(productDTO);
+			model.addAttribute("product", product);
+			return "product/edit";
+		}
 
 		// 로그인 유저
 		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
