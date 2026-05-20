@@ -29,12 +29,13 @@ public class NotificationController {
 		}
 
 		List<NotificationDTO> list = notificationService.list(memberDTO.getMemberNum());
+public class NotificationController {
 
-		model.addAttribute("list", list);
+	private final NotificationService notificationService;
+	private final com.club.app.productChat.ChatService chatService;
 
-		return "notification/list";
-	}
-
+	@GetMapping("list")
+// ...
 	@GetMapping("read")
 	public String read(@RequestParam("notificationNum") Long notificationNum,
 			@RequestParam(value = "url", required = false) String url, RedirectAttributes redirectAttributes)
@@ -42,7 +43,17 @@ public class NotificationController {
 
 		notificationService.readUpdate(notificationNum);
 
-		if (url != null && !url.equals("")) {
+		if (url != null && !url.contains("chatroomNum")) {
+			return "redirect:" + url;
+		} else if (url != null && url.contains("chatroomNum")) {
+			// 채팅방 존재 여부 확인
+			String numStr = url.split("chatroomNum=")[1];
+			Long chatroomNum = Long.parseLong(numStr);
+
+			if (chatService.findById(chatroomNum) == null) {
+				redirectAttributes.addFlashAttribute("msg", "삭제된 채팅방입니다.");
+				return "redirect:/productChat/list";
+			}
 			return "redirect:" + url;
 		}
 
