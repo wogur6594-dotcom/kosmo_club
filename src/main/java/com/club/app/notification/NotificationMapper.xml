@@ -13,14 +13,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		(
 		"MEMBER_NUM",
 		"NOTIFICATION_CONTENTS",
-		"NOTIFICATION_URL"
+		"NOTIFICATION_URL",
+		"CREATE_DATE"
 		)
 
 		VALUES
 		(
 		#{memberNum},
 		#{notificationContents},
-		#{notificationUrl}
+		#{notificationUrl},
+		NOW() AT TIME ZONE 'Asia/Seoul'
 		)
 
 	</insert>
@@ -89,7 +91,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 		WHERE "MEMBER_NUM" = #{memberNum}
 
-		ORDER BY "NOTIFICATION_NUM" DESC
+		ORDER BY
+		"NOTIFICATION_NUM" DESC
 
 		LIMIT 5
 

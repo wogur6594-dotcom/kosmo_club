@@ -15,5 +15,6 @@ public class ClubMessageDTO {
 	private Long senderNum;
 	private String senderName;
 	private String messageContents;
+	private String clubName;
 	private LocalDateTime createDate;
 }

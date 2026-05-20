@@ -16,182 +16,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<style>
-body {
-	background-color: #fff7f3;
-}
-
-.club-wrapper {
-	max-width: 1500px;
-}
-
-.side-card, .main-card {
-	background-color: white;
-	border: none;
-	border-radius: 18px;
-	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-}
-
-.section-title {
-	font-weight: 700;
-	color: #3f2d20;
-}
-
-.btn-brown {
-	background-color: #b36200;
-	color: white;
-	border-radius: 12px;
-	padding: 6px 16px;
-	border: none;
-}
-
-.btn-brown:hover {
-	color: white;
-	background-color: #9d5600;
-}
-
-.btn-gray {
-	background-color: #8c7b6d;
-	color: white;
-	border-radius: 12px;
-	padding: 6px 16px;
-}
-
-.btn-gray:hover {
-	color: white;
-	background-color: #77685d;
-}
-
-.club-image {
-	width: 100%;
-	height: 200px;
-	object-fit: cover;
-	border-radius: 16px;
-}
-
-.info-label {
-	font-weight: 700;
-	color: #5f4b3b;
-}
-
-.notice-box {
-	background-color: #fff3e6;
-	border-radius: 14px;
-	padding: 12px;
-	color: #5f4b3b;
-	font-size: 14px;
-}
-
-.notice-item {
-	display: block;
-	background-color: #fff1df;
-	color: #8a4b00;
-	font-weight: 600;
-	padding: 14px 16px;
-	border-radius: 12px;
-	margin-bottom: 10px;
-	text-decoration: none;
-}
-
-.notice-item:hover {
-	background-color: #ffe4c2;
-	color: #6f3c00;
-	text-decoration: none;
-}
-
-.schedule-item {
-	padding: 8px 0;
-}
-
-.schedule-item:last-child {
-	border-bottom: none;
-}
-
-.schedule-date {
-	font-size: 13px;
-	font-weight: 700;
-	color: #b36200;
-}
-
-.schedule-title {
-	margin-bottom: 4px;
-	font-size: 15px;
-	font-weight: 700;
-	color: #3f2d20;
-}
-
-.table thead th {
-	border-top: none;
-	color: #5f4b3b;
-}
-
-.table td {
-	vertical-align: middle;
-	font-size: 15px;
-}
-
-.board-title-link {
-	color: #a85b00;
-	text-decoration: none;
-}
-
-.board-title-link:hover {
-	color: #7d4300;
-	text-decoration: none;
-}
-
-@media ( max-width : 991px) {
-	.center-board {
-		order: 1;
-	}
-	.left-side {
-		order: 2;
-	}
-	.right-side {
-		order: 3;
-	}
-}
-
-.table tbody tr:hover {
-	background-color: #fff7ef;
-	transition: 0.15s;
-}
-
-.search-control {
-	height: 42px;
-	border-radius: 10px;
-}
-
-.search-btn {
-	height: 42px;
-	min-width: 58px;
-	padding: 0 16px;
-	line-height: 42px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	white-space: nowrap;
-}
-
-.board-filter-box {
-	margin-bottom: 16px;
-}
-
-.board-filter-box .btn {
-	padding: 5px 13px;
-	font-size: 14px;
-	border-radius: 11px;
-	margin-bottom: 8px;
-	font-weight: 700;
-	font-size: 14px;
-	border-radius: 11px;
-	border-radius: 11px;
-}
-
-.btn-brown {
-	box-shadow: 0 2px 8px rgba(179, 98, 0, 0.25);
-}
-</style>
+<link rel="stylesheet" href="/css/common.css">
 
 </head>
 
@@ -232,22 +57,19 @@ body {
 	<div class="container mt-5 club-wrapper">
 
 		<!-- 상단 제목 / 버튼 -->
-		<div class="d-flex justify-content-between align-items-center mb-4">
+		<div class="club-top-header mb-4">
 
 			<div class="text-center flex-grow-1">
 
 
-				<h1 class="section-title mb-0" style="font-size: 52px;">
-					${dto.clubName}</h1>
+				<h1 class="section-title mb-0">${dto.clubName}</h1>
 
 			</div>
 
-			<div>
+			<div class="club-top-buttons">
 				<c:choose>
 
 					<c:when test="${isMember}">
-						<button type="button" class="btn btn-sm btn-secondary" disabled>
-							가입완료</button>
 					</c:when>
 
 					<c:when test="${isWaiting}">
@@ -258,8 +80,7 @@ body {
 					<c:otherwise>
 
 						<form action="${pageContext.request.contextPath}/clubMember/join"
-							method="post" style="display: inline;"
-							onsubmit="return confirm('이 동호회에 가입 신청하시겠습니까?');">
+							method="post" onsubmit="return confirm('이 동호회에 가입 신청하시겠습니까?');">
 
 							<input type="hidden" name="clubNum" value="${dto.clubNum}">
 
@@ -274,52 +95,29 @@ body {
 				<!-- 가입승인 -->
 				<c:if test="${roleNum eq 1}">
 					<a href="/clubMember/waitList?clubNum=${dto.clubNum}"
-						class="btn btn-sm"
-						style="background-color: #a35400; color: white; border-radius: 12px; padding: 6px 16px;">
-						가입 신청 목록 </a>
+						class="btn-top-gray club-top-link"> 가입 신청 목록 </a>
 				</c:if>
-				<!-- 가입승인 끝 -->
 
-				<!-- 강퇴 -->
 				<c:if test="${roleNum eq 1}">
 					<a href="/clubMember/memberList?clubNum=${dto.clubNum}"
-						class="btn btn-sm"
-						style="background-color: #5f4b3b; color: white; border-radius: 12px; padding: 6px 16px;">
-						회원 목록 </a>
-				</c:if>
-				<!-- 강퇴 끝 -->
-
-				<c:if test="${isMember}">
-					<!-- <span class="badge badge-secondary ml-2"> 가입완료 </span> -->
+						class="btn-top-gray club-top-link"> 회원 목록 </a>
 				</c:if>
 
 				<c:if test="${isMember and roleNum eq 2}">
 					<form action="${pageContext.request.contextPath}/clubMember/leave"
-						method="post" style="display: inline;"
-						onsubmit="return confirm('정말 이 동호회에서 탈퇴하시겠습니까?');">
+						method="post" onsubmit="return confirm('정말 이 동호회에서 탈퇴하시겠습니까?');">
 
 						<input type="hidden" name="clubNum" value="${dto.clubNum}">
 
-						<button type="submit" class="btn btn-sm"
-							style="background-color: #6c757d; color: white; border-radius: 12px; padding: 6px 16px; border: none;">
-							탈퇴하기</button>
+						<button type="submit" class="btn-top-danger">탈퇴하기</button>
 					</form>
 				</c:if>
 
-				<a href="./list?page=${param.page}" class="btn btn-sm btn-gray">
-					목록으로 </a>
+				<a href="./list?page=${param.page}"
+					class="btn-top-gray club-top-link"> 목록으로 </a>
 
-				<c:if test="${canDelete}">
-					<form action="./delete" method="post" style="display: inline;"
-						onsubmit="return confirm('정말 삭제하시겠습니까?');">
 
-						<input type="hidden" name="clubNum" value="${dto.clubNum}">
 
-						<button type="submit" class="btn btn-sm"
-							style="background-color: #b00020; color: white; border-radius: 12px; padding: 6px 16px; border: none;">
-							삭제</button>
-					</form>
-				</c:if>
 			</div>
 
 		</div>
@@ -338,17 +136,15 @@ body {
 					<h5 class="section-title mb-3">동호회 정보</h5>
 
 					<p class="mb-3">
-						<span class="info-label">회장</span> · ${dto.ownerName}
+						<span class="club-info-label">회장</span> · ${dto.ownerName}
 					</p>
 					<p class="mb-2">
-						<span class="info-label">지역</span> · ${dto.clubLocation}
+						<span class="club-info-label">지역</span> · ${dto.clubLocation}
 					</p>
 
 
-					<div class="mb-3"
-						style="background: #fff3e6; border-radius: 12px; padding: 10px; font-weight: 700; color: #b36200;">
-
-						${dto.currentMember} / ${dto.clubMax} 명</div>
+					<div class="club-member-count mb-3">${dto.currentMember}/
+						${dto.clubMax} 명</div>
 
 					<c:choose>
 
@@ -367,12 +163,18 @@ body {
 					<c:if test="${not empty dto.clubContents}">
 						<hr>
 
-						<p
-							style="color: #5f4b3b; line-height: 1.6; font-size: 14px; margin-bottom: 0;">
-
-							${dto.clubContents}</p>
+						<p class="club-desc">${dto.clubContents}</p>
 					</c:if>
+					<c:if test="${canDelete}">
+						<form action="./delete" method="post"
+							onsubmit="return confirm('정말 삭제하시겠습니까?');">
 
+							<input type="hidden" name="clubNum" value="${dto.clubNum}">
+
+							<button type="submit" class="club-delete-btn">동호회 해체</button>
+
+						</form>
+					</c:if>
 				</div>
 			</div>
 
@@ -381,15 +183,11 @@ body {
 
 				<div class="main-card p-3" id="boardArea">
 
-					<div class="position-relative mb-4 text-center">
-
-						<h3 class="section-title mb-0">${dto.clubName}  게시판</h3>
+					<div class="board-header mb-4">
+						<h3 class="section-title mb-0">${dto.clubName}게시판</h3>
 
 						<a href="../clubboard/create?clubNum=${dto.clubNum}"
-							class="btn btn-sm btn-brown"
-							style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">
-							글쓰기 </a>
-
+							class="btn btn-sm btn-brown"> 글쓰기 </a>
 					</div>
 
 					<form action="./detail" method="get" class="mb-3">
@@ -399,8 +197,7 @@ body {
 
 						<div class="d-flex">
 
-							<select name="kind" class="form-control search-control mr-2"
-								style="max-width: 140px;">
+							<select name="kind" class="form-control search-control mr-2">
 
 								<option value="title" ${pager.kind eq 'title' ? 'selected' : ''}>
 									제목</option>
@@ -472,8 +269,7 @@ body {
 					</div>
 					<!-- 카테고리 필터 끝 -->
 
-					<div class="mb-3 px-2"
-						style="font-size: 14px; color: #8c7b6d; font-weight: 700;">
+					<div class="mb-3 px-2">
 
 						총 ${pager.totalCount}개의 게시글 ·
 
@@ -503,9 +299,9 @@ body {
 
 						<thead>
 							<tr>
-								<th style="width: 20%;">작성자</th>
+								<th>작성자</th>
 								<th>제목</th>
-								<th style="width: 26%;">등록일</th>
+								<th>등록일</th>
 							</tr>
 						</thead>
 
@@ -514,19 +310,14 @@ body {
 								<tr>
 									<td>${boardDTO.memberName}</td>
 
-									<td><span class="badge badge-success"
-										style="font-size: 10px; padding: 3px 6px; margin-right: 5px;">
+									<td><span class="badge badge-success">
 											${boardDTO.boardCategory} </span> <a
 										href="../clubboard/detail?boardNum=${boardDTO.boardNum}&clubNum=${dto.clubNum}&page=${pager.page}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}"
 										class="board-title-link"> ${boardDTO.boardTitle} </a> <c:if
 											test="${boardDTO.fileCount > 0}">
-											<span
-												style="font-size: 13px; margin-left: 5px; color: #8c7b6d;">
-												🖼 </span>
+											<span> 🖼 </span>
 										</c:if> <c:if test="${boardDTO.commentCount > 0}">
-											<span
-												style="color: #b36200; font-weight: 700; margin-left: 4px;">
-												(${boardDTO.commentCount}) </span>
+											<span> (${boardDTO.commentCount}) </span>
 										</c:if></td>
 
 									<td>
@@ -552,27 +343,19 @@ body {
 
 								<c:if test="${pager.pre}">
 									<li class="page-item"><a class="page-link"
-										href="./detail?clubNum=${dto.clubNum}&page=${pager.start-1}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}#boardArea"
-										style="background-color: #f1f1f1; color: #333; border: none; border-radius: 10px; margin: 0 3px;">
+										href="./detail?clubNum=${dto.clubNum}&page=${pager.start-1}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}#boardArea">
 											이전 </a></li>
 								</c:if>
 
 								<c:forEach begin="${pager.start}" end="${pager.end}" var="i">
 									<li class="page-item"><a class="page-link"
-										href="./detail?clubNum=${dto.clubNum}&page=${i}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}#boardArea"
-										style="
-											background-color: ${pager.page eq i ? '#ff8a00' : '#f1f1f1'};
-											color: ${pager.page eq i ? 'white' : '#333'};
-											border: none;
-											border-radius: 10px;
-											margin: 0 3px;">
+										href="./detail?clubNum=${dto.clubNum}&page=${i}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}#boardArea">
 											${i} </a></li>
 								</c:forEach>
 
 								<c:if test="${pager.next}">
 									<li class="page-item"><a class="page-link"
-										href="./detail?clubNum=${dto.clubNum}&page=${pager.end+1}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}#boardArea"
-										style="background-color: #f1f1f1; color: #333; border: none; border-radius: 10px; margin: 0 3px;">
+										href="./detail?clubNum=${dto.clubNum}&page=${pager.end+1}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}#boardArea">
 											다음 </a></li>
 								</c:if>
 
@@ -613,8 +396,7 @@ body {
 									class="board-title-link"> ${schedule.scheduleTitle} </a>
 							</div>
 
-							<div class="text-muted" style="font-size: 13px;">
-								${schedule.scheduleLocation}</div>
+							<div class="text-muted">${schedule.scheduleLocation}</div>
 						</div>
 
 					</c:forEach>
@@ -647,9 +429,7 @@ body {
 
 									<a
 										href="../clubboard/detail?boardNum=${popular.boardNum}&clubNum=${dto.clubNum}&page=${pager.page}&sort=${pager.sort}&kind=${pager.kind}&search=${pager.search}"
-										class="board-title-link" style="font-weight: 700;">
-
-										${popular.boardTitle} </a>
+										class="board-title-link"> ${popular.boardTitle} </a>
 
 									<div class="small text-muted mt-1">❤ ${popular.likeCount}
 										· 💬 ${popular.commentCount} · 👁 ${popular.hit}</div>
