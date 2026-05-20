@@ -91,7 +91,8 @@
 		CM."MEMBER_NUM",
 		CM."ROLE_NUM",
 		M."MEMBER_ID",
-		M."MEMBER_NAME"
+		M."MEMBER_NAME",
+		M."MEMBER_PHONE"
 
 		FROM "TB_CLUB_MEMBER" CM
 
@@ -152,26 +153,25 @@
 	</delete>
 
 	<select id="memberList" parameterType="long"
-		resultType="ClubMemberDTO">
+	resultType="ClubMemberDTO">
 
-		SELECT
-		CM.*,
-		M."MEMBER_ID",
-		M."MEMBER_NAME"
+	SELECT
+	CM.*,
+	M."MEMBER_ID" AS "memberId",
+	M."MEMBER_NAME" AS "memberName",
+	M."MEMBER_PHONE" AS "memberPhone"
 
-		FROM
-		"TB_CLUB_MEMBER" CM
-		JOIN "TB_MEMBER" M
-		ON CM."MEMBER_NUM" =
-		M."MEMBER_NUM"
+	FROM "TB_CLUB_MEMBER" CM
 
-		WHERE CM."CLUB_NUM" = #{clubNum}
-		AND CM."ROLE_NUM" IN
-		(1,2)
+	JOIN "TB_MEMBER" M
+	ON CM."MEMBER_NUM" = M."MEMBER_NUM"
 
-		ORDER BY CM."ROLE_NUM" ASC
+	WHERE CM."CLUB_NUM" = #{clubNum}
+	AND CM."ROLE_NUM" IN (1, 2)
 
-	</select>
+	ORDER BY CM."ROLE_NUM" ASC
+
+</select>
 
 	<delete id="leave" parameterType="ClubMemberDTO">
 		DELETE FROM "TB_CLUB_MEMBER"

@@ -1,0 +1,1751 @@
+body {
+	background-color: #fff7f3;
+}
+
+/* 공통 텍스트 */
+.page-title {
+	font-weight: 800;
+	color: #3f2d20;
+	margin-bottom: 25px;
+}
+
+.section-title {
+	font-weight: 800;
+	color: #3f2d20;
+	margin-bottom: 18px;
+}
+
+.page-desc {
+	color: #7a6a5d;
+	font-size: 15px;
+	margin-top: -12px;
+	margin-bottom: 28px;
+}
+
+.empty-text {
+	color: #999;
+	font-size: 14px;
+	margin-bottom: 0;
+}
+
+/* 공통 카드 */
+.section-card, .profile-card, .main-card, .side-card, .create-box,
+	.detail-box {
+	background-color: white;
+	border-radius: 18px;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.section-card, .profile-card, .main-card {
+	padding: 28px;
+	margin-bottom: 25px;
+}
+
+.side-card {
+	padding: 20px;
+	margin-bottom: 16px;
+}
+
+.create-box {
+	padding: 35px;
+}
+
+.detail-box {
+	max-width: 900px;
+	margin: 50px auto;
+	padding: 35px;
+}
+
+/* 공통 버튼 */
+.btn-brown {
+	background-color: #8b5e34;
+	color: white;
+	border-radius: 10px;
+	font-weight: 700;
+	padding: 6px 14px;
+	border: none;
+}
+
+.btn-brown:hover {
+	background-color: #704722;
+	color: white;
+	text-decoration: none;
+}
+
+.btn-gray, .btn-soft-gray, .btn-soft {
+	background-color: #f1ebe6;
+	color: #5f4b3b;
+	border-radius: 10px;
+	font-weight: 700;
+	padding: 7px 16px;
+	border: none;
+	text-decoration: none;
+}
+
+.btn-gray:hover, .btn-soft-gray:hover, .btn-soft:hover {
+	background-color: #e3d8ce;
+	color: #3f2d20;
+	text-decoration: none;
+}
+
+.btn-danger, .btn-warning, .btn-outline-warning, .btn-dark,
+	.btn-outline-secondary {
+	border-radius: 10px;
+	font-weight: 700;
+}
+
+/* 마이페이지 */
+.my-page-wrap {
+	max-width: 1100px;
+	margin: 50px auto;
+}
+
+.info-text {
+	color: #6b5a4a;
+	margin-bottom: 6px;
+}
+
+.item-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 0;
+	border-bottom: 1px solid #f0e4d8;
+}
+
+.item-row:last-child {
+	border-bottom: none;
+}
+
+.item-title {
+	font-weight: 700;
+	color: #3f2d20;
+}
+
+.item-sub {
+	font-size: 13px;
+	color: #8a7767;
+}
+
+/* 생성/수정 폼 */
+.create-wrap {
+	max-width: 760px;
+	margin: 55px auto;
+	padding: 0 16px;
+}
+
+.form-group label {
+	font-weight: 700;
+	color: #5f4b3b;
+	margin-bottom: 8px;
+}
+
+.form-control {
+	height: 48px;
+	border-radius: 12px;
+	border: 1px solid #e0d1c2;
+	padding: 0 14px;
+	color: #2d2118;
+	font-size: 15px;
+	line-height: 48px;
+	background-color: white;
+}
+
+.form-control:focus {
+	border-color: #8b5e34;
+	box-shadow: 0 0 0 0.15rem rgba(139, 94, 52, 0.18);
+}
+
+select.form-control {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	padding-right: 42px;
+	background-image:
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='%238a4b12' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5 8 12l6.5-6.5' stroke='%238a4b12' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 14px center;
+	background-size: 16px;
+}
+
+textarea.form-control {
+	height: auto;
+	padding: 14px;
+	line-height: 1.6;
+}
+
+.form-control-file {
+	color: #5f4b3b;
+}
+
+/* 알바 상세 */
+.job-image {
+	width: 100%;
+	max-width: 700px;
+	max-height: 360px;
+	object-fit: contain;
+	border-radius: 16px;
+	display: block;
+	margin: 0 auto 25px auto;
+	background-color: #f8f1ec;
+}
+
+.detail-title {
+	font-weight: 800;
+	color: #2f241d;
+	margin: 12px 0 18px 0;
+}
+
+.detail-meta {
+	color: #7a6a5d;
+	font-size: 14px;
+	margin-bottom: 22px;
+}
+
+.category-badge {
+	display: inline-block;
+	background-color: #f5e7d8;
+	color: #8b5e34;
+	border-radius: 20px;
+	padding: 6px 14px;
+	font-weight: 700;
+	font-size: 13px;
+}
+
+.info-card {
+	background-color: #fff7f3;
+	border-radius: 18px;
+	padding: 24px;
+	margin: 0 auto 28px auto;
+	max-width: 720px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px 28px;
+}
+
+.info-row {
+	border-bottom: none;
+	padding: 0;
+}
+
+.info-label {
+	font-size: 13px;
+	font-weight: 700;
+	color: #8b5e34;
+	margin-bottom: 6px;
+}
+
+.info-value {
+	font-size: 17px;
+	font-weight: 800;
+	color: #2f241d;
+}
+
+.info-row-full {
+	grid-column: 1/3;
+}
+
+.contents-box {
+	background-color: #fffaf7;
+	border-radius: 14px;
+	padding: 22px;
+	min-height: 120px;
+	line-height: 1.8;
+	white-space: pre-wrap;
+	max-width: 820px;
+	margin: 0 auto;
+}
+
+.job-action-area {
+	text-align: right;
+	margin-top: 28px;
+}
+
+.job-action-area .btn {
+	border-radius: 10px;
+	font-weight: 700;
+	padding: 7px 16px;
+	margin-left: 6px;
+}
+
+.action-divider {
+	margin: 18px 0;
+	border-top: 1px solid #eee0d6;
+}
+
+/* 동호회 상세 */
+.club-wrapper {
+	max-width: 1280px;
+}
+
+.club-top-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 24px;
+}
+
+.club-action-area {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 18px;
+}
+
+.club-action-area form {
+	display: inline;
+}
+
+.club-action-area .btn {
+	border-radius: 12px;
+	font-weight: 700;
+	padding: 6px 14px;
+}
+
+.club-image {
+	width: 100%;
+	height: 200px;
+	object-fit: cover;
+	border-radius: 14px;
+}
+
+.club-member-count {
+	background: #fff3e6;
+	border-radius: 12px;
+	padding: 10px;
+	font-weight: 700;
+	color: #b36200;
+	text-align: center;
+}
+
+.club-desc {
+	color: #5f4b3b;
+	line-height: 1.6;
+	font-size: 14px;
+	margin-bottom: 0;
+}
+
+.club-info-label {
+	font-weight: 700;
+	color: #5f4b3b;
+	font-size: 14px;
+}
+
+.center-board .main-card {
+	padding: 26px;
+}
+
+.center-board .section-title {
+	font-size: 28px;
+}
+
+.right-side .section-title {
+	font-size: 22px;
+}
+
+.board-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.search-control {
+	height: 38px;
+}
+
+.search-control:first-child {
+	max-width: 160px;
+}
+
+.search-btn {
+	min-width: 64px;
+	height: 38px;
+	padding: 6px 12px;
+	line-height: 1.2;
+	white-space: nowrap;
+}
+
+.board-filter-box {
+	margin-bottom: 8px;
+}
+
+.board-meta-text {
+	font-size: 14px;
+	color: #8c7b6d;
+	font-weight: 700;
+}
+
+.board-title-link {
+	color: #3f2d20;
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.board-title-link:hover {
+	color: #b36200;
+	text-decoration: none;
+}
+
+.schedule-item {
+	padding: 10px 0;
+	border-bottom: 1px solid #f0e4d8;
+}
+
+.schedule-item:last-child {
+	border-bottom: none;
+}
+
+.schedule-date {
+	font-size: 12px;
+	color: #8c7b6d;
+	font-weight: 700;
+	margin-bottom: 4px;
+}
+
+.schedule-title {
+	font-weight: 700;
+	margin-bottom: 3px;
+}
+
+.notice-item {
+	display: block;
+	padding: 10px 0;
+	color: #3f2d20;
+	font-weight: 700;
+	border-bottom: 1px solid #f0e4d8;
+	text-decoration: none;
+}
+
+.notice-item:last-child {
+	border-bottom: none;
+}
+
+.notice-item:hover {
+	color: #b36200;
+	text-decoration: none;
+}
+
+/* 테이블 */
+.table {
+	margin-bottom: 0;
+}
+
+.table thead th {
+	border-top: none;
+	color: #5f4b3b;
+	font-weight: 800;
+	font-size: 14px;
+}
+
+.table td {
+	vertical-align: middle;
+	border-color: #f0e4d8;
+	padding-top: 14px;
+	padding-bottom: 14px;
+}
+
+/* 배지 */
+.badge-brown {
+	background-color: #8b5e34;
+	color: white;
+	border-radius: 8px;
+	padding: 5px 10px;
+	font-size: 12px;
+}
+
+.club-category-badge {
+	font-size: 10px;
+	padding: 3px 6px;
+	margin-right: 5px;
+}
+/* 동호회 상세 레이아웃 보정 */
+.club-wrapper {
+	max-width: 1380px;
+}
+
+.left-side {
+	flex: 0 0 24%;
+	max-width: 24%;
+}
+
+.center-board {
+	flex: 0 0 52%;
+	max-width: 52%;
+}
+
+.right-side {
+	flex: 0 0 24%;
+	max-width: 24%;
+}
+
+/* 카드 여백/그림자 정리 */
+.main-card, .side-card {
+	border-radius: 20px;
+	box-shadow: 0 6px 18px rgba(63, 45, 32, 0.08);
+}
+
+.center-board .main-card {
+	padding: 28px 30px;
+}
+
+/* 게시판 제목 줄 */
+.board-header {
+	margin-bottom: 22px;
+}
+
+.board-header .section-title {
+	font-size: 26px;
+	letter-spacing: -1px;
+}
+
+/* 검색 영역 */
+.search-control {
+	height: 42px;
+	font-size: 14px;
+}
+
+.search-control:first-child {
+	max-width: 150px;
+}
+
+.search-btn {
+	height: 42px;
+	min-width: 72px;
+}
+
+/* 정렬/카테고리 버튼 크기 축소 */
+.board-filter-box .btn {
+	padding: 6px 14px;
+	font-size: 14px;
+	margin-bottom: 6px;
+}
+
+/* 게시글 수 문구 */
+.board-meta-text, .center-board .mb-3.px-2 {
+	font-size: 14px;
+	color: #7a6a5d;
+	margin-top: 4px;
+}
+
+/* 테이블 정리 */
+.table thead th {
+	background-color: #faf5f1;
+	border-bottom: 2px solid #ead8c8;
+	padding: 13px 12px;
+}
+
+.table td {
+	padding: 13px 12px;
+	font-size: 15px;
+}
+
+.table th:nth-child(1), .table td:nth-child(1) {
+	width: 15%;
+	white-space: nowrap;
+}
+
+.table th:nth-child(2), .table td:nth-child(2) {
+	width: 60%;
+}
+
+.table th:nth-child(3), .table td:nth-child(3) {
+	width: 25%;
+	white-space: nowrap;
+}
+
+/* 카테고리 배지 */
+.table .badge {
+	border-radius: 8px;
+	padding: 5px 7px;
+	font-size: 12px;
+	margin-right: 5px;
+}
+
+/* 오른쪽 사이드 카드 간격 */
+.right-side .side-card {
+	margin-bottom: 14px;
+}
+
+.schedule-item {
+	padding: 12px 0;
+}
+
+/* 왼쪽 정보 카드 */
+.club-image {
+	height: 210px;
+}
+
+.club-member-count {
+	font-size: 16px;
+	padding: 12px;
+}
+
+/* 페이지네이션 */
+.pagination .page-link {
+	color: #8b5e34;
+	border-color: #ead8c8;
+}
+
+.pagination .page-link:hover {
+	background-color: #fff3e6;
+	color: #704722;
+}
+/* 일정 상세 */
+.schedule-detail-box {
+	max-width: 820px;
+	margin: 55px auto;
+	background-color: white;
+	border-radius: 22px;
+	padding: 38px;
+	box-shadow: 0 6px 20px rgba(63, 45, 32, 0.08);
+}
+
+.schedule-title {
+	font-size: 30px;
+	font-weight: 800;
+	color: #3f2d20;
+	margin-bottom: 8px;
+}
+
+.schedule-divider {
+	border-top: 1px solid #eee0d6;
+	margin: 24px 0;
+}
+
+/* 일정 상세 - 표 형태 */
+.schedule-info-table {
+	border-top: 1px solid #ead8c8;
+	border-bottom: 1px solid #ead8c8;
+	margin-bottom: 26px;
+}
+
+.schedule-info-row {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+	border-bottom: 1px solid #f0e4d8;
+	min-height: 58px;
+	align-items: center;
+}
+
+.schedule-info-row:last-child {
+	border-bottom: none;
+}
+
+.schedule-info-label {
+	font-weight: 800;
+	color: #8b5e34;
+	background-color: #fffaf7;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	padding: 0 20px;
+	font-size: 14px;
+}
+
+.schedule-info-value {
+	font-weight: 700;
+	color: #2f241d;
+	padding: 0 22px;
+	font-size: 15px;
+}
+
+.schedule-member-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 22px;
+}
+
+.schedule-member-badge {
+	background-color: #fffaf7;
+	border: 1px solid #ead8c8;
+	border-radius: 999px;
+	padding: 8px 16px;
+	font-size: 14px;
+	font-weight: 700;
+	color: #5f4b3b;
+}
+
+.schedule-content-box {
+	background-color: #fffaf7;
+	border: 1px solid #f0e4d8;
+	border-radius: 14px;
+	padding: 22px;
+	min-height: 130px;
+	color: #4a382b;
+	line-height: 1.8;
+	white-space: pre-wrap;
+}
+
+.schedule-action-area {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	margin-top: 28px;
+}
+
+.schedule-left-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.schedule-left-actions form {
+	display: inline;
+}
+
+.btn-delete {
+	background-color: #d9534f;
+	color: white;
+	border-radius: 12px;
+	padding: 7px 17px;
+	border: none;
+	font-weight: 700;
+}
+
+.btn-delete:hover {
+	background-color: #c9302c;
+	color: white;
+}
+
+@media ( max-width : 768px) {
+	.schedule-detail-box {
+		margin: 30px 15px;
+		padding: 26px;
+	}
+	.schedule-info-row {
+		grid-template-columns: 1fr;
+		min-height: auto;
+	}
+	.schedule-info-label {
+		padding: 12px 16px 4px;
+		background-color: transparent;
+	}
+	.schedule-info-value {
+		padding: 0 16px 14px;
+	}
+	.schedule-action-area {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	.schedule-action-area .btn {
+		width: 100%;
+	}
+}
+/* 우측 사이드바 일정 축소 */
+.right-side .side-card {
+	padding: 18px;
+}
+
+.right-side .schedule-item {
+	padding: 9px 0;
+}
+
+.right-side .schedule-date {
+	font-size: 11px;
+	margin-bottom: 5px;
+	color: #8c7b6d;
+}
+
+.right-side .schedule-title {
+	font-size: 15px;
+	line-height: 1.35;
+	margin-bottom: 4px;
+}
+
+.right-side .schedule-title a {
+	font-size: 15px;
+	font-weight: 800;
+}
+
+.right-side .schedule-item .text-muted {
+	font-size: 12px;
+	line-height: 1.3;
+}
+
+.right-side .side-card .btn-block {
+	height: 36px;
+	font-size: 13px;
+	padding: 7px 12px;
+}
+
+.right-side .section-title {
+	font-size: 21px;
+}
+
+.right-side .schedule-title {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.btn-top-gray:hover {
+	background-color: #e4d8ce;
+	color: #3f2d20;
+	text-decoration: none;
+}
+
+/* =========================
+   게시글 등록/수정 공통
+========================= */
+.board-create-wrap {
+	max-width: 920px;
+	margin: 50px auto 80px;
+	padding: 0 20px;
+}
+
+.board-create-card {
+	background-color: white;
+	border-radius: 26px;
+	padding: 42px;
+	box-shadow: 0 8px 24px rgba(120, 80, 40, 0.08);
+	border: 1px solid #f1dfd0;
+}
+
+.board-create-header {
+	margin-bottom: 30px;
+}
+
+.board-create-badge {
+	display: inline-block;
+	background-color: #ffe2c4;
+	color: #b45f00;
+	font-weight: 800;
+	border-radius: 999px;
+	padding: 7px 16px;
+	margin-bottom: 14px;
+}
+
+.board-create-title {
+	font-size: 30px;
+	font-weight: 900;
+	color: #2d2118;
+	margin-bottom: 8px;
+}
+
+.board-create-desc {
+	color: #7a6657;
+	margin-bottom: 0;
+}
+
+/* form */
+.board-form-group {
+	margin-bottom: 24px;
+}
+
+.board-form-group label {
+	font-weight: 800;
+	color: #3f2d20;
+	margin-bottom: 8px;
+}
+
+.board-input {
+	height: 48px;
+	border-radius: 12px;
+	border: 1px solid #e0d1c2;
+	padding: 0 14px;
+	color: #2d2118;
+	font-size: 15px;
+	line-height: 48px;
+	background-color: white;
+}
+
+.board-input:focus {
+	border-color: #ff9b42;
+	box-shadow: 0 0 0 0.2rem rgba(255, 122, 0, 0.15);
+}
+
+/* select */
+select.board-input {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	padding-right: 42px;
+	background-image:
+		url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='%238a4b12' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5 8 12l6.5-6.5' stroke='%238a4b12' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 14px center;
+	background-size: 16px;
+}
+
+/* textarea */
+textarea.board-input {
+	height: auto;
+	padding: 14px;
+	line-height: 1.6;
+}
+
+/* file */
+input[type="file"].board-input {
+	height: auto;
+	padding: 10px 14px;
+	line-height: normal;
+}
+
+/* summernote */
+.note-editor {
+	border-radius: 14px;
+	overflow: hidden;
+	border-color: #e0d1c2 !important;
+}
+
+.note-toolbar {
+	background-color: #fff3e8 !important;
+	border-bottom: 1px solid #ead1bb !important;
+}
+
+.note-editable {
+	min-height: 300px;
+	color: #2d2118;
+}
+
+.board-file-help {
+	font-size: 13px;
+	color: #8a7565;
+	margin-top: 6px;
+}
+
+.btn-light-brown {
+	background-color: #fff3e8;
+	color: #8a4b12 !important;
+	border: 1px solid #ead1bb;
+	border-radius: 12px;
+	padding: 10px 24px;
+	font-weight: 800;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 46px;
+	min-width: 92px;
+	transition: all 0.18s ease;
+}
+
+.btn-light-brown:hover {
+	background-color: #ffe5cc;
+	color: #8a4b12 !important;
+	text-decoration: none;
+}
+
+/* 게시글 등록 버튼 */
+.board-btn-area .btn-brown {
+	background-color: #a35400;
+	color: white !important;
+	border-radius: 12px;
+	padding: 10px 26px;
+	font-weight: 800;
+	border: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 46px;
+	min-width: 92px;
+	transition: all 0.18s ease;
+}
+
+.board-btn-area .btn-brown:hover {
+	background-color: #8b4700;
+	color: white !important;
+	text-decoration: none;
+}
+/* buttons */
+.board-btn-area {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 30px;
+}
+
+.club-top-buttons a, .club-top-buttons button {
+	height: 38px;
+	min-width: 92px;
+	border-radius: 999px;
+	font-size: 14px;
+	font-weight: 800;
+	padding: 0 18px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	line-height: 1;
+	text-decoration: none;
+}
+
+.club-top-buttons form {
+	margin: 0;
+}
+
+.btn-top-gray {
+	background-color: #f1ebe6;
+	color: #5f4b3b !important;
+}
+
+.btn-top-gray:hover {
+	background-color: #e3d8ce;
+	color: #3f2d20 !important;
+	text-decoration: none;
+}
+
+.btn-top-danger {
+	background-color: #fff1f0;
+	color: #d9534f !important;
+}
+
+.btn-top-danger:hover {
+	background-color: #ffe1df;
+	color: #c9302c !important;
+}
+/* =========================
+   동호회 상단 버튼
+========================= */
+.club-top-header-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	margin-top: 18px;
+}
+
+.club-top-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 10px;
+}
+
+.club-top-buttons form {
+	margin: 0;
+}
+
+.club-top-buttons a, .club-top-buttons button {
+	height: 40px;
+	min-width: 96px;
+	padding: 0 18px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 999px;
+	font-size: 14px;
+	font-weight: 800;
+	border: none;
+	text-decoration: none;
+	transition: all 0.18s ease;
+}
+
+/* 기본 버튼 */
+.btn-top-gray {
+	background-color: #f1ebe6;
+	color: #5f4b3b !important;
+}
+
+.btn-top-gray:hover {
+	background-color: #e3d8ce;
+	color: #3f2d20 !important;
+	text-decoration: none;
+}
+
+/* 위험 버튼 */
+.btn-top-danger {
+	background-color: #fff1f0;
+	color: #d9534f !important;
+}
+
+.btn-top-danger:hover {
+	background-color: #ffe1df;
+	color: #c9302c !important;
+	text-decoration: none;
+}
+
+/* 동호회 삭제 */
+.club-delete-btn {
+	background: transparent;
+	border: none;
+	color: #d9534f;
+	font-size: 13px;
+	font-weight: 700;
+	padding: 0;
+}
+
+.club-delete-btn:hover {
+	color: #b52b27;
+	text-decoration: underline;
+}
+/* =========================
+   동호회 게시글 상세
+========================= */
+.board-detail-wrap {
+	max-width: 1100px;
+	margin: 55px auto 80px;
+	padding: 0 20px;
+}
+
+.board-detail-card {
+	background: white;
+	border-radius: 24px;
+	padding: 42px;
+	box-shadow: 0 8px 24px rgba(120, 80, 40, 0.08);
+	border: 1px solid #f1dfd0;
+}
+
+.board-detail-header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 22px;
+}
+
+.board-detail-title {
+	font-size: 36px;
+	font-weight: 900;
+	color: #2d2118;
+	margin: 0;
+}
+
+.board-detail-meta {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	border-top: 1px solid #ead8c8;
+	border-bottom: 1px solid #ead8c8;
+	margin-bottom: 26px;
+}
+
+.board-detail-meta-item {
+	padding: 16px 18px;
+	font-size: 15px;
+	color: #3f2d20;
+}
+
+.board-detail-meta-item strong {
+	color: #8b5e34;
+}
+
+.board-detail-content {
+	background-color: #fffaf7;
+	border: 1px solid #ead8c8;
+	border-radius: 16px;
+	padding: 26px;
+	min-height: 220px;
+	color: #3d2b1f;
+	line-height: 1.8;
+	margin-bottom: 24px;
+}
+
+.board-detail-image {
+	max-width: 420px;
+	border-radius: 16px;
+	margin-bottom: 16px;
+	display: block;
+}
+
+.board-like-area {
+	margin: 22px 0 34px;
+}
+
+.comment-section-title {
+	font-size: 24px;
+	font-weight: 900;
+	color: #2d2118;
+	margin-bottom: 18px;
+}
+
+.comment-item {
+	padding: 16px 0;
+	border-bottom: 1px solid #ead8c8;
+}
+
+.comment-writer {
+	font-weight: 800;
+	color: #3f2d20;
+}
+
+.comment-date {
+	font-size: 12px;
+	color: #8a7565;
+	margin-left: 8px;
+}
+
+.comment-contents {
+	color: #4a382b;
+	margin-top: 6px;
+}
+
+.comment-form textarea {
+	min-height: 100px;
+	padding: 14px;
+	line-height: 1.6;
+}
+
+.board-detail-actions {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 32px;
+}
+
+.board-action-right {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.btn-soft-brown {
+	background-color: #a35400;
+	color: white !important;
+	border: none;
+	border-radius: 14px;
+	padding: 10px 22px;
+	font-weight: 800;
+	text-decoration: none;
+}
+
+.btn-soft-brown:hover {
+	background-color: #8b4700;
+	color: white !important;
+	text-decoration: none;
+}
+
+.btn-soft-red {
+	background-color: #c95c54;
+	color: white !important;
+	border: none;
+	border-radius: 14px;
+	padding: 10px 22px;
+	font-weight: 800;
+}
+
+.btn-soft-red:hover {
+	background-color: #ae463f;
+	color: white !important;
+}
+
+@media ( max-width : 768px) {
+	.board-detail-meta {
+		grid-template-columns: 1fr;
+	}
+	.board-detail-actions {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+	}
+	.board-action-right {
+		justify-content: flex-end;
+	}
+}
+/* =========================
+   동호회 리스트 카드
+========================= */
+.club-card-link {
+	text-decoration: none;
+	color: inherit;
+	display: block;
+}
+
+.club-card-link:hover {
+	text-decoration: none;
+	color: inherit;
+}
+
+.default-club-image {
+	background-color: #f7eee8;
+	object-fit: cover;
+	filter: brightness(0.97);
+}
+
+.club-capacity {
+	font-weight: 700;
+}
+
+.club-capacity.available {
+	color: #1e8e3e;
+}
+
+.club-capacity.full {
+	color: #d93025;
+}
+
+.club-capacity-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 999px;
+	margin-right: 8px;
+}
+
+.club-capacity.available .club-capacity-dot {
+	background-color: #1e8e3e;
+}
+
+.club-capacity.full .club-capacity-dot {
+	background-color: #d93025;
+}
+/* =========================
+   동호회 회원 목록
+========================= */
+.club-member-wrap {
+	max-width: 1100px;
+	margin: 55px auto 80px;
+	padding: 0 20px;
+}
+
+.club-member-card {
+	background-color: white;
+	border-radius: 24px;
+	padding: 36px;
+	box-shadow: 0 8px 24px rgba(120, 80, 40, 0.08);
+	border: 1px solid #f1dfd0;
+}
+
+.club-member-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 28px;
+}
+
+.club-member-title {
+	font-size: 30px;
+	font-weight: 900;
+	color: #2d2118;
+	margin-bottom: 8px;
+}
+
+.club-member-desc {
+	color: #7a6657;
+	margin-bottom: 0;
+}
+
+.club-member-table {
+	margin-bottom: 0;
+}
+
+.club-member-table thead th {
+	background-color: #fffaf7;
+	color: #5f4b3b;
+	font-weight: 900;
+	border-top: 1px solid #ead8c8;
+	border-bottom: 2px solid #ead8c8;
+	padding: 15px 14px;
+}
+
+.club-member-table td {
+	vertical-align: middle;
+	padding: 15px 14px;
+	border-color: #f0e4d8;
+	color: #2f241d;
+}
+
+.member-name {
+	font-weight: 800;
+}
+
+.member-role-boss {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #fff3e6;
+	color: #a35400;
+	border-radius: 999px;
+	padding: 5px 13px;
+	font-weight: 800;
+	font-size: 13px;
+}
+
+.member-role-normal {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f1ebe6;
+	color: #5f4b3b;
+	border-radius: 999px;
+	padding: 5px 13px;
+	font-weight: 800;
+	font-size: 13px;
+}
+
+.member-action-area {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 8px;
+	flex-wrap: nowrap;
+}
+
+.member-action-area form {
+	margin: 0;
+	display: inline-flex;
+}
+
+.btn-member-delegate, .btn-member-kick {
+	height: 36px;
+	min-width: 76px;
+	border-radius: 10px;
+	padding: 0 12px;
+	font-weight: 800;
+	font-size: 13px;
+	white-space: nowrap;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn-member-delegate {
+	background-color: #fff3e6;
+	color: #a35400;
+	border: 1px solid #ead1bb;
+}
+
+.btn-member-delegate:hover {
+	background-color: #ffe5cc;
+}
+
+.btn-member-kick {
+	background-color: #fff1f0;
+	color: #d9534f;
+	border: 1px solid #ffd7d4;
+}
+
+.btn-member-kick:hover {
+	background-color: #ffe1df;
+}
+
+.club-member-table th:nth-child(1), .club-member-table td:nth-child(1) {
+	width: 16%;
+}
+
+.club-member-table th:nth-child(2), .club-member-table td:nth-child(2) {
+	width: 18%;
+}
+
+.club-member-table th:nth-child(3), .club-member-table td:nth-child(3) {
+	width: 22%;
+}
+
+.club-member-table th:nth-child(4), .club-member-table td:nth-child(4) {
+	width: 14%;
+	text-align: center;
+}
+
+.club-member-table th:nth-child(5), .club-member-table td:nth-child(5) {
+	width: 30%;
+}
+/* =========================
+   가입 신청 목록
+========================= */
+.club-wait-wrap {
+	max-width: 1100px;
+	margin: 55px auto 80px;
+	padding: 0 20px;
+}
+
+.club-wait-card {
+	background-color: white;
+	border-radius: 24px;
+	padding: 36px;
+	box-shadow: 0 8px 24px rgba(120, 80, 40, 0.08);
+	border: 1px solid #f1dfd0;
+}
+
+.club-wait-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 28px;
+}
+
+.club-wait-title {
+	font-size: 30px;
+	font-weight: 900;
+	color: #2d2118;
+	margin-bottom: 8px;
+}
+
+.club-wait-desc {
+	color: #7a6657;
+	margin-bottom: 0;
+}
+
+.club-wait-table {
+	margin-bottom: 0;
+}
+
+.club-wait-table thead th {
+	background-color: #fffaf7;
+	color: #5f4b3b;
+	font-weight: 900;
+	border-top: 1px solid #ead8c8;
+	border-bottom: 2px solid #ead8c8;
+	padding: 15px 14px;
+}
+
+.club-wait-table td {
+	vertical-align: middle;
+	padding: 15px 14px;
+	border-color: #f0e4d8;
+	color: #2f241d;
+}
+
+.wait-member-name {
+	font-weight: 800;
+}
+
+.btn-wait-approve {
+	height: 38px;
+	min-width: 74px;
+	border-radius: 10px;
+	padding: 0 14px;
+	font-weight: 800;
+	font-size: 13px;
+	border: 1px solid #d8b899;
+	background-color: #a35400;
+	color: white;
+	transition: 0.2s;
+}
+
+.btn-wait-approve:hover {
+	background-color: #8c4600;
+}
+
+.empty-wait-box {
+	padding: 80px 20px;
+	text-align: center;
+	color: #8b7766;
+	font-weight: 700;
+	background-color: #fffaf7;
+	border-radius: 18px;
+	border: 1px dashed #ead8c8;
+}
+
+.club-wait-table th:nth-child(1), .club-wait-table td:nth-child(1) {
+	width: 22%;
+}
+
+.club-wait-table th:nth-child(2), .club-wait-table td:nth-child(2) {
+	width: 22%;
+}
+
+.club-wait-table th:nth-child(3), .club-wait-table td:nth-child(3) {
+	width: 32%;
+	color: #7a6657;
+}
+
+.club-wait-table th:nth-child(4), .club-wait-table td:nth-child(4) {
+	width: 24%;
+}
+
+@media ( max-width : 768px) {
+	.club-wait-header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.club-wait-table {
+		font-size: 14px;
+	}
+}
+/* =========================
+   동호회 채팅
+========================= */
+.chat-wrap {
+	max-width: 980px;
+	margin: 55px auto 80px;
+	padding: 0 20px;
+}
+
+.chat-card {
+	background-color: white;
+	border-radius: 26px;
+	padding: 34px;
+	box-shadow: 0 8px 24px rgba(120, 80, 40, 0.08);
+	border: 1px solid #f1dfd0;
+}
+
+.chat-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
+}
+
+.chat-title {
+	font-size: 32px;
+	font-weight: 900;
+	color: #2d2118;
+	margin-bottom: 6px;
+}
+
+.chat-desc {
+	color: #7a6657;
+	margin-bottom: 0;
+	font-size: 14px;
+}
+
+.chat-area {
+	height: 560px;
+	overflow-y: auto;
+	border: 1px solid #ead8c8;
+	border-radius: 22px;
+	padding: 24px;
+	background-color: #fffaf7;
+	scroll-behavior: smooth;
+}
+
+.chat-message {
+	margin-bottom: 16px;
+	display: flex;
+	flex-direction: column;
+}
+
+.other-message {
+	align-items: flex-start;
+}
+
+.my-message {
+	align-items: flex-end;
+}
+
+.chat-bubble {
+	max-width: 78%;
+	border-radius: 18px;
+	padding: 12px 16px;
+	box-shadow: 0 3px 10px rgba(120, 80, 40, 0.05);
+}
+
+.other-message .chat-bubble {
+	background-color: white;
+	border: 1px solid #ead8c8;
+	border-radius: 18px 18px 18px 6px;
+}
+
+.my-message .chat-bubble {
+	background-color: #fff3e6;
+	border: 1px solid #f0d3b3;
+	border-radius: 18px 18px 6px 18px;
+}
+
+.chat-writer {
+	font-size: 13px;
+	font-weight: 800;
+	color: #a35400;
+	margin-bottom: 4px;
+}
+
+.chat-content {
+	color: #2d2118;
+	font-size: 15px;
+	line-height: 1.6;
+	word-break: break-word;
+}
+
+.chat-time {
+	font-size: 11px;
+	color: #9a8878;
+	margin-top: 6px;
+}
+
+.chat-input-area {
+	display: flex;
+	gap: 12px;
+	margin-top: 18px;
+}
+
+.chat-input {
+	height: 52px;
+	border-radius: 16px;
+	border: 1px solid #e0d1c2;
+	padding: 0 18px;
+	font-size: 15px;
+}
+
+.chat-input:focus {
+	border-color: #8b5e34;
+	box-shadow: 0 0 0 0.15rem rgba(139, 94, 52, 0.18);
+}
+
+.chat-send-btn {
+	background-color: #a35400;
+	color: white;
+	border-radius: 16px;
+	font-weight: 800;
+	border: none;
+	min-width: 92px;
+	font-size: 15px;
+}
+
+.chat-send-btn:hover {
+	background-color: #8b4700;
+	color: white;
+}
+
+.chat-back-btn {
+	background-color: #f1ebe6;
+	color: #5f4b3b;
+	border-radius: 14px;
+	font-weight: 800;
+	padding: 10px 18px;
+	text-decoration: none;
+	transition: 0.18s ease;
+}
+
+.chat-back-btn:hover {
+	background-color: #e3d8ce;
+	color: #3f2d20;
+	text-decoration: none;
+}
+
+.empty-chat {
+	text-align: center;
+	color: #9a8878;
+	font-weight: 700;
+	margin-top: 200px;
+	line-height: 1.8;
+}
+
+@media ( max-width : 768px) {
+	.chat-card {
+		padding: 24px;
+	}
+	.chat-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 14px;
+	}
+	.chat-area {
+		height: 520px;
+		padding: 18px;
+	}
+	.chat-bubble {
+		max-width: 92%;
+	}
+	.chat-input-area {
+		flex-direction: column;
+	}
+	.chat-send-btn {
+		width: 100%;
+		height: 48px;
+	}
+}
+
+.chat-message.compact {
+	margin-top: -8px;
+}
+
+.chat-message.compact .chat-writer {
+	display: none;
+}
+
+.chat-message.compact:not(.last-in-group) .chat-time {
+	display: none;
+}
+
+.chat-room-badge {
+	display: inline-block;
+	background-color: #fff3e6;
+	color: #a35400;
+	font-size: 12px;
+	font-weight: 800;
+	padding: 6px 12px;
+	border-radius: 999px;
+	margin-bottom: 10px;
+}

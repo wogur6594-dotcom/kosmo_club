@@ -1,13 +1,17 @@
 package com.club.app.club.chat;
 
+import java.time.LocalTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class ClubChatHandler extends TextWebSocketHandler {
 
 	private final ClubMessageService clubMessageService;
+
+	private final ObjectMapper objectMapper;
 
 	private static final Map<Long, Set<WebSocketSession>> rooms = new ConcurrentHashMap<>();
 
@@ -44,33 +50,39 @@ public class ClubChatHandler extends TextWebSocketHandler {
 
 		clubMessageService.insert(dto);
 
-		String time = java.time.LocalTime.now()
-				.withSecond(0)
-				.withNano(0)
-				.toString();
+		String time = LocalTime.now().withSecond(0).withNano(0).toString();
 
-		String sendMessage =
-				"<strong>" + memberName + "</strong> : "
-				+ contents
-				+ " <span style='font-size:12px; color:gray;'>("
-				+ time
-				+ ")</span>";
+		Map<String, Object> sendData = Map.of("memberNum", memberNum, "senderName", memberName, "messageContents",
+				contents, "chatTime", time);
 
-		for (WebSocketSession s : rooms.get(clubNum)) {
+		String json = objectMapper.writeValueAsString(sendData);
+
+		Set<WebSocketSession> room = rooms.get(clubNum);
+
+		if (room == null) {
+			return;
+		}
+
+		for (WebSocketSession s : room) {
 			if (s.isOpen()) {
-				s.sendMessage(new TextMessage(sendMessage));
+				s.sendMessage(new TextMessage(json));
 			}
 		}
 	}
 
 	@Override
-	public void afterConnectionClosed(WebSocketSession session,
-			org.springframework.web.socket.CloseStatus status) throws Exception {
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 
 		Long clubNum = (Long) session.getAttributes().get("clubNum");
 
-		if (rooms.get(clubNum) != null) {
-			rooms.get(clubNum).remove(session);
+		Set<WebSocketSession> room = rooms.get(clubNum);
+
+		if (room != null) {
+			room.remove(session);
+
+			if (room.isEmpty()) {
+				rooms.remove(clubNum);
+			}
 		}
 	}
 }

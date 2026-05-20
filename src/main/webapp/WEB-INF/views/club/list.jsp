@@ -388,8 +388,7 @@ a:hover {
 				<c:forEach items="${list}" var="dto">
 
 					<a href="./detail?clubNum=${dto.clubNum}&page=${pager.page}"
-						class="group bg-surface rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(154,70,0,0.05)] hover:shadow-[0_20px_40px_rgba(154,70,0,0.1)] transition-all border border-outline-variant/30"
-						style="text-decoration: none; color: inherit;">
+						class="club-card-link group bg-surface rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(154,70,0,0.05)] hover:shadow-[0_20px_40px_rgba(154,70,0,0.1)] transition-all border border-outline-variant/30">
 
 						<div class="h-48 overflow-hidden">
 							<c:choose>
@@ -402,9 +401,53 @@ a:hover {
 								</c:when>
 
 								<c:otherwise>
-									<img src="https://via.placeholder.com/600x400?text=No+Image"
-										alt="no image"
-										class="w-full card-img-fix group-hover:scale-105 transition-transform duration-500">
+
+									<c:choose>
+
+										<c:when test="${dto.clubCategory eq '운동'}">
+											<img
+												src="${pageContext.request.contextPath}/image/default-sports.jpg"
+												alt="운동 기본 이미지"
+												class="w-full card-img-fix default-club-image group-hover:scale-105 transition-transform duration-500">
+										</c:when>
+
+										<c:when test="${dto.clubCategory eq '맛집'}">
+											<img
+												src="${pageContext.request.contextPath}/image/default-food.jpg"
+												alt="맛집 기본 이미지"
+												class="w-full card-img-fix default-club-image group-hover:scale-105 transition-transform duration-500">
+										</c:when>
+
+										<c:when test="${dto.clubCategory eq '여행'}">
+											<img
+												src="${pageContext.request.contextPath}/image/default-travel.jpg"
+												alt="여행 기본 이미지"
+												class="w-full card-img-fix default-club-image group-hover:scale-105 transition-transform duration-500">
+										</c:when>
+
+										<c:when test="${dto.clubCategory eq '음악'}">
+											<img
+												src="${pageContext.request.contextPath}/image/default-music.jpg"
+												alt="음악 기본 이미지"
+												class="w-full card-img-fix default-club-image group-hover:scale-105 transition-transform duration-500">
+										</c:when>
+
+										<c:when test="${dto.clubCategory eq '스터디'}">
+											<img
+												src="${pageContext.request.contextPath}/image/default-study.jpg"
+												alt="스터디 기본 이미지"
+												class="w-full card-img-fix default-club-image group-hover:scale-105 transition-transform duration-500">
+										</c:when>
+
+										<c:otherwise>
+											<img
+												src="${pageContext.request.contextPath}/image/default-club.jpg"
+												alt="기본 이미지"
+												class="w-full card-img-fix default-club-image group-hover:scale-105 transition-transform duration-500">
+										</c:otherwise>
+
+									</c:choose>
+
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -423,8 +466,8 @@ a:hover {
 							<h3
 								class="font-headline-sm text-headline-sm text-on-surface mb-xs">
 								${dto.clubName}</h3>
-								
-								<p
+
+							<p
 								class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-md">
 								회장 : ${dto.ownerName}</p>
 
@@ -434,19 +477,12 @@ a:hover {
 
 							<div
 								class="flex items-center justify-between border-t border-outline-variant/30 pt-sm">
-								<span class="flex items-center font-label-lg"
-									style="
-		color: ${dto.currentMember >= dto.clubMax ? '#d93025' : '#1e8e3e'};
-		font-weight: 700;
-	">
+								<span
+									class="flex items-center font-label-lg club-capacity
+	${dto.currentMember >= dto.clubMax ? 'full' : 'available'}">
 
-									<span class="w-2 h-2 rounded-full mr-2"
-									style="
-			background-color: ${dto.currentMember >= dto.clubMax ? '#d93025' : '#1e8e3e'};
-		">
-								</span> 정원 : ${dto.currentMember} / ${dto.clubMax}명
-
-								</span> <span
+									<span class="club-capacity-dot"></span>
+								</span> 정원 : ${dto.currentMember} / ${dto.clubMax}명 </span> <span
 									class="text-primary font-label-lg hover:underline transition-all">
 									상세보기 </span>
 							</div>

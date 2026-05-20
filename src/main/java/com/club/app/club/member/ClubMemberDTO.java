@@ -10,7 +10,7 @@ public class ClubMemberDTO {
 	private Long clubNum;
 	private Long memberNum;
 	private Long roleNum;
-
+	private String memberPhone;
 	private String memberId;
 	private String memberName;
 
