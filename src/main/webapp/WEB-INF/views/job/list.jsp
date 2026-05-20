@@ -16,67 +16,88 @@
 
 <style>
 body {
-	background-color: #ffffff;
-	color: #212529;
+	background-color: #fff7f3;
+	color: #2f241d;
 }
 
 .job-container {
-	max-width: 1200px;
-	margin: 40px auto;
+	max-width: 1280px;
+	margin: 50px auto;
+	padding: 35px;
+	background-color: white;
+	border-radius: 24px;
+	box-shadow: 0 8px 24px rgba(120, 80, 40, 0.08);
+	border: 1px solid #f1dfd0;
 }
 
 .search-box {
-	border: 1px solid #e5e5e5;
-	border-radius: 28px;
-	padding: 10px 18px;
+	border: 1px solid #ead8c8;
+	border-radius: 18px;
+	padding: 10px 14px;
 	display: flex;
 	align-items: center;
-	margin-bottom: 35px;
+	gap: 10px;
+	margin-bottom: 32px;
+	background-color: #fffaf7;
 }
 
 .search-box select {
+	width: 120px;
+	height: 42px;
 	border: none;
+	background: transparent;
 	outline: none;
-	font-weight: 600;
-	margin-right: 12px;
+	font-weight: 800;
+	color: #3f2d20;
+	flex-shrink: 0;
 }
 
 .search-box input {
+	height: 42px;
 	border: none;
+	background: transparent;
 	outline: none;
 	flex: 1;
+	min-width: 0;
+	color: #3f2d20;
+	font-weight: 700;
 }
 
 .search-box button {
 	border: none;
-	background-color: #343a40;
+	background-color: #a35400;
 	color: white;
-	width: 38px;
-	height: 38px;
-	border-radius: 50%;
-	font-weight: 700;
+	width: 46px;
+	height: 42px;
+	border-radius: 12px;
+	font-weight: 900;
+	flex-shrink: 0;
+}
+
+.search-box button:hover {
+	background-color: #8b4700;
 }
 
 .page-title {
-	font-size: 28px;
-	font-weight: 800;
-	margin-bottom: 35px;
+	font-size: 34px;
+	font-weight: 900;
+	color: #2d2118;
+	margin-bottom: 30px;
 }
 
 .filter-box {
-	width: 230px;
-	padding-right: 25px;
+	width: 250px;
+	padding: 24px;
+	background-color: #fffaf7;
+	border-radius: 20px;
+	border: 1px solid #ead8c8;
+	height: fit-content;
+	margin-right: 26px;
 }
 
-.filter-title {
-	font-weight: 800;
-	margin-bottom: 20px;
-}
-
-.filter-section {
-	border-bottom: 1px solid #eee;
-	padding-bottom: 20px;
-	margin-bottom: 22px;
+.filter-title, .filter-section h6 {
+	font-weight: 900;
+	color: #3f2d20;
 }
 
 .filter-section h6 {
@@ -96,15 +117,24 @@ body {
 
 .job-item {
 	position: relative;
-	padding: 24px 0;
-	border-bottom: 1px solid #eee;
+	padding: 26px;
+	border-radius: 20px;
+	background-color: #fffaf7;
+	border: 1px solid #f1dfd0;
+	margin-bottom: 18px;
+	transition: 0.2s;
+}
+
+.job-item:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 20px rgba(120, 80, 40, 0.08);
 }
 
 .job-title {
-	font-size: 21px;
-	font-weight: 800;
-	color: #111;
-	margin-bottom: 8px;
+	font-size: 22px;
+	font-weight: 900;
+	color: #2d2118;
+	margin-bottom: 10px;
 }
 
 .job-title:hover {
@@ -137,30 +167,41 @@ body {
 
 .floating-write-btn {
 	position: fixed;
-	right: 70px;
-	bottom: 60px;
-	background-color: #ff6f0f;
+	right: 50px;
+	bottom: 45px;
+	background-color: #a35400;
 	color: white;
-	padding: 14px 24px;
-	border-radius: 12px;
-	font-weight: 800;
+	padding: 15px 24px;
+	border-radius: 18px;
+	font-weight: 900;
 	z-index: 999;
-	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+	transition: 0.2s;
 }
 
 .floating-write-btn:hover {
 	color: white;
 	text-decoration: none;
-	background-color: #e85f00;
+	background-color: #8b4700;
+	transform: translateY(-2px);
 }
 
 .pagination .page-link {
-	color: #ff6f0f;
+	color: #8b5e34;
+	border-color: #ead8c8;
+	border-radius: 10px;
+	margin: 0 3px;
+	font-weight: 700;
+}
+
+.pagination .page-link:hover {
+	background-color: #fff3e6;
+	color: #704722;
 }
 
 .pagination .active .page-link {
-	background-color: #ff6f0f;
-	border-color: #ff6f0f;
+	background-color: #a35400;
+	border-color: #a35400;
 	color: white;
 }
 
@@ -191,6 +232,67 @@ body {
 	background-color: #ffe1c2;
 	color: #e85f00;
 }
+
+.badge-success {
+	background-color: #d3f9d8;
+	color: #2b8a3e;
+	border-radius: 999px;
+	padding: 6px 12px;
+	font-weight: 800;
+	border: none;
+}
+
+.badge-danger {
+	background-color: #ffe3e3;
+	color: #c92a2a;
+	border-radius: 999px;
+	padding: 6px 12px;
+	font-weight: 800;
+	border: none;
+}
+
+.job-top-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: -10px;
+	margin-bottom: 26px;
+}
+
+.job-action-main, .job-action-sub {
+	height: 40px;
+	padding: 0 18px;
+	border-radius: 999px;
+	font-size: 14px;
+	font-weight: 800;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+}
+
+.job-action-main {
+	background-color: #a35400;
+	color: white;
+}
+
+.job-action-main:hover {
+	background-color: #8b4700;
+	color: white;
+	text-decoration: none;
+}
+
+.job-action-sub {
+	background-color: #fff3e6;
+	color: #a35400;
+	border: 1px solid #ead1bb;
+}
+
+.job-action-sub:hover {
+	background-color: #ffe5cc;
+	color: #8b4700;
+	text-decoration: none;
+}
 </style>
 </head>
 
@@ -199,6 +301,16 @@ body {
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
 	<div class="job-container">
+		<sec:authorize access="isAuthenticated()">
+			<div class="job-top-actions">
+
+				<a href="${pageContext.request.contextPath}/job/myJobList"
+					class="job-action-main"> 내 공고 관리 </a> <a
+					href="${pageContext.request.contextPath}/jobApply/myList"
+					class="job-action-sub"> 내 지원내역 </a>
+
+			</div>
+		</sec:authorize>
 
 		<form action="./list" method="get" class="search-box">
 			<select name="kind">
@@ -212,18 +324,8 @@ body {
 			<button type="submit">→</button>
 		</form>
 
-		<h1 class="page-title">동네알바</h1>
 
-		<sec:authorize access="isAuthenticated()">
-			<div class="mb-4 text-right">
 
-				<a href="${pageContext.request.contextPath}/job/myJobList"
-					class="btn btn-sm btn-job-main"> 내 공고 관리 </a> <a
-					href="${pageContext.request.contextPath}/jobApply/myList"
-					class="btn btn-sm btn-job-sub"> 내 지원내역 </a>
-
-			</div>
-		</sec:authorize>
 
 		<div class="d-flex">
 
