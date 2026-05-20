@@ -7,67 +7,140 @@
 <meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<title>회원가입</title>
+<title>정보 수정 - 당근 느낌</title>
+<style>
+    :root {
+        --daangn-orange: #ff8a3d;
+        --daangn-grey: #868e96;
+    }
+    body {
+        background-color: #f8f9fa;
+    }
+    .update-container {
+        max-width: 500px;
+        margin: 60px auto;
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .update-title {
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .profile-edit-section {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+    }
+    .profile-preview {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #eee;
+    }
+    .form-group label {
+        font-weight: bold;
+        color: #495057;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    .form-control {
+        border-radius: 8px;
+        padding: 10px 15px;
+        border: 1px solid #dee2e6;
+    }
+    .form-control:focus {
+        border-color: var(--daangn-orange);
+        box-shadow: 0 0 0 0.2rem rgba(255, 138, 61, 0.2);
+    }
+    .btn-orange {
+        background-color: var(--daangn-orange);
+        color: white;
+        border: none;
+        font-weight: bold;
+        padding: 12px;
+        border-radius: 8px;
+    }
+    .btn-orange:hover {
+        background-color: #e67831;
+        color: white;
+    }
+</style>
 </head>
 <body>
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
-	<h1>회원정보 수정 페이지</h1>
-	<c:choose>
-		<c:when test="${not empty update.profile.fileName}">
-			<img src="/files/memberProfile/${update.profile.fileName}" class="img-thumbnail">
-		</c:when>
-		<c:otherwise>
-			<img src="/image/default.png" class="img-thumbnail" style="width: 150px; height: 150px;">
-		</c:otherwise>
-	</c:choose>
-	<form:form modelAttribute="update" action="./update" method="post" enctype="multipart/form-data" id="form">
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">이름</span>
-			</div>
-			<input type="text" class="form-control" name="memberName" value="${update.memberName}" readonly>
-		</div>
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">ID</span>
-			</div>
-			<input type="text" class="form-control" name="memberId" value="${update.memberId}" readonly>
-		</div>
-		<form:errors path="memberPhone" cssStyle="color:red" />
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">Phone</span>
-			</div>
-			<input type="text" class="form-control" name="memberPhone" placeholder="ex) 01012341234" value="${update.memberPhone}">
-		</div>
-		<form:errors path="memberEmail" cssStyle="color:red" />
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">email</span>
-			</div>
-			<input type="email" class="form-control" name="memberEmail" value="${update.memberEmail}" id="uEmail">
-			<button type="button" id="emailBtn">중복확인</button>
-		</div>
-		<div id="emailMsg" style="font-size: 12px; margin-top: 5px;"></div>
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text" id="basic-addon1">생년월일</span>
-			</div>
-			<input type="date" class="form-control" name="memberBirth" value="${update.memberBirth}" readonly>
-		</div>
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text">프로필 사진</span>
-			</div>
-			<div class="custom-file">
-				<input type="file" class="custom-file-input" name="attach" accept="image/*" id="uAttach">
-				<label class="custom-file-label" id="uSelectFile"> ${not empty update.profile.oriName ? update.profile.oriName : "사진 선택"} </label>
-			</div>
-			<button type="button" id="deleteImgBtn" class="btn btn-outline-danger btn-sm">삭제</button>
-		</div>
-		<input type="hidden" name="deleteProfile" id="deleteProfile" value="false">
-		<button type="submit" class="btn btn-outline-dark">정보수정</button>
-	</form:form>
+	
+	<div class="update-container">
+        <h2 class="update-title">프로필 수정</h2>
+        
+        <div class="profile-edit-section">
+            <c:choose>
+                <c:when test="${not empty update.profile.fileName}">
+                    <img src="/files/memberProfile/${update.profile.fileName}" class="profile-preview" id="previewImg">
+                </c:when>
+                <c:otherwise>
+                    <img src="/image/default.png" class="profile-preview" id="previewImg">
+                </c:otherwise>
+            </c:choose>
+            <div class="mt-2">
+                <button type="button" id="deleteImgBtn" class="btn btn-sm btn-link text-danger">사진 삭제</button>
+            </div>
+        </div>
+
+        <form:form modelAttribute="update" action="./update" method="post" enctype="multipart/form-data" id="form">
+            <div class="form-group mb-3">
+                <label>이름</label>
+                <input type="text" class="form-control bg-light" name="memberName" value="${update.memberName}" readonly>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>아이디</label>
+                <input type="text" class="form-control bg-light" name="memberId" value="${update.memberId}" readonly>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>전화번호</label>
+                <input type="text" class="form-control" name="memberPhone" placeholder="01012341234" value="${update.memberPhone}">
+                <form:errors path="memberPhone" cssClass="text-danger small mt-1" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label>이메일</label>
+                <div class="input-group">
+                    <input type="email" class="form-control" name="memberEmail" value="${update.memberEmail}" id="uEmail">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary btn-sm" type="button" id="emailBtn">중복확인</button>
+                    </div>
+                </div>
+                <div id="emailMsg" class="small mt-1"></div>
+                <form:errors path="memberEmail" cssClass="text-danger small mt-1" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label>생년월일</label>
+                <input type="date" class="form-control bg-light" name="memberBirth" value="${update.memberBirth}" readonly>
+            </div>
+
+            <div class="form-group mb-4">
+                <label>프로필 사진 변경</label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="attach" accept="image/*" id="uAttach">
+                    <label class="custom-file-label" id="uSelectFile">
+                        ${not empty update.profile.oriName ? update.profile.oriName : "새 사진 선택"}
+                    </label>
+                </div>
+            </div>
+
+            <input type="hidden" name="deleteProfile" id="deleteProfile" value="false">
+            <button type="submit" class="btn btn-orange btn-block">수정 완료</button>
+            <a href="/member/detail" class="btn btn-link btn-block text-muted small">취소</a>
+        </form:form>
+	</div>
+
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="/js/update/update.js"></script>
 </body>

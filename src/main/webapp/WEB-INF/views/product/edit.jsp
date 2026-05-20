@@ -8,37 +8,114 @@
 <meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<title>상품 수정</title>
+<title>상품 수정 - 당근 느낌</title>
+<style>
+    :root {
+        --daangn-orange: #ff8a3d;
+        --daangn-light-orange: #fff1eb;
+        --daangn-grey: #868e96;
+    }
+    body {
+        background-color: #f8f9fa;
+    }
+    .edit-container {
+        max-width: 800px;
+        margin: 60px auto;
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .edit-title {
+        font-weight: bold;
+        font-size: 24px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .form-group label {
+        font-weight: bold;
+        color: #495057;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    .form-control {
+        border-radius: 8px;
+        padding: 10px 15px;
+        border: 1px solid #dee2e6;
+        height: auto;
+    }
+    .form-control:focus {
+        border-color: var(--daangn-orange);
+        box-shadow: 0 0 0 0.2rem rgba(255, 138, 61, 0.2);
+    }
+    .btn-orange {
+        background-color: var(--daangn-orange);
+        color: white;
+        border: none;
+        font-weight: bold;
+        padding: 12px;
+        border-radius: 8px;
+    }
+    .btn-orange:hover {
+        background-color: #e67831;
+        color: white;
+    }
+    .btn-check {
+        background-color: #e9ecef;
+        border: none;
+        color: #495057;
+        font-size: 13px;
+        border-radius: 6px;
+        padding: 0 15px;
+    }
+    .error-msg {
+        color: #fa5252;
+        font-size: 12px;
+        margin-top: 4px;
+        display: block;
+    }
+    .current-img-box {
+        position: relative;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+    .current-img-box img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+    .delete-btn {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        border-radius: 50%;
+        font-size: 12px;
+    }
+</style>
 </head>
 
 <body>
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
-	<div class="container mt-5">
+	<div class="container edit-container">
+		<h2 class="edit-title">상품 정보 수정</h2>
+        
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-12 mb-4">
+                <label class="font-weight-bold small text-muted">현재 등록된 이미지</label>
 				<c:choose>
 					<c:when test="${not empty product.fileList}">
-						<div id="productCarousel" class="carousel slide" data-ride="carousel">
-							<div class="carousel-inner">
-								<c:forEach var="f" items="${product.fileList}" varStatus="status">
-									<div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-										<img src="/files/product/${f.fileName}" class="d-block w-100" style="height: 400px; object-fit: cover;">
-									</div>
-								</c:forEach>
-							</div>
-							<a class="carousel-control-prev" href="#productCarousel" data-slide="prev">
-								<span class="carousel-control-prev-icon"></span>
-							</a>
-							<a class="carousel-control-next" href="#productCarousel" data-slide="next">
-								<span class="carousel-control-next-icon"></span>
-							</a>
-						</div>
-						<div class="mt-3 d-flex flex-wrap" id="fileBox">
+						<div class="d-flex flex-wrap mt-2" id="fileBox">
 							<c:forEach var="f" items="${product.fileList}">
-								<div class="position-relative mr-2 file-box">
-									<img src="/files/product/${f.fileName}" style="width: 80px; height: 80px; object-fit: cover;">
-									<button type="button" class="btn btn-sm btn-danger delete-btn" data-file-num="${f.fileNum}" style="position: absolute; top: 0; right: 0;">
+								<div class="current-img-box file-box">
+									<img src="/files/product/${f.fileName}">
+									<button type="button" class="btn btn-danger delete-btn" data-file-num="${f.fileNum}">
 										<i class="bi bi-x"></i>
 									</button>
 								</div>
@@ -46,89 +123,87 @@
 						</div>
 					</c:when>
 					<c:otherwise>
-						<img src="/image/noImage.png" class="img-fluid">
+						<p class="text-muted small mt-2">등록된 이미지가 없습니다.</p>
 					</c:otherwise>
 				</c:choose>
 			</div>
-			<div class="col-md-6">
-
+            
+			<div class="col-md-12">
 				<form:form action="/product/edit" method="post" modelAttribute="productDTO" enctype="multipart/form-data">
-
 					<form:hidden path="productNum" />
-					<form:errors path="productTitle" cssStyle="color:red" />
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<span class="input-group-text">상품명</span>
-						</div>
-						<form:input path="productTitle" class="form-control" placeholder="상품명을 입력하세요" />
-					</div>
 					
-					<form:errors path="productPrice" cssStyle="color:red" />
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<span class="input-group-text">가격</span>
-						</div>
-						<form:input path="productPrice" type="number" class="form-control" placeholder="가격 입력" />
-					</div>
+                    <div class="form-group mb-4">
+                        <label>상품명</label>
+                        <form:input path="productTitle" class="form-control" placeholder="상품명을 입력하세요" />
+                        <form:errors path="productTitle" cssClass="error-msg" />
+                    </div>
 					
-					<form:errors path="productLocation" cssStyle="color:red" />
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<span class="input-group-text">지역</span>
-						</div>
-						<form:input path="productLocation" id="productLocation" class="form-control" readonly="true" />
-						<div class="input-group-append">
-							<button type="button" class="btn btn-outline-secondary" onclick="searchAddress()">주소 검색</button>
-						</div>
-					</div>
+                    <div class="form-group mb-4">
+                        <label>가격 (원)</label>
+                        <form:input path="productPrice" type="number" class="form-control" placeholder="가격을 입력해주세요" />
+                        <form:errors path="productPrice" cssClass="error-msg" />
+                    </div>
 					
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<span class="input-group-text">상품종류</span>
-						</div>
-						<form:select path="productType" class="form-control">
-							<form:option value="디지털기기">디지털기기</form:option>
-							<form:option value="생활가전">생활가전</form:option>
-							<form:option value="가구/인테리어">가구/인테리어</form:option>
-							<form:option value="생활/주방">생활/주방</form:option>
-							<form:option value="유아물품">유아물품</form:option>
-							<form:option value="의류">의류</form:option>
-							<form:option value="잡화">잡화</form:option>
-							<form:option value="뷰티/미용">뷰티/미용</form:option>
-							<form:option value="스포츠/레저">스포츠/레저</form:option>
-							<form:option value="취미/게임/음반">취미/게임/음반</form:option>
-							<form:option value="티켓/e쿠폰">티켓/e쿠폰</form:option>
-							<form:option value="식품">식품</form:option>
-							<form:option value="기타">기타</form:option>
-						</form:select>
-					</div>
+                    <div class="form-group mb-4">
+                        <label>거래 지역</label>
+                        <div class="input-group">
+                            <form:input path="productLocation" id="productLocation" class="form-control" readonly="true" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-check" onclick="searchAddress()">주소 검색</button>
+                            </div>
+                        </div>
+                        <form:errors path="productLocation" cssClass="error-msg" />
+                    </div>
 					
-					<div class="input-group mb-3">
-						<div class="input-group-prepend">
-							<span class="input-group-text">판매상태</span>
-						</div>
-						<form:select path="productStatus" class="form-control">
-							<form:option value="판매중">판매중</form:option>
-							<form:option value="거래중">거래중</form:option>
-							<form:option value="판매완료">판매완료</form:option>
-						</form:select>
-					</div>
+					<div class="row">
+                        <div class="col-md-6 form-group mb-4">
+                            <label>카테고리</label>
+                            <form:select path="productType" class="form-control">
+                                <form:option value="디지털기기">디지털기기</form:option>
+                                <form:option value="생활가전">생활가전</form:option>
+                                <form:option value="가구/인테리어">가구/인테리어</form:option>
+                                <form:option value="생활/주방">생활/주방</form:option>
+                                <form:option value="유아물품">유아물품</form:option>
+                                <form:option value="의류">의류</form:option>
+                                <form:option value="잡화">잡화</form:option>
+                                <form:option value="뷰티/미용">뷰티/미용</form:option>
+                                <form:option value="스포츠/레저">스포츠/레저</form:option>
+                                <form:option value="취미/게임/음반">취미/게임/음반</form:option>
+                                <form:option value="티켓/e쿠폰">티켓/e쿠폰</form:option>
+                                <form:option value="식품">식품</form:option>
+                                <form:option value="기타">기타</form:option>
+                            </form:select>
+                        </div>
+                        
+                        <div class="col-md-6 form-group mb-4">
+                            <label>판매상태</label>
+                            <form:select path="productStatus" class="form-control">
+                                <form:option value="판매중">판매중</form:option>
+                                <form:option value="거래중">거래중</form:option>
+                                <form:option value="판매완료">판매완료</form:option>
+                            </form:select>
+                        </div>
+                    </div>
 					
-					<form:errors path="productContent" cssStyle="color:red" />
-					<div class="form-group">
+					<div class="form-group mb-4">
 						<label>상품 설명</label>
-						<form:textarea path="productContent" class="form-control" rows="7" />
+						<form:textarea path="productContent" class="form-control" rows="8" placeholder="설명을 입력해주세요" />
+                        <form:errors path="productContent" cssClass="error-msg" />
 					</div>
 					
-					<label>이미지 바로 추가</label>
-					<div class="form-group">
-						<input type="hidden" id="productNum" value="${product.productNum}">
-						<input type="file" id="fileInput" name="file" multiple>
-						<button type="button" id="addFileBtn" class="btn btn-primary">이미지 추가</button>
+					<div class="form-group mb-4">
+                        <label>이미지 추가</label>
+                        <div class="input-group">
+                            <input type="file" id="fileInput" name="file" multiple class="form-control-file border p-2 rounded" style="width: 100%;">
+                            <button type="button" id="addFileBtn" class="btn btn-orange mt-2 btn-sm">이미지 즉시 추가</button>
+                        </div>
+                        <div id="previewBox" class="d-flex flex-wrap mt-2"></div>
 					</div>
-					<div id="previewBox" class="d-flex flex-wrap mt-2"></div>
-					<button type="submit" class="btn btn-success">수정 완료</button>
-					<a href="/product/detail?productNum=${product.productNum}" class="btn btn-secondary">취소</a>
+                    
+                    <div class="d-flex gap-3 mt-5">
+					    <button type="submit" class="btn btn-orange flex-grow-1 py-3">수정 완료</button>
+					    <a href="/product/detail?productNum=${product.productNum}" class="btn btn-light flex-grow-1 py-3 border ml-3">취소</a>
+                    </div>
 				</form:form>
 			</div>
 		</div>
