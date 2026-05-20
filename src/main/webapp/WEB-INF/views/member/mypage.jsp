@@ -199,5 +199,6 @@
 
 	</div>
 
+    <c:import url="/WEB-INF/views/temp/footer.jsp"></c:import>
 </body>
 </html>

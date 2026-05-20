@@ -109,6 +109,7 @@
         </c:if>
 	</div>
 
+    <c:import url="/WEB-INF/views/temp/footer.jsp"></c:import>
 	<c:remove var="loginError" scope="session" />
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="/js/login/login.js"></script>

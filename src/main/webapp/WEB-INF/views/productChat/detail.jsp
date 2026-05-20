@@ -42,7 +42,7 @@
         flex-direction: column;
         padding: 20px 15px;
         background-color: white;
-        height: calc(100vh - 140px);
+        height: calc(75vh - 50px);
         overflow-y: auto;
     }
     .msg {
@@ -139,7 +139,7 @@
 
 	<c:import url="/WEB-INF/views/temp/topbar.jsp" />
 
-	<div class="container p-0 border-left border-right" style="max-width: 600px; min-height: 100vh; display: flex; flex-direction: column;">
+	<div class="container p-0 border-left border-right" style="max-width: 700px; min-height: 75vh; display: flex; flex-direction: column;">
         <div class="chat-header">
             <a href="javascript:history.back()" class="text-dark mr-3"><i class="bi bi-chevron-left"></i></a>
             <div class="product-mini-info">
@@ -200,7 +200,7 @@
 				<i class="bi bi-plus-circle"></i>
 			</button>
 			<input type="text" id="message" class="form-control" placeholder="메시지 입력..." style="border-radius: 20px; background: #f8f9fa;">
-			<button class="btn btn-orange" style="border-radius: 20px; padding: 6px 15px; font-weight: bold;" onclick="sendMessage()">보내기</button>
+			<button class="btn btn-orange" style="border-radius: 20px; padding: 6px 20px; font-weight: bold; white-space: nowrap;" onclick="sendMessage()">보내기</button>
 		</div>
 
 		<div class="plus-menu" id="plusMenu">
