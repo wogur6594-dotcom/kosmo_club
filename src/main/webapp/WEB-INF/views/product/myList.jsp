@@ -77,7 +77,7 @@
 			<!-- ================= LEFT FILTER ================= -->
 			<div class="col-md-3 mb-4">
                 <div class="filter-section">
-                    <form action="./myList" method="get">
+                    <form action="./myList" method="get" onsubmit="return false;">
                         <!-- 검색 -->
                         <div class="input-group mb-4">
                             <input type="text" name="search" value="${pager.search}" class="form-control border-right-0" placeholder="내 상품 검색">
@@ -129,7 +129,6 @@
                             <label><input type="radio" name="productType" value="식품" ${fn:contains(pager.productType, '식품') ? 'checked' : ''}> 식품</label>
                             <label><input type="radio" name="productType" value="기타" ${fn:contains(pager.productType, '기타') ? 'checked' : ''}> 기타</label>
                         </div>
-                        <button type="submit" class="btn btn-block btn-outline-orange mt-3">필터 적용</button>
                     </form>
                 </div>
 			</div>

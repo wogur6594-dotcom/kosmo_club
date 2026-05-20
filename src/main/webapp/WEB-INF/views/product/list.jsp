@@ -192,7 +192,6 @@
                             <label><input type="radio" name="productType" value="식품" ${fn:contains(pager.productType, '식품') ? 'checked' : ''}> 식품</label>
                             <label><input type="radio" name="productType" value="기타" ${fn:contains(pager.productType, '기타') ? 'checked' : ''}> 기타</label>
                         </div>
-                        <button type="submit" class="btn btn-block btn-outline-orange mt-3">필터 적용</button>
                     </form>
                 </div>
 			</div>
