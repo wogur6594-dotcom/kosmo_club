@@ -46,19 +46,10 @@
 
 	<!-- 게시글 개수 -->
 	<select id="getCount" parameterType="Pager" resultType="long">
-
-		SELECT COUNT(*)
-
-		FROM "TB_CLUB_BOARD" CB
-
-		JOIN "TB_MEMBER" M
-		ON
-		CB."BOARD_WRITER" = M."MEMBER_ID"
-
-		WHERE CB."CLUB_NUM" = #{clubNum}
-
-		<include refid="clubBoardSearch" />
-
+		SELECT
+		COUNT(*)
+		FROM "TB_CLUB_BOARD"
+		WHERE "CLUB_NUM" = #{clubNum}
 	</select>
 
 	<!-- 게시글 목록 -->
@@ -102,8 +93,8 @@
 		"clubNum",
 		M."MEMBER_NAME" AS "memberName"
 		FROM "TB_CLUB_BOARD" CB
-		LEFT
-		JOIN "TB_MEMBER"
+		JOIN
+		"TB_MEMBER"
 		M
 		ON CB."BOARD_WRITER" = M."MEMBER_ID"
 		WHERE
@@ -270,8 +261,6 @@
 		"BOARD_CONTENTS" = #{boardContents},
 		"BOARD_CATEGORY" = #{boardCategory}
 		WHERE "BOARD_NUM" = #{boardNum}
-		AND
-		"BOARD_WRITER" = #{boardWriter}
 
 	</update>
 
@@ -280,7 +269,6 @@
 
 		DELETE FROM "TB_CLUB_BOARD"
 		WHERE "BOARD_NUM" = #{boardNum}
-		AND "BOARD_WRITER" = #{boardWriter}
 
 	</delete>
 

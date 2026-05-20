@@ -32,19 +32,27 @@ public class JobApplyService {
 		int allCheck = jobApplyMapper.checkApplyAll(jobApplyDTO);
 
 		if (allCheck > 0) {
-			int result = jobApplyMapper.reApply(jobApplyDTO);
-
-			if (result > 0) {
-				this.addApplyNotification(jobApplyDTO);
-			}
-
-			return result;
+			return jobApplyMapper.reApply(jobApplyDTO);
 		}
 
 		int result = jobApplyMapper.apply(jobApplyDTO);
 
 		if (result > 0) {
-			this.addApplyNotification(jobApplyDTO);
+
+			JobDTO jobDTO = new JobDTO();
+			jobDTO.setJobNum(jobApplyDTO.getJobNum());
+
+			jobDTO = jobService.detail(jobDTO);
+
+			NotificationDTO notificationDTO = new NotificationDTO();
+
+			notificationDTO.setMemberNum(jobDTO.getMemberNum());
+
+			notificationDTO.setNotificationContents("새로운 지원자가 있습니다.");
+
+			notificationDTO.setNotificationUrl("/jobApply/applicantList?jobNum=" + jobDTO.getJobNum());
+
+			notificationService.add(notificationDTO);
 		}
 
 		return result;
@@ -86,16 +94,19 @@ public class JobApplyService {
 
 		if (result > 0) {
 
+			JobApplyDTO applyDetailDto = jobApplyMapper.jobApplyDetail(jobApplyDTO);
+
 			NotificationDTO notificationDTO = new NotificationDTO();
 
 			notificationDTO.setMemberNum(applyDetail.getMemberNum());
 
 			if ("ACCEPT".equals(jobApplyDTO.getApplyStatus())) {
+
 				notificationDTO.setNotificationContents("지원한 공고가 승인되었습니다.");
+
 			} else if ("REJECT".equals(jobApplyDTO.getApplyStatus())) {
+
 				notificationDTO.setNotificationContents("지원한 공고가 거절되었습니다.");
-			} else {
-				notificationDTO.setNotificationContents("지원한 공고 상태가 변경되었습니다.");
 			}
 
 			notificationDTO.setNotificationUrl("/jobApply/myList");
@@ -112,34 +123,6 @@ public class JobApplyService {
 
 	public JobApplyDTO myApplyStatus(JobApplyDTO jobApplyDTO) throws Exception {
 		return jobApplyMapper.myApplyStatus(jobApplyDTO);
-	}
-
-	public JobApplyDTO jobApplyDetail(JobApplyDTO jobApplyDTO) throws Exception {
-		return jobApplyMapper.jobApplyDetail(jobApplyDTO);
-	}
-
-	private void addApplyNotification(JobApplyDTO jobApplyDTO) throws Exception {
-
-		JobDTO jobDTO = new JobDTO();
-		jobDTO.setJobNum(jobApplyDTO.getJobNum());
-
-		jobDTO = jobService.detail(jobDTO);
-
-		if (jobDTO == null) {
-			return;
-		}
-
-		if (jobDTO.getMemberNum().equals(jobApplyDTO.getMemberNum())) {
-			return;
-		}
-
-		NotificationDTO notificationDTO = new NotificationDTO();
-
-		notificationDTO.setMemberNum(jobDTO.getMemberNum());
-		notificationDTO.setNotificationContents("새로운 지원자가 있습니다.");
-		notificationDTO.setNotificationUrl("/jobApply/applicantList?jobNum=" + jobDTO.getJobNum());
-
-		notificationService.add(notificationDTO);
 	}
 
 }

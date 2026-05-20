@@ -8,13 +8,141 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="/css/job.css">
 <title>알바 공고 상세</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/common.css">
 
+<style>
+body {
+	background-color: #fff7f3;
+	color: #212529;
+}
+
+.detail-box {
+	max-width: 820px;
+	margin: 55px auto;
+	background-color: white;
+	border-radius: 18px;
+	padding: 40px;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.category-badge {
+	display: inline-block;
+	background-color: #fff3e8;
+	color: #ff6f0f;
+	font-size: 13px;
+	font-weight: 700;
+	padding: 6px 10px;
+	border-radius: 6px;
+	margin-bottom: 15px;
+}
+
+.detail-title {
+	font-size: 30px;
+	font-weight: 800;
+	color: #1f2933;
+	margin-bottom: 12px;
+}
+
+.detail-meta {
+	color: #868e96;
+	font-size: 14px;
+	margin-bottom: 28px;
+}
+
+.info-card {
+	background-color: #fffaf7;
+	border: 1px solid #f1e0d2;
+	border-radius: 14px;
+	padding: 22px;
+	margin-bottom: 28px;
+}
+
+.info-row {
+	display: flex;
+	margin-bottom: 12px;
+}
+
+.info-row:last-child {
+	margin-bottom: 0;
+}
+
+.info-label {
+	width: 90px;
+	font-weight: 800;
+	color: #5f4b3b;
+}
+
+.info-value {
+	flex: 1;
+	color: #212529;
+}
+
+.contents-box {
+	line-height: 1.8;
+	white-space: pre-wrap;
+	font-size: 16px;
+	margin-top: 20px;
+	min-height: 180px;
+}
+
+.btn-orange {
+	background-color: #ff6f0f;
+	color: white;
+	border-radius: 10px;
+	font-weight: 700;
+}
+
+.btn-orange:hover {
+	background-color: #e85f00;
+	color: white;
+}
+
+.btn-soft {
+	background-color: #f1f3f5;
+	color: #343a40;
+	border-radius: 10px;
+	font-weight: 700;
+}
+
+.btn-soft:hover {
+	background-color: #e9ecef;
+	color: #212529;
+}
+
+.apply-status-box {
+	margin-top: 18px;
+	padding: 16px 18px;
+	border-radius: 14px;
+	font-weight: 700;
+}
+
+.apply-wait {
+	background-color: #fff3e8;
+	color: #d9480f;
+	border: 1px solid #ffd8a8;
+}
+
+.apply-accept {
+	background-color: #e6fcf5;
+	color: #087f5b;
+	border: 1px solid #96f2d7;
+}
+
+.apply-reject {
+	background-color: #fff5f5;
+	color: #c92a2a;
+	border: 1px solid #ffc9c9;
+}
+
+.apply-closed {
+	background-color: #f1f3f5;
+	color: #495057;
+	border: 1px solid #dee2e6;
+}
+</style>
 </head>
 
 <body>
@@ -31,7 +159,8 @@
 
 		<c:if test="${not empty dto.fileName}">
 			<div class="mb-4">
-				<img src="/files/job/${dto.fileName}" class="job-image">
+				<img src="/files/job/${dto.fileName}"
+					style="width: 100%; border-radius: 16px;">
 			</div>
 		</c:if>
 
@@ -95,7 +224,7 @@
 
 		<div class="contents-box">${dto.jobContents}</div>
 
-		<div class="job-action-area">
+		<div class="text-right mt-4">
 
 			<sec:authorize access="isAuthenticated()">
 
@@ -103,7 +232,7 @@
 					var="loginMemberNum" />
 
 				<c:if test="${dto.memberNum eq loginMemberNum}">
-					<a href="./update?jobNum=${dto.jobNum}" class="btn btn-brown">
+					<a href="./update?jobNum=${dto.jobNum}" class="btn btn-orange">
 						수정 </a>
 				</c:if>
 
@@ -129,7 +258,7 @@
 					</c:if>
 				</sec:authorize>
 
-				<hr class="action-divider">
+				<hr>
 
 				<c:if test="${dto.memberNum ne loginMemberNum}">
 
@@ -242,7 +371,7 @@
 
 			</sec:authorize>
 
-			<a href="./list" class="btn btn-outline-secondary">목록</a>
+			<a href="./list" class="btn btn-soft">목록</a>
 
 		</div>
 

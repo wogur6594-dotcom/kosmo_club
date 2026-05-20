@@ -37,21 +37,11 @@ public class SecurityConfig {
                         "/member/detail",
                         "/member/delete",
                         "/member/pwChange",
-                        "/member/mypage",
                         "/product/add",
                         "/product/detail",
                         "/product/myList",
                         "/job/create",
                         "/job/create/**",
-                        "/job/update",
-                        "/job/update/**",
-                        "/job/delete",
-                        "/job/delete/**",
-                        "/job/deleteFile",
-                        "/job/deleteFile/**",
-                        "/job/myJobList",
-                        "/jobApply/**",
-
                         "/club/create",
                         "/club/create/**",
                         "/clubSchedule/create",
@@ -68,7 +58,13 @@ public class SecurityConfig {
                         "/css/**",
                         "/js/**",
                         "/images/**",
-                        "/files/**"
+                        "/files/**",
+                        "/job/update",
+                        "/job/update/**",
+                        "/job/delete",
+                        "/job/delete/**",
+                        "/job/deleteFile",
+                        "/job/deleteFile/**"
                     ).permitAll()
 
                     .anyRequest().permitAll();

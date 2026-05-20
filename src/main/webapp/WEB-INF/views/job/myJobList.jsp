@@ -12,7 +12,95 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/css/job.css">
+<style>
+body {
+	background-color: #fff7f3;
+}
+
+.manage-box {
+	max-width: 1050px;
+	margin: 50px auto;
+	background: white;
+	border-radius: 18px;
+	padding: 35px;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.page-title {
+	font-size: 28px;
+	font-weight: 800;
+	color: #3f2d20;
+	margin-bottom: 30px;
+}
+
+.job-card {
+	border: 1px solid #f1e0d2;
+	border-radius: 14px;
+	padding: 22px;
+	margin-bottom: 18px;
+	background-color: #fffaf7;
+}
+
+.job-title {
+	font-size: 20px;
+	font-weight: 800;
+	color: #3f2d20;
+	text-decoration: none;
+}
+
+.job-title:hover {
+	color: #ff6f0f;
+	text-decoration: none;
+}
+
+.meta {
+	color: #868e96;
+	font-size: 14px;
+	margin-top: 8px;
+}
+
+.pay {
+	font-weight: 800;
+	margin-top: 8px;
+	color: #212529;
+}
+
+.badge-open {
+	background: #d3f9d8;
+	color: #2b8a3e;
+	padding: 6px 10px;
+	border-radius: 8px;
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.badge-closed {
+	background: #ffe3e3;
+	color: #c92a2a;
+	padding: 6px 10px;
+	border-radius: 8px;
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.btn-orange {
+	background-color: #ff6f0f;
+	color: white;
+	border-radius: 10px;
+	font-weight: 700;
+}
+
+.btn-orange:hover {
+	background-color: #e85f00;
+	color: white;
+}
+
+.empty-box {
+	text-align: center;
+	color: #868e96;
+	padding: 60px 0;
+}
+</style>
 </head>
 
 <body>
@@ -21,17 +109,9 @@
 
 	<div class="manage-box">
 
-		<div class="manage-head">
-			<div>
-				<h1 class="page-title">내 공고 관리</h1>
-				<p class="manage-desc">내가 등록한 동네알바 공고와 지원 현황을 확인할 수 있습니다.</p>
-			</div>
-
-			<div class="manage-head-btns">
-				<a href="${pageContext.request.contextPath}/job/list"
-					class="btn-back-link"> 뒤로가기 </a>
-			</div>
-		</div>
+		<h1 class="page-title">내 공고 관리</h1>
+		<a href="${pageContext.request.contextPath}/jobBookmark/myList"
+			class="btn btn-outline-warning"> 관심 공고 </a>
 
 		<c:choose>
 			<c:when test="${empty list}">
@@ -41,69 +121,57 @@
 			<c:otherwise>
 				<c:forEach items="${list}" var="dto">
 
-					<div
-						class="manage-job-card ${dto.currentApplyMember ge dto.jobMaxMember ? 'closed-job-card' : ''}">
+					<div class="job-card">
 
-						<div class="manage-job-main">
+						<div class="d-flex justify-content-between align-items-start">
 
-							<a
-								href="${pageContext.request.contextPath}/job/detail?jobNum=${dto.jobNum}"
-								class="job-title"> ${dto.jobTitle} </a>
-
-							<div class="meta">${dto.jobLocation}·${dto.jobWorkDay} ·
-								${dto.jobWorkTime}</div>
-
-							<div class="pay">${dto.jobPay}</div>
-
-							<div class="meta">지원자 ${dto.currentApplyMember} /
-								${dto.jobMaxMember}</div>
-
-						</div>
-
-						<div class="manage-job-applicant">
-
-							<c:choose>
-								<c:when test="${dto.applyCount gt 0}">
-									<div class="recent-applicant">
-										최근 지원자 : ${dto.recentApplicantName}
-
-										<c:if test="${dto.applyCount gt 1}">
-											외 ${dto.applyCount - 1}명
-										</c:if>
-									</div>
-								</c:when>
-
-								<c:otherwise>
-									<div class="recent-applicant empty">아직 지원자가 없습니다.</div>
-								</c:otherwise>
-							</c:choose>
-
-						</div>
-
-						<div class="manage-job-actions">
-
-							<c:choose>
-								<c:when test="${dto.currentApplyMember ge dto.jobMaxMember}">
-									<span class="badge-closed">모집완료</span>
-								</c:when>
-
-								<c:otherwise>
-									<span class="badge-open">모집중</span>
-								</c:otherwise>
-							</c:choose>
-
-							<div class="manage-btn-area">
+							<div>
 								<a
-									href="${pageContext.request.contextPath}/jobApply/applicantList?jobNum=${dto.jobNum}"
-									class="btn-manage-primary"> 지원자 보기 </a> <a
-									href="${pageContext.request.contextPath}/job/update?jobNum=${dto.jobNum}"
-									class="btn-manage-sub"> 수정 </a>
+									href="${pageContext.request.contextPath}/job/detail?jobNum=${dto.jobNum}"
+									class="job-title"> ${dto.jobTitle} </a>
 
-								<form action="${pageContext.request.contextPath}/job/delete"
-									method="post" onsubmit="return confirm('정말 이 공고를 삭제하시겠습니까?');">
-									<input type="hidden" name="jobNum" value="${dto.jobNum}">
-									<button type="submit" class="btn-manage-delete">삭제</button>
-								</form>
+								<div class="meta">${dto.jobLocation}·${dto.jobWorkDay} ·
+									${dto.jobWorkTime}</div>
+
+								<div class="pay">${dto.jobPay}</div>
+
+								<div class="meta">지원자 ${dto.currentApplyMember} /
+									${dto.jobMaxMember}</div>
+							</div>
+							<c:if test="${dto.applyCount gt 0}">
+
+								<div class="meta mt-2">
+
+									최근 지원자 : ${dto.recentApplicantName}
+
+									<c:if test="${dto.applyCount gt 1}">
+			외 ${dto.applyCount - 1}명
+		</c:if>
+
+								</div>
+
+							</c:if>
+
+							<div class="text-right">
+
+								<c:choose>
+									<c:when test="${dto.currentApplyMember ge dto.jobMaxMember}">
+										<span class="badge-closed">모집완료</span>
+									</c:when>
+
+									<c:otherwise>
+										<span class="badge-open">모집중</span>
+									</c:otherwise>
+								</c:choose>
+
+								<div class="mt-3">
+									<a
+										href="${pageContext.request.contextPath}/jobApply/applicantList?jobNum=${dto.jobNum}"
+										class="btn btn-sm btn-orange"> 지원자 보기 </a> <a
+										href="${pageContext.request.contextPath}/job/update?jobNum=${dto.jobNum}"
+										class="btn btn-sm btn-secondary"> 수정 </a>
+								</div>
+
 							</div>
 
 						</div>

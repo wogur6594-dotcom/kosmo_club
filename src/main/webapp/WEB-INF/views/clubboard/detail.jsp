@@ -10,14 +10,70 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>게시글 상세</title>
+<title>Detail</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/css/common.css">
-</head>
+<style>
+body {
+	background-color: #f8f5f1;
+}
 
+.btn-soft-brown {
+	background-color: #a35400;
+	color: white;
+	border: none;
+	border-radius: 14px;
+	padding: 10px 22px;
+	font-weight: 600;
+	transition: all 0.25s ease;
+	box-shadow: 0 4px 12px rgba(163, 84, 0, 0.15);
+}
+
+.btn-soft-brown:hover {
+	background-color: #8b4700;
+	color: white;
+	text-decoration: none;
+	transform: translateY(-1px);
+	box-shadow: 0 8px 18px rgba(163, 84, 0, 0.22);
+}
+
+.btn-soft-gray {
+	background-color: #ebe3dc;
+	color: #6f5b4c;
+	border: none;
+	border-radius: 14px;
+	padding: 10px 22px;
+	font-weight: 600;
+	transition: all 0.25s ease;
+}
+
+.btn-soft-gray:hover {
+	background-color: #ddd2c8;
+	color: #4e4036;
+	text-decoration: none;
+	transform: translateY(-1px);
+}
+
+.btn-soft-red {
+	background-color: #c95c54;
+	color: white;
+	border: none;
+	border-radius: 14px;
+	padding: 10px 22px;
+	font-weight: 600;
+	transition: all 0.25s ease;
+}
+
+.btn-soft-red:hover {
+	background-color: #ae463f;
+	color: white;
+	transform: translateY(-1px);
+}
+</style>
+
+</head>
 <body>
 
 	<c:if test="${not empty message}">
@@ -26,48 +82,69 @@
 		</script>
 	</c:if>
 
+
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
-	<div class="board-detail-wrap">
+	<div class="container mt-5">
+		<div style="max-width: 1100px; margin: 0 auto;">
 
-		<div class="board-detail-card">
+			<div class="d-flex align-items-center mb-3">
 
-			<div class="board-detail-header">
-
-				<h1 class="board-detail-title">${dto.boardTitle}</h1>
+				<h1 class="mr-3 mb-0">${dto.boardTitle}</h1>
 
 				<span class="badge badge-success"> ${dto.boardCategory} </span>
 
 			</div>
 
-			<div class="board-detail-meta">
+			<hr>
 
-				<div class="board-detail-meta-item">
-					<strong>작성자 :</strong> ${dto.memberName}
-				</div>
+			<div class="mb-3">
 
-				<div class="board-detail-meta-item">
-					<strong>등록일 :</strong>
-					${fn:replace(fn:substring(dto.createDate.toString(), 0, 16), 'T', ' ')}
-				</div>
+				<div class="d-flex justify-content-between mb-4">
 
-				<div class="board-detail-meta-item">
-					<strong>조회수 :</strong> ${dto.hit}
+					<div>
+						<strong>작성자 :</strong> ${dto.memberName}
+					</div>
+
+					<div>
+						<strong>등록일 :</strong>
+						${fn:replace(fn:substring(dto.createDate.toString(), 0, 16), 'T', ' ')}
+					</div>
+
+					<div>
+						<strong>조회수 :</strong> ${dto.hit}
+					</div>
+
 				</div>
 
 			</div>
 
-			<c:forEach items="${dto.list}" var="file">
 
+
+
+
+			<c:forEach items="${dto.list}" var="file">
 				<img
 					src="${pageContext.request.contextPath}/files/clubboard/${file.fileName}"
-					class="board-detail-image">
-
+					class="img-fluid mb-3" style="max-width: 400px;">
+			</c:forEach>
+			<hr>
+			<c:forEach items="${dto.list}" var="file">
 			</c:forEach>
 
-			<div class="board-detail-content">${dto.boardContents}</div>
 
-			<div class="board-like-area">
+			<div class="p-4 border rounded"
+				style="min-height: 200px; background-color: #f3ebe4; border-color: #e2d6cc !important; color: #3d2b1f; line-height: 1.8; border-radius: 18px;">
+
+
+
+
+				${dto.boardContents}</div>
+
+
+			<hr>
+
+			<div class="mb-3">
 
 				<c:choose>
 
@@ -75,7 +152,7 @@
 
 						<form
 							action="${pageContext.request.contextPath}/clubboard/like/add"
-							method="post" class="inline-form">
+							method="post" style="display: inline;">
 
 							<input type="hidden" name="boardNum" value="${dto.boardNum}">
 
@@ -90,7 +167,7 @@
 
 						<form
 							action="${pageContext.request.contextPath}/clubboard/like/delete"
-							method="post" class="inline-form">
+							method="post" style="display: inline;">
 
 							<input type="hidden" name="boardNum" value="${dto.boardNum}">
 
@@ -105,100 +182,85 @@
 
 			</div>
 
-			<div class="comment-section">
+			<!-- 댓글 -->
 
-				<h4 class="comment-section-title">댓글</h4>
+			<c:forEach items="${commentList}" var="comment">
 
-				<c:choose>
+				<div class="mb-3">
 
-					<c:when test="${not empty commentList}">
+					<div>
+						<span style="font-weight: 700;">${comment.memberName}</span> <span
+							style="font-size: 12px; color: #888; margin-left: 8px;">
+							${fn:replace(fn:substring(comment.createDate.toString(), 0, 16), 'T', ' ')}
+						</span>
+					</div>
 
-						<c:forEach items="${commentList}" var="comment">
+					<div style="color: #444;">${comment.commentContents}</div>
 
-							<div class="comment-item">
+				</div>
 
-								<div>
-									<span class="comment-writer"> ${comment.memberName} </span> <span
-										class="comment-date">
-										${fn:replace(fn:substring(comment.createDate.toString(), 0, 16), 'T', ' ')}
-									</span>
-								</div>
+				<hr>
 
-								<div class="comment-contents">${comment.commentContents}</div>
+			</c:forEach>
 
-							</div>
 
-						</c:forEach>
+			<h4 class="mt-5 mb-3">댓글</h4>
 
-					</c:when>
+			<form action="/clubboardcomment/add" method="post">
 
-					<c:otherwise>
-						<p class="empty-text">아직 댓글이 없습니다.</p>
-					</c:otherwise>
+				<input type="hidden" name="boardNum" value="${dto.boardNum}">
 
-				</c:choose>
+				<input type="hidden" name="clubNum" value="${dto.clubNum}">
 
-				<form action="/clubboardcomment/add" method="post"
-					class="comment-form mt-4">
+				<textarea name="commentContents" class="form-control" rows="3"
+					placeholder="댓글을 입력하세요"></textarea>
 
-					<input type="hidden" name="boardNum" value="${dto.boardNum}">
+				<button type="submit" class="btn btn-sm mt-2"
+					style="background-color: #b36200; color: white;">댓글 작성</button>
 
-					<input type="hidden" name="clubNum" value="${dto.clubNum}">
+			</form>
 
-					<textarea name="commentContents" class="form-control"
-						placeholder="댓글을 입력하세요"></textarea>
+			<!-- 댓글끝 -->
 
-					<button type="submit" class="btn btn-brown mt-2">댓글 작성</button>
 
-				</form>
 
-			</div>
 
 			<sec:authentication property="principal" var="member" />
 
-			<div class="board-detail-actions">
+			<div
+				class="d-flex justify-content-between align-items-center mt-4 mb-5">
 
 				<a
 					href="/club/detail?clubNum=${dto.clubNum}&page=${param.page}&kind=${param.kind}&search=${param.search}#boardArea"
 					class="btn-soft-gray"> 동호회로 돌아가기 </a>
 
 				<sec:authorize access="isAuthenticated()">
+					<sec:authentication property="principal" var="member" />
 
-					<div class="board-action-right">
+					<div class="d-flex align-items-center" style="gap: 10px;">
 
 						<c:if test="${member.username eq dto.boardWriter}">
-
 							<a
 								href="./update?boardNum=${dto.boardNum}&clubNum=${dto.clubNum}"
 								class="btn-soft-brown"> 수정 </a>
-
 						</c:if>
 
 						<c:if
 							test="${member.username eq dto.boardWriter || member.roleNum == 1}">
-
-							<form action="./delete" method="post" class="inline-form"
+							<form action="./delete" method="post" style="margin: 0;"
 								onsubmit="return confirm('정말 삭제하시겠습니까?');">
 
 								<input type="hidden" name="boardNum" value="${dto.boardNum}">
-
 								<input type="hidden" name="clubNum" value="${dto.clubNum}">
 
 								<button type="submit" class="btn-soft-red">삭제</button>
 
 							</form>
-
 						</c:if>
 
 					</div>
-
 				</sec:authorize>
 
 			</div>
-
-		</div>
-
-	</div>
-
 </body>
 </html>
