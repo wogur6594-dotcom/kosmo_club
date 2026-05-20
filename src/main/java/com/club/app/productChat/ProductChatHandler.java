@@ -20,16 +20,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 
 @Component
-@RequiredArgsConstructor
 public class ProductChatHandler extends TextWebSocketHandler {
 
 	private final ObjectMapper objectMapper;
 	private final ChatService chatService;
-
+	private final com.club.app.notification.NotificationService notificationService;
+	
 	// 방별 세션 (Detail view 전용)
 	private final Map<Long, List<WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
 	// 사용자별 모든 세션 (List view + Detail view 통합)
 	private final Map<Long, List<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
+
+	@org.springframework.beans.factory.annotation.Autowired
+	public ProductChatHandler(ObjectMapper objectMapper, ChatService chatService, com.club.app.notification.NotificationService notificationService) {
+		this.objectMapper = objectMapper;
+		this.chatService = chatService;
+		this.notificationService = notificationService;
+	}
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
@@ -107,6 +114,23 @@ public class ProductChatHandler extends TextWebSocketHandler {
 		// 방 참여자 정보 조회
 		ChatRoomDTO room = chatService.findById(roomNum);
 		if (room != null) {
+			
+			// 알림 등록 (상대방에게만, 방에 없을 때)
+			if (!isOtherInRoom) {
+				Long recipientNum = (room.getBuyerNum().equals(loginUser.getMemberNum())) ? room.getSellerNum() : room.getBuyerNum();
+				com.club.app.notification.NotificationDTO noti = new com.club.app.notification.NotificationDTO();
+				noti.setMemberNum(recipientNum);
+				noti.setNotificationContents(loginUser.getMemberId() + "님으로부터 새 메시지가 도착했습니다.");
+				noti.setNotificationUrl("/productChat/detail?chatroomNum=" + roomNum);
+				notificationService.add(noti);
+
+				// 실시간 알림 전송 (타입: notification)
+				ChatMessageDTO notiEvent = new ChatMessageDTO();
+				notiEvent.setType("notification");
+				notiEvent.setMessageContent(loginUser.getMemberId() + "님으로부터 새 메시지가 도착했습니다.");
+				broadcastToUser(recipientNum, notiEvent);
+			}
+
 			// 발신자 & 수신자 모두에게 전송 (목록 업데이트 포함)
 			broadcastToUser(room.getBuyerNum(), dto);
 			broadcastToUser(room.getSellerNum(), dto);

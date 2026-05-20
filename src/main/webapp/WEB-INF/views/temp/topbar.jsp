@@ -130,6 +130,48 @@
 
 </nav>
 
+<script>
+    // 전역 알림 수신 (상단바에 항상 연결)
+    (function connectNotificationSocket() {
+        const socket = new WebSocket("ws://" + location.host + "/ws/productChat?chatroomNum=list");
+
+        socket.onmessage = function(event) {
+            const msg = JSON.parse(event.data);
+            if (msg.type === "notification") {
+                // 1. 배지 카운트 업데이트
+                const badge = document.querySelector("#notificationDropdown .badge");
+                if (badge) {
+                    badge.innerText = parseInt(badge.innerText) + 1;
+                } else {
+                    const btn = document.getElementById("notificationDropdown");
+                    btn.insertAdjacentHTML('beforeend', '<span class="badge badge-danger ml-1">1</span>');
+                }
+
+                // 2. 드롭다운 목록에 알림 추가
+                const dropdownMenu = document.querySelector(".dropdown-menu");
+                const noNoti = dropdownMenu.querySelector(".text-center.text-muted");
+                if (noNoti) noNoti.remove();
+
+                const newNoti = document.createElement("a");
+                newNoti.className = "dropdown-item mb-2";
+                newNoti.href = "/notification/list"; // 전체 알림 보기로 유도
+                newNoti.style.cssText = "border-radius: 12px; padding: 12px; background-color: #fff8f1; border: 1px solid #ffcfaa; white-space: normal;";
+                newNoti.innerHTML = `
+                    <div style="font-size: 14px; color: #3f2d20;">
+                        ${msg.messageContent}
+                        <span class="badge badge-warning ml-1"> NEW </span>
+                    </div>
+                    <div style="font-size: 12px; color: #999; margin-top: 6px;">방금 전</div>
+                `;
+                dropdownMenu.insertBefore(newNoti, dropdownMenu.firstChild);
+            }
+        };
+
+        socket.onclose = function() {
+            setTimeout(connectNotificationSocket, 5000);
+        };
+    })();
+</script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
