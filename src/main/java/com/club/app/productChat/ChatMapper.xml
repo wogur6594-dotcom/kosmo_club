@@ -98,14 +98,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 메시지 저장 -->
 	<insert id="addMessage" parameterType="chatMessageDTO">
 		INSERT INTO "TB_PRODUCTMESSAGE"
-		("CHATROOM_NUM", "SENDER_NUM", "MESSAGE_CONTENT")
-		VALUES ( #{chatroomNum}, #{senderNum}, #{messageContent})
+		("CHATROOM_NUM", "SENDER_NUM", "MESSAGE_CONTENT", "MESSAGE_TYPE")
+		VALUES ( #{chatroomNum}, #{senderNum}, #{messageContent}, #{type})
 	</insert>
 
 	<!-- 메시지 목록 -->
 	<select id="messageList" parameterType="long" resultType="chatMessageDTO">
 		SELECT m.*,
 		m."SENDER_NUM",
+		m."MESSAGE_TYPE" AS type,
 		u."MEMBER_ID" AS senderName
 		FROM "TB_PRODUCTMESSAGE" m
 		JOIN "TB_MEMBER" u

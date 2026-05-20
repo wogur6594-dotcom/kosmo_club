@@ -56,7 +56,9 @@ body {
 
 .product-name {
 	font-weight: bold;
-	font-size: 15px;
+	font-size: 13px;
+	color: #007bff;
+	margin-bottom: 2px;
 }
 
 .last-message {
@@ -70,8 +72,9 @@ body {
 }
 
 .other-name {
-	font-size: 12px;
-	color: #999;
+	font-size: 15px;
+	font-weight: bold;
+	color: black;
 }
 
 .meta-info {
@@ -125,9 +128,16 @@ body {
 						</c:otherwise>
 					</c:choose>
 					<div class="info">
-						<div class="product-name">${c.productName}</div>
+						<div class="product-name">
+							<i class="bi bi-box-seam"></i> ${c.productName}
+						</div>
 						<div class="other-name">${c.otherName}</div>
-						<div class="last-message">${c.lastMessage}</div>
+						<div class="last-message">
+							<c:choose>
+								<c:when test="${empty c.lastMessage}">대화를 시작해보세요!</c:when>
+								<c:otherwise>${c.lastMessage}</c:otherwise>
+							</c:choose>
+						</div>
 					</div>
 					<div class="meta-info">
 						<div class="last-time" data-time="${c.lastMessageTime != null ? c.lastMessageTime : c.createtime}"></div>
@@ -148,10 +158,8 @@ body {
 	</script>
 	<script src="/js/productChat/list.js"></script>
 	<script>
-		// 시간 포맷팅 함수 (chat.js의 것과 유사하게)
 		function formatTime(time) {
 			if (!time) return "";
-			
 			if (typeof time === "string") {
 				time = time.split(".")[0];
 				const [date, t] = time.split("T");
@@ -160,7 +168,6 @@ body {
 					return h + ":" + m;
 				}
 			}
-			
 			let d = new Date(time);
 			if (!isNaN(d.getTime())) {
 				return String(d.getHours()).padStart(2, '0') + ":" + String(d.getMinutes()).padStart(2, '0');

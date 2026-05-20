@@ -24,6 +24,9 @@ public class ChatController {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private com.club.app.file.FileManager fileManager;
 
 	// 채팅방 생성
 	@GetMapping("create")
@@ -132,5 +135,21 @@ public class ChatController {
 		rttr.addFlashAttribute("msg", msg);
 
 		return "redirect:/productChat/list";
+	}
+
+	// 사진 업로드
+	@org.springframework.web.bind.annotation.PostMapping("uploadImage")
+	@org.springframework.web.bind.annotation.ResponseBody
+	public String uploadImage(@RequestParam("file") org.springframework.web.multipart.MultipartFile file)
+			throws Exception {
+		return fileManager.fileSave("chat", file);
+	}
+
+	// 거래 상태 변경
+	@org.springframework.web.bind.annotation.PostMapping("updateStatus")
+	@org.springframework.web.bind.annotation.ResponseBody
+	public String updateStatus(ProductDTO productDTO) throws Exception {
+		int result = productService.edit(productDTO);
+		return result > 0 ? "success" : "fail";
 	}
 }

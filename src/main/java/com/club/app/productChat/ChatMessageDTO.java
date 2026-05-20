@@ -23,4 +23,6 @@ public class ChatMessageDTO {
     private String senderName;
     
     private String type; 
+
+    private String extra; 
 }
