@@ -26,16 +26,35 @@ public class ProductChatHandler extends TextWebSocketHandler {
 	private final ObjectMapper objectMapper;
 	private final ChatService chatService;
 
+	// 방별 세션 (Detail view 전용)
 	private final Map<Long, List<WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
+	// 사용자별 모든 세션 (List view + Detail view 통합)
+	private final Map<Long, List<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
 
-		Long chatroomNum = Long.valueOf(session.getAttributes().get("chatroomNum").toString());
+		Map<String, Object> attrs = session.getAttributes();
+		String chatroomNumStr = (String) attrs.get("chatroomNum");
 
-		roomSessions.putIfAbsent(chatroomNum, new CopyOnWriteArrayList<>());
+		Authentication auth = (Authentication) session.getPrincipal();
+		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+		Long memberNum = loginUser.getMemberNum();
 
-		roomSessions.get(chatroomNum).add(session);
+		// 사용자별 세션 추가
+		userSessions.putIfAbsent(memberNum, new CopyOnWriteArrayList<>());
+		userSessions.get(memberNum).add(session);
+
+		// 방별 세션 추가 (숫자일 때만)
+		if (chatroomNumStr != null && !chatroomNumStr.equals("list")) {
+			try {
+				Long chatroomNum = Long.valueOf(chatroomNumStr);
+				roomSessions.putIfAbsent(chatroomNum, new CopyOnWriteArrayList<>());
+				roomSessions.get(chatroomNum).add(session);
+			} catch (NumberFormatException e) {
+				// list 등 숫자가 아닌 경우 무시
+			}
+		}
 	}
 
 	@Override
@@ -58,11 +77,7 @@ public class ProductChatHandler extends TextWebSocketHandler {
 			dto.setSenderNum(loginUser.getMemberNum());
 			dto.setIsRead(true);
 
-			for (WebSocketSession s : roomSessions.get(roomNum)) {
-				if (s.isOpen()) {
-					s.sendMessage(new TextMessage(objectMapper.writeValueAsString(dto)));
-				}
-			}
+			broadcastToRoom(roomNum, dto);
 			return;
 		}
 
@@ -72,16 +87,51 @@ public class ProductChatHandler extends TextWebSocketHandler {
 		dto.setSenderNum(loginUser.getMemberNum());
 		dto.setSenderName(loginUser.getMemberId());
 		dto.setCreatetime(LocalDateTime.now());
-		dto.setIsRead(false); // 🔥 중요
+
+		// 상대방이 방에 있는지 확인
+		boolean isOtherInRoom = false;
+		List<WebSocketSession> roomSess = roomSessions.get(roomNum);
+		if (roomSess != null) {
+			for (WebSocketSession s : roomSess) {
+				MemberDTO user = (MemberDTO) ((Authentication) s.getPrincipal()).getPrincipal();
+				if (!user.getMemberNum().equals(loginUser.getMemberNum())) {
+					isOtherInRoom = true;
+					break;
+				}
+			}
+		}
+		dto.setIsRead(isOtherInRoom);
 
 		chatService.addMessage(dto);
 
-		List<WebSocketSession> sessions = roomSessions.get(roomNum);
+		// 방 참여자 정보 조회
+		ChatRoomDTO room = chatService.findById(roomNum);
+		if (room != null) {
+			// 발신자 & 수신자 모두에게 전송 (목록 업데이트 포함)
+			broadcastToUser(room.getBuyerNum(), dto);
+			broadcastToUser(room.getSellerNum(), dto);
+		}
+	}
 
+	private void broadcastToRoom(Long roomNum, ChatMessageDTO dto) throws Exception {
+		List<WebSocketSession> sessions = roomSessions.get(roomNum);
 		if (sessions != null) {
+			String json = objectMapper.writeValueAsString(dto);
 			for (WebSocketSession s : sessions) {
 				if (s.isOpen()) {
-					s.sendMessage(new TextMessage(objectMapper.writeValueAsString(dto)));
+					s.sendMessage(new TextMessage(json));
+				}
+			}
+		}
+	}
+
+	private void broadcastToUser(Long memberNum, ChatMessageDTO dto) throws Exception {
+		List<WebSocketSession> sessions = userSessions.get(memberNum);
+		if (sessions != null) {
+			String json = objectMapper.writeValueAsString(dto);
+			for (WebSocketSession s : sessions) {
+				if (s.isOpen()) {
+					s.sendMessage(new TextMessage(json));
 				}
 			}
 		}
@@ -90,15 +140,30 @@ public class ProductChatHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
 
-		Long chatroomNum = Long.valueOf(session.getAttributes().get("chatroomNum").toString());
+		Authentication auth = (Authentication) session.getPrincipal();
+		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+		Long memberNum = loginUser.getMemberNum();
 
-		List<WebSocketSession> sessions = roomSessions.get(chatroomNum);
+		// 사용자 세션 제거
+		List<WebSocketSession> uSessions = userSessions.get(memberNum);
+		if (uSessions != null) {
+			uSessions.remove(session);
+			if (uSessions.isEmpty())
+				userSessions.remove(memberNum);
+		}
 
-		if (sessions != null) {
-			sessions.remove(session);
-
-			if (sessions.isEmpty()) {
-				roomSessions.remove(chatroomNum);
+		// 방 세션 제거
+		String chatroomNumStr = (String) session.getAttributes().get("chatroomNum");
+		if (chatroomNumStr != null && !chatroomNumStr.equals("list")) {
+			try {
+				Long chatroomNum = Long.valueOf(chatroomNumStr);
+				List<WebSocketSession> rSessions = roomSessions.get(chatroomNum);
+				if (rSessions != null) {
+					rSessions.remove(session);
+					if (rSessions.isEmpty())
+						roomSessions.remove(chatroomNum);
+				}
+			} catch (NumberFormatException e) {
 			}
 		}
 	}

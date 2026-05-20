@@ -27,7 +27,10 @@ function connectSocket() {
         // read 이벤트
         // =========================
         if (msg.type === "read") {
-            markAsReadUI();
+            // 내가 보낸 read 이벤트가 아닐 때만 UI 업데이트
+            if (Number(msg.senderNum) !== Number(loginUserNum)) {
+                markAsReadUI();
+            }
             return;
         }
 

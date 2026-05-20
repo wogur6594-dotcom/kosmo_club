@@ -25,4 +25,11 @@ public class ChatRoomDTO {
     private String otherName;
     
     private String otherProfileImage;
+
+    // 마지막 메시지 정보
+    private String lastMessage;
+    private LocalDateTime lastMessageTime;
+
+    // 안읽은 메시지 개수
+    private Integer unreadCount;
 }

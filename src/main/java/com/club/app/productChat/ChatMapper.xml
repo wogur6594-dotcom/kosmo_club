@@ -40,7 +40,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ELSE buyer."MEMBER_ID"
 		END AS otherName,
 
-		mp."FILE_NAME" AS otherProfileImage
+		mp."FILE_NAME" AS otherProfileImage,
+
+		(SELECT "MESSAGE_CONTENT" FROM "TB_PRODUCTMESSAGE"
+		WHERE "CHATROOM_NUM" = c."CHATROOM_NUM"
+		ORDER BY "CREATETIME" DESC
+		LIMIT 1) AS lastMessage,
+
+		(SELECT "CREATETIME"
+		FROM "TB_PRODUCTMESSAGE"
+		WHERE "CHATROOM_NUM" = c."CHATROOM_NUM"
+		ORDER BY "CREATETIME" DESC
+		LIMIT 1) AS lastMessageTime,
+
+		(SELECT COUNT(*) FROM "TB_PRODUCTMESSAGE"
+		WHERE "CHATROOM_NUM" = c."CHATROOM_NUM"
+		AND "SENDER_NUM" != #{memberNum}
+		AND "IS_READ" = false) AS unreadCount
 
 		FROM "TB_PRODUCTCHAT" c
 
@@ -48,7 +64,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ON c."PRODUCT_NUM" = p."PRODUCT_NUM"
 
 		JOIN "TB_MEMBER" buyer
-		ON c."BUYER_NUM" = buyer."MEMBER_NUM"
+		ON c."BUYER_NUM" =
+		buyer."MEMBER_NUM"
 
 		JOIN "TB_MEMBER" seller
 		ON
@@ -59,13 +76,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		CASE
 		WHEN c."BUYER_NUM" = #{memberNum}
 		THEN c."SELLER_NUM"
-		ELSE c."BUYER_NUM"
+		ELSE
+		c."BUYER_NUM"
 		END
 
 		WHERE c."BUYER_NUM" = #{memberNum}
 		OR c."SELLER_NUM" = #{memberNum}
 
-		ORDER BY c."CREATETIME" DESC
+		ORDER BY COALESCE(
+		(
+		SELECT "CREATETIME"
+		FROM "TB_PRODUCTMESSAGE"
+		WHERE "CHATROOM_NUM" = c."CHATROOM_NUM"
+		ORDER BY "CREATETIME" DESC
+		LIMIT 1
+		),
+		c."CREATETIME"
+		) DESC
 	</select>
 
 	<!-- 메시지 저장 -->
