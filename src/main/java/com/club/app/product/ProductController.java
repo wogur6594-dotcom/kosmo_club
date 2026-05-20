@@ -33,6 +33,9 @@ public class ProductController {
 	private ProductService productService;
 
 	@Autowired
+	private com.club.app.productChat.ChatService chatService;
+
+	@Autowired
 	private MemberService memberService;
 
 	// 리스트
@@ -76,9 +79,11 @@ public class ProductController {
 	public String detail(@ModelAttribute ProductDTO productDTO, Model model, Authentication auth) throws Exception {
 
 		ProductDTO dto = productService.detail(productDTO);
+		int chatCount = chatService.countByProductNum(productDTO.getProductNum());
 
 		model.addAttribute("loginUser", auth.getPrincipal());
 		model.addAttribute("product", dto);
+		model.addAttribute("chatCount", chatCount);
 
 		return "product/detail";
 	}

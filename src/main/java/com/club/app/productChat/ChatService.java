@@ -48,4 +48,8 @@ public class ChatService {
 	public int markAsRead(Long chatroomNum, Long memberNum) throws Exception {
 		return chatMapper.markAsRead(chatroomNum, memberNum);
 	}
+
+	public int countByProductNum(Long productNum) throws Exception {
+		return chatMapper.countByProductNum(productNum);
+	}
 }

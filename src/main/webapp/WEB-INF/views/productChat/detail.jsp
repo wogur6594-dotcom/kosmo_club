@@ -8,7 +8,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <title>${product.productTitle} - 채팅</title>
 
-<link rel="stylesheet" href="/css/chat.css">
 <style>
     :root {
         --daangn-orange: #ff8a3d;
@@ -17,7 +16,9 @@
         --daangn-light-grey: #f1f3f5;
     }
     body {
-        background-color: white;
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
     }
     .chat-header {
         padding: 15px;
@@ -29,80 +30,61 @@
         top: 0;
         z-index: 100;
     }
-    .product-mini-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex: 1;
-    }
     .product-mini-img {
         width: 40px;
         height: 40px;
         border-radius: 6px;
         object-fit: cover;
     }
-    .product-mini-text .title {
-        font-weight: bold;
-        font-size: 14px;
-        display: block;
-    }
-    .product-mini-text .status {
-        font-size: 11px;
-        color: var(--daangn-orange);
-    }
-    
     .chat-box {
-        background-color: white;
-        height: calc(100vh - 180px);
+        display: flex;
+        flex-direction: column;
         padding: 20px 15px;
+        background-color: white;
+        height: calc(100vh - 140px);
+        overflow-y: auto;
     }
-    
     .msg {
-        max-width: 75%;
+        max-width: 70%;
         margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
     }
     .msg.me {
         align-self: flex-end;
+        align-items: flex-end;
+    }
+    .msg.other {
+        align-self: flex-start;
+        align-items: flex-start;
+    }
+    .msg .content {
+        padding: 10px 14px;
+        font-size: 15px;
+        line-height: 1.4;
     }
     .msg.me .content {
         background-color: var(--daangn-orange);
         color: white;
-        border-radius: 18px 18px 2px 18px;
+        border-radius: 16px 16px 2px 16px;
     }
     .msg.other .content {
         background-color: var(--daangn-light-grey);
         color: #212529;
-        border-radius: 18px 18px 18px 2px;
+        border-radius: 16px 16px 16px 2px;
     }
-    .msg .content {
-        padding: 10px 16px;
-        font-size: 15px;
-        box-shadow: none;
+    .msg.system {
+        align-self: center;
+        text-align: center;
+        color: var(--daangn-grey);
+        font-size: 12px;
+        margin: 15px 0;
     }
-    .msg .sender {
+    .sender {
         font-size: 12px;
         color: var(--daangn-grey);
         margin-bottom: 4px;
-        margin-left: 4px;
     }
-    .msg.me .sender {
-        display: none;
-    }
-    
-    .msg.system {
-        align-self: center;
-        width: 100%;
-        max-width: 100%;
-        text-align: center;
-        margin: 20px 0;
-    }
-    .msg.system .content {
-        background: transparent;
-        color: var(--daangn-grey);
-        font-size: 12px;
-        padding: 0;
-    }
-    
     .input-area {
         padding: 10px 15px;
         border-top: 1px solid var(--daangn-light-grey);
@@ -116,46 +98,38 @@
         border: none;
         border-radius: 20px;
         padding: 8px 18px;
-        font-size: 15px;
-    }
-    #message:focus {
-        outline: none;
-        box-shadow: inset 0 0 0 1px var(--daangn-orange);
-    }
-    .btn-send {
-        background: none;
-        border: none;
-        color: var(--daangn-orange);
-        font-weight: bold;
-        padding: 5px 10px;
     }
     .btn-plus {
         background: none;
         border: none;
         color: var(--daangn-grey);
-        font-size: 20px;
-        padding: 0;
+        font-size: 24px;
     }
-    
     .plus-menu {
-        border-top: 1px solid var(--daangn-light-grey);
+        display: none;
         background: #fcfcfc;
+        padding: 15px;
+        border-top: 1px solid var(--daangn-light-grey);
+        justify-content: space-around;
     }
     .plus-menu button {
+        background: none;
+        border: none;
         color: #495057;
+        text-align: center;
+        font-size: 13px;
     }
     .plus-menu i {
-        color: #adb5bd !important;
+        display: block;
+        font-size: 24px;
+        color: var(--daangn-orange);
+        margin-bottom: 5px;
     }
-    .plus-menu button:hover i {
-        color: var(--daangn-orange) !important;
-    }
-    
     .unread-badge {
         color: var(--daangn-orange);
-        font-weight: bold;
         font-size: 10px;
-        margin-right: 4px;
+        font-weight: bold;
+        margin-right: 5px;
     }
 </style>
 </head>
@@ -183,7 +157,7 @@
                     </span>
                 </div>
             </div>
-            <a href="/product/detail?productNum=${product.productNum}" class="btn btn-sm btn-outline-secondary">상품보기</a>
+            <a href="/product/detail?productNum=${product.productNum}" class="btn btn-sm btn-outline-secondary" style="border-radius: 8px;">상품보기</a>
         </div>
 
 		<div class="chat-box" id="chatBox">
@@ -224,8 +198,8 @@
 			<button class="btn-plus" onclick="togglePlusMenu()">
 				<i class="bi bi-plus-circle"></i>
 			</button>
-			<input type="text" id="message" class="form-control" placeholder="메시지 보내기">
-			<button class="btn-send" onclick="sendMessage()">보내기</button>
+			<input type="text" id="message" class="form-control" placeholder="메시지 입력..." style="border-radius: 20px; background: #f8f9fa;">
+			<button class="btn btn-orange" style="border-radius: 20px; padding: 6px 15px; font-weight: bold;" onclick="sendMessage()">보내기</button>
 		</div>
 
 		<div class="plus-menu" id="plusMenu">

@@ -207,7 +207,7 @@
             <hr>
             
             <div class="d-flex justify-content-between align-items-center">
-                <div class="text-muted small">채팅 0</div>
+                <div class="text-muted small">채팅 ${chatCount}</div>
                 <c:choose>
                     <c:when test="${product.productStatus eq '판매완료'}">
                         <button class="btn btn-secondary px-5 py-3" disabled>판매가 완료된 상품입니다</button>

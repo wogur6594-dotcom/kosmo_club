@@ -29,4 +29,6 @@ public interface ChatMapper {
 	public int deleteChatRoom(Long chatroomNum);
 
 	public int markAsRead(@Param("chatroomNum") Long chatroomNum, @Param("memberNum") Long memberNum);
+
+	public int countByProductNum(Long productNum) throws Exception;
 }

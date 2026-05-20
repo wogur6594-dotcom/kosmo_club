@@ -141,4 +141,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND "IS_READ" = false
 	</update>
 
+	<select id="countByProductNum" parameterType="long" resultType="int">
+		SELECT COUNT(*) FROM "TB_PRODUCTCHAT" WHERE "PRODUCT_NUM" = #{productNum}
+	</select>
+
 </mapper>
