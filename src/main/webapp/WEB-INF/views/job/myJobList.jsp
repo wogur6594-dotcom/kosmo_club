@@ -100,6 +100,21 @@ body {
 	color: #868e96;
 	padding: 60px 0;
 }
+.btn-back {
+	background-color: #f1ebe6;
+	color: #5f4b3b;
+	border-radius: 12px;
+	font-weight: 800;
+	padding: 8px 18px;
+	border: none;
+	transition: 0.2s;
+}
+
+.btn-back:hover {
+	background-color: #e3d8ce;
+	color: #3f2d20;
+	text-decoration: none;
+}
 </style>
 </head>
 
@@ -110,8 +125,7 @@ body {
 	<div class="manage-box">
 
 		<h1 class="page-title">내 공고 관리</h1>
-		<a href="${pageContext.request.contextPath}/jobBookmark/myList"
-			class="btn btn-outline-warning"> 관심 공고 </a>
+		
 
 		<c:choose>
 			<c:when test="${empty list}">
@@ -181,6 +195,14 @@ body {
 				</c:forEach>
 			</c:otherwise>
 		</c:choose>
+		
+		<div class="text-right mt-4">
+
+	<a href="javascript:history.back();" class="btn btn-back">
+		뒤로가기
+	</a>
+
+</div>
 
 	</div>
 
