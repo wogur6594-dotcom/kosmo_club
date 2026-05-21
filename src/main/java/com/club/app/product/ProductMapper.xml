@@ -88,14 +88,14 @@
 
 	<update id="edit" parameterType="ProductDTO">
 		UPDATE "TB_PRODUCT"
-		SET
-		"PRODUCT_TITLE" = #{productTitle},
-		"PRODUCT_PRICE" = #{productPrice},
-		"PRODUCT_LOCATION" = #{productLocation},
-		"PRODUCT_TYPE" =
-		#{productType},
-		"PRODUCT_CONTENT" = #{productContent},
-		"PRODUCT_STATUS" = #{productStatus}
+		<set>
+			<if test="productTitle != null">"PRODUCT_TITLE" = #{productTitle},</if>
+			<if test="productPrice != null">"PRODUCT_PRICE" = #{productPrice},</if>
+			<if test="productLocation != null">"PRODUCT_LOCATION" = #{productLocation},</if>
+			<if test="productType != null">"PRODUCT_TYPE" = #{productType},</if>
+			<if test="productContent != null">"PRODUCT_CONTENT" = #{productContent},</if>
+			<if test="productStatus != null">"PRODUCT_STATUS" = #{productStatus}</if>
+		</set>
 		WHERE "PRODUCT_NUM" = #{productNum}
 	</update>
 
