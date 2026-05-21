@@ -182,7 +182,7 @@ body {
 	max-width: 460px;
 	width: 100%;
 	object-fit: contain;
-	filter: drop-shadow(0 10px 18px rgba(0,0,0,0.08));
+	filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.08));
 }
 </style>
 </head>
@@ -215,17 +215,18 @@ body {
 									중고거래부터 알바 구인구직, 동호회 모임까지<br> 동네 사람들과 연결되는 생활 서비스를 이용해보세요.
 								</p>
 
-								
+
 
 							</div>
 
 							<!-- 오른쪽 로고 -->
-<div class="col-lg-5 d-flex justify-content-center align-items-center">
+							<div
+								class="col-lg-5 d-flex justify-content-center align-items-center">
 
-	<img src="${pageContext.request.contextPath}/image/logo.png"
-		alt="로고" class="main-logo">
+								<img src="${pageContext.request.contextPath}/image/logo.png"
+									alt="로고" class="main-logo">
 
-</div>
+							</div>
 
 						</div>
 
@@ -238,7 +239,7 @@ body {
 
 						<div class="row">
 
-							<div class="col-md-4 mb-4">
+							<div class="col-lg-3 col-md-6 mb-4">
 								<div class="service-card">
 									<div class="service-icon">
 										<i class="bi bi-bag-check-fill"></i>
@@ -254,7 +255,7 @@ body {
 								</div>
 							</div>
 
-							<div class="col-md-4 mb-4">
+							<div class="col-lg-3 col-md-6 mb-4">
 								<div class="service-card">
 									<div class="service-icon">
 										<i class="bi bi-briefcase-fill"></i>
@@ -270,11 +271,29 @@ body {
 								</div>
 							</div>
 
-							<div class="col-md-4 mb-4">
+
+							<div class="col-lg-3 col-md-6 mb-4">
+								<div class="service-card">
+									<div class="service-icon">
+										<i class="bi bi-cup-hot-fill"></i>
+									</div>
+
+									<h3 class="service-title">동네맛집</h3>
+
+									<p class="service-text">우리 동네 맛집을 공유하고, 가까운 맛집 정보를 확인할 수
+										있습니다.</p>
+
+									<a href="${pageContext.request.contextPath}/restaurant/list"
+										class="service-link"> 동네맛집 페이지 이동 → </a>
+								</div>
+							</div>
+							<div class="col-lg-3 col-md-6 mb-4">
 								<div class="service-card">
 									<div class="service-icon">
 										<i class="bi bi-people-fill"></i>
 									</div>
+
+
 
 									<h3 class="service-title">동호회</h3>
 
@@ -301,7 +320,8 @@ body {
 						</div>
 
 						<div class="info-item mb-0">
-							<i class="bi bi-check-circle-fill"></i> <span>다되면 GPT 넣는정도?</span>
+							<i class="bi bi-check-circle-fill"></i> <span>다되면 GPT
+								넣는정도?</span>
 						</div>
 					</section>
 
@@ -314,6 +334,6 @@ body {
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-<c:import url="/WEB-INF/views/temp/footer.jsp"></c:import>
+	<c:import url="/WEB-INF/views/temp/footer.jsp"></c:import>
 </body>
 </html>

@@ -1,5 +1,7 @@
 package com.club.app.member;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +29,8 @@ import com.club.app.job.JobService;
 import com.club.app.job.apply.JobApplyDTO;
 import com.club.app.job.apply.JobApplyService;
 import com.club.app.notification.NotificationService;
+import com.club.app.restaurant.RestaurantDTO;
+import com.club.app.restaurant.RestaurantService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,6 +51,8 @@ public class MemberController {
 	@Autowired
 	private ClubService clubService;
 
+	private RestaurantService restaurantService;
+
 	@Autowired
 	private ClubBoardService clubBoardService;
 
@@ -61,7 +67,12 @@ public class MemberController {
 
 //필드 추가 끝
 	@GetMapping("/")
-	public String index() throws Exception {
+	public String index(Model model) throws Exception {
+
+		List<RestaurantDTO> popularRestaurantList = restaurantService.popularList();
+
+		model.addAttribute("popularRestaurantList", popularRestaurantList);
+
 		return "index";
 	}
 

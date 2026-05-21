@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.club.app.restaurant.review.RestaurantReviewMapper">
+
+	<insert id="add" parameterType="RestaurantReviewDTO"
+		useGeneratedKeys="true" keyProperty="reviewNum" keyColumn="REVIEW_NUM">
+
+		INSERT INTO "TB_RESTAURANT_REVIEW" (
+		"RESTAURANT_NUM",
+		"MEMBER_NUM",
+		"REVIEW_CONTENTS",
+		"REVIEW_SCORE"
+		) VALUES (
+		#{restaurantNum},
+		#{memberNum},
+		#{reviewContents},
+		#{reviewScore}
+		)
+
+	</insert>
+
+	<select id="list" parameterType="RestaurantReviewDTO"
+		resultType="RestaurantReviewDTO">
+
+		SELECT
+		RR."REVIEW_NUM" AS "reviewNum",
+		RR."RESTAURANT_NUM" AS
+		"restaurantNum",
+		RR."MEMBER_NUM" AS "memberNum",
+		RR."REVIEW_CONTENTS" AS
+		"reviewContents",
+		RR."REVIEW_SCORE" AS "reviewScore",
+		RR."CREATE_DATE"
+		AS "createDate",
+		M."MEMBER_NAME" AS "memberName"
+		FROM
+		"TB_RESTAURANT_REVIEW" RR
+		LEFT JOIN "TB_MEMBER" M
+		ON RR."MEMBER_NUM" =
+		M."MEMBER_NUM"
+		WHERE RR."RESTAURANT_NUM" =
+		#{restaurantNum}
+		ORDER BY
+		RR."REVIEW_NUM" DESC
+
+	</select>
+
+	<delete id="delete" parameterType="RestaurantReviewDTO">
+
+		DELETE FROM
+		"TB_RESTAURANT_REVIEW"
+		WHERE "REVIEW_NUM" = #{reviewNum}
+		AND
+		"MEMBER_NUM" = #{memberNum}
+
+	</delete>
+	<update id="update" parameterType="RestaurantReviewDTO">
+
+		UPDATE "TB_RESTAURANT_REVIEW"
+		SET
+		"REVIEW_CONTENTS" = #{reviewContents},
+		"REVIEW_SCORE" =
+		#{reviewScore}
+		WHERE "REVIEW_NUM" = #{reviewNum}
+		AND "MEMBER_NUM" =
+		#{memberNum}
+
+	</update>
+</mapper>
