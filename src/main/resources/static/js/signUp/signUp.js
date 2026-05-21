@@ -50,6 +50,7 @@ const pw = document.getElementById("pw");
 const pwCheck = document.getElementById("pwCheck");
 const pwInputBox = document.getElementById("pwInputBox");
 const pwStatus = document.getElementById("pwStatus");
+const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/;
 
 let isPwChecked = false;
 
@@ -190,6 +191,12 @@ form.addEventListener("submit", (e) => {
         return;
     }
 
+    if (!pwRegex.test(pw.value)) {
+        alert("비밀번호는 8~16자 영문, 숫자, 특수문자를 포함해야 합니다.");
+        e.preventDefault();
+        return;
+    }
+
     if (!isEmailChecked) {
         alert("이메일 중복체크를 해주세요");
         e.preventDefault();
@@ -197,7 +204,7 @@ form.addEventListener("submit", (e) => {
     }
 
     if (!isEmailAvailable) {
-        alert("이미 사용중인 아이디입니다");
+        alert("이미 사용중인 이메일입니다");
         e.preventDefault();
         return;
     }

@@ -28,6 +28,8 @@ import com.club.app.job.apply.JobApplyDTO;
 import com.club.app.job.apply.JobApplyService;
 import com.club.app.notification.NotificationService;
 
+import org.springframework.dao.DuplicateKeyException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -170,8 +172,23 @@ public class MemberController {
 		memberDTO.setMemberId(loginUser.getMemberId());
 		memberDTO.setMemberNum(loginUser.getMemberNum());
 		memberDTO.setMemberBirth(loginUser.getMemberBirth());
+		memberDTO.setMemberName(loginUser.getMemberName());
 
-		memberService.update(memberDTO, attach, deleteProfile);
+		try {
+			memberService.update(memberDTO, attach, deleteProfile);
+		} catch (DuplicateKeyException e) {
+			if (e.getMessage().contains("MEMBER_PHONE")) {
+				bindingResult.rejectValue("memberPhone", "duplicate", "이미 사용중인 전화번호입니다.");
+			} else if (e.getMessage().contains("MEMBER_EMAIL")) {
+				bindingResult.rejectValue("memberEmail", "duplicate", "이미 사용중인 이메일입니다.");
+			} else {
+				bindingResult.reject("duplicate", "이미 존재하는 정보입니다.");
+			}
+			MemberDTO memberProfile = memberService.detail(memberDTO);
+			memberDTO.setProfile(memberProfile.getProfile());
+			model.addAttribute("update", memberDTO);
+			return "member/update";
+		}
 
 		return "redirect:/member/detail";
 	}
@@ -191,9 +208,13 @@ public class MemberController {
 	public void pwChange() throws Exception {
 	}
 
-	@PostMapping("/member/pwChange")
-	public String pwChange(@ModelAttribute MemberDTO memberDTO, Authentication auth, RedirectAttributes rttr)
+	@PostMapping("pwChange")
+	public String pwChange(@Validated(PasswordGroup.class) @ModelAttribute MemberDTO memberDTO, BindingResult bindingResult, Authentication auth, RedirectAttributes rttr)
 			throws Exception {
+
+		if (bindingResult.hasErrors()) {
+			return "member/pwChange";
+		}
 
 		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
 		memberDTO.setMemberNum(loginUser.getMemberNum());

@@ -3,10 +3,38 @@ const emailMsg = document.getElementById("emailMsg");
 const emailBtn = document.getElementById("emailBtn");
 const form = document.querySelector("form");
 
-let emailOk = true;
+const uPhone = document.getElementById("uPhone");
+const phoneMsg = document.getElementById("phoneMsg");
+const phoneBtn = document.getElementById("phoneBtn");
 
-// 기존 이메일 저장 (내 이메일 체크용 핵심)
+let emailOk = true;
+let phoneOk = true;
+
+// 기존 이메일, 전화번호 저장 (내 정보 체크용 핵심)
 const originEmail = uEmail.value;
+const originPhone = uPhone.value;
+
+uEmail.addEventListener("change", () => {
+    if (uEmail.value === originEmail) {
+        emailOk = true;
+        emailMsg.innerText = "";
+    } else {
+        emailOk = false;
+        emailMsg.innerText = "이메일 중복확인이 필요합니다.";
+        emailMsg.style.color = "red";
+    }
+});
+
+uPhone.addEventListener("change", () => {
+    if (uPhone.value === originPhone) {
+        phoneOk = true;
+        phoneMsg.innerText = "";
+    } else {
+        phoneOk = false;
+        phoneMsg.innerText = "전화번호 중복확인이 필요합니다.";
+        phoneMsg.style.color = "red";
+    }
+});
 
 emailBtn.addEventListener("click", async () => {
 
@@ -43,11 +71,47 @@ emailBtn.addEventListener("click", async () => {
     }
 });
 
+phoneBtn.addEventListener("click", async () => {
+
+    const phone = uPhone.value;
+
+    if (!phone) return;
+
+    if (phone === originPhone) {
+        phoneMsg.innerText = "사용 가능한 전화번호입니다.";
+        phoneMsg.style.color = "blue";
+        phoneOk = true;
+        return;
+    }
+
+    const res = await fetch(`/member/checkPhone?memberPhone=${phone}`);
+    const isDuplicate = await res.json();
+
+    if (isDuplicate) {
+        phoneMsg.innerText = "이미 사용중인 전화번호입니다.";
+        phoneMsg.style.color = "red";
+        phoneOk = false;
+    } else {
+        phoneMsg.innerText = "사용 가능한 전화번호입니다.";
+        phoneMsg.style.color = "green";
+        phoneOk = true;
+    }
+});
+
 form.addEventListener("submit", (e) => {
 
     if (!emailOk) {
         e.preventDefault();
-        alert("이메일을 확인해주세요.");
+        alert("이메일 중복확인을 완료해주세요.");
+        uEmail.focus();
+        return;
+    }
+    
+    if (!phoneOk) {
+        e.preventDefault();
+        alert("전화번호 중복확인을 완료해주세요.");
+        uPhone.focus();
+        return;
     }
 });
 //

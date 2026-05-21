@@ -77,6 +77,8 @@
             <div class="form-group mb-3">
                 <label>새 비밀번호</label>
                 <input type="password" class="form-control" name="memberPw" id="newPw" placeholder="새 비밀번호 입력">
+                <small class="text-muted d-block mt-1">8~16자 영문, 숫자, 특수문자(@,$,!,%,*,#,?,&)를 포함해야 합니다.</small>
+                <form:errors path="memberPw" cssClass="text-danger small mt-1" />
             </div>
             
             <div class="form-group mb-4">

@@ -104,7 +104,13 @@
 
             <div class="form-group mb-3">
                 <label>전화번호</label>
-                <input type="text" class="form-control" name="memberPhone" placeholder="01012341234" value="${update.memberPhone}">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="memberPhone" placeholder="01012341234" value="${update.memberPhone}" id="uPhone">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary btn-sm" type="button" id="phoneBtn">중복확인</button>
+                    </div>
+                </div>
+                <div id="phoneMsg" class="small mt-1"></div>
                 <form:errors path="memberPhone" cssClass="text-danger small mt-1" />
             </div>
 

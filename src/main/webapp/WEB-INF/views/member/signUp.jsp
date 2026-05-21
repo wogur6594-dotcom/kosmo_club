@@ -101,7 +101,8 @@
 
             <div class="form-group mb-3">
                 <label class="small font-weight-bold text-muted">비밀번호</label>
-                <input type="password" class="form-control" name="memberPw" id="pw" placeholder="비밀번호 (8자 이상)">
+                <input type="password" class="form-control" name="memberPw" id="pw" placeholder="비밀번호 입력">
+                <small class="text-muted d-block mt-1">8~16자 영문, 숫자, 특수문자(@,$,!,%,*,#,?,&)를 포함해야 합니다.</small>
                 <form:errors path="memberPw" cssClass="error-msg" />
             </div>
 
