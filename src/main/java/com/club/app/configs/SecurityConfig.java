@@ -57,6 +57,7 @@ public class SecurityConfig {
 
                         "/club/create",
                         "/club/create/**",
+                        "/clubSchedule/list",
                         "/clubSchedule/create",
                         "/clubSchedule/create/**",
                         "/productChat/**"

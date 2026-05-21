@@ -27,8 +27,8 @@ public class ClubScheduleController {
 	private final ClubMemberService clubMemberService;
 
 	@GetMapping("/create")
-	public String create(ClubScheduleDTO clubScheduleDTO, Model model,
-			@AuthenticationPrincipal MemberDTO memberDTO) throws Exception {
+	public String create(ClubScheduleDTO clubScheduleDTO, Model model, @AuthenticationPrincipal MemberDTO memberDTO)
+			throws Exception {
 
 		if (memberDTO == null) {
 			return "redirect:/member/login";
@@ -176,4 +176,13 @@ public class ClubScheduleController {
 
 		return "redirect:/club/detail?clubNum=" + check.getClubNum();
 	}
+
+	@GetMapping("totalList")
+	public String totalList(Model model) throws Exception {
+
+		model.addAttribute("scheduleList", clubScheduleService.totalList());
+
+		return "clubSchedule/totalList";
+	}
+
 }
