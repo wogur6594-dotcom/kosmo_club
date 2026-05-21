@@ -19,7 +19,7 @@
 					</div>
 				</li>
 				<li class="nav-item mr-4"><a class="nav-link font-weight-bold" href="/club/list" style="color: #a35400;"> 동호회 </a></li>
-				<li class="nav-item mr-4"><a class="nav-link font-weight-bold" href="#" style="color: #a35400;"> ???? </a></li>
+				<li class="nav-item mr-4"><a class="nav-link font-weight-bold" href="/restaurant/list" style="color: #a35400;"> 동네맛집 </a></li>
 				<li class="nav-item"><a class="nav-link font-weight-bold" href="/job/list" style="color: #a35400;"> 동네알바 </a></li>
 			</ul>
 

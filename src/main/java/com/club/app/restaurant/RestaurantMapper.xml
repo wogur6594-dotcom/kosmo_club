@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.club.app.restaurant.RestaurantMapper">
+
+	<resultMap id="restaurantFileResultMap" type="RestaurantDTO">
+
+		<id column="RESTAURANT_NUM" property="restaurantNum" />
+
+		<result column="MEMBER_NUM" property="memberNum" />
+		<result column="RESTAURANT_NAME" property="restaurantName" />
+		<result column="RESTAURANT_CATEGORY"
+			property="restaurantCategory" />
+		<result column="RESTAURANT_LOCATION"
+			property="restaurantLocation" />
+		<result column="RESTAURANT_DETAIL_ADDRESS"
+			property="restaurantDetailAddress" />
+		<result column="RESTAURANT_CONTENTS"
+			property="restaurantContents" />
+		<result column="RESTAURANT_PHONE" property="restaurantPhone" />
+		<result column="RESTAURANT_TIME" property="restaurantTime" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="HIT" property="hit" />
+
+		<result column="MEMBER_NAME" property="memberName" />
+
+		<result column="avgScore" property="avgScore" />
+		<result column="reviewCount" property="reviewCount" />
+
+		<collection property="fileDTOs" ofType="RestaurantFileDTO">
+			<id column="FILE_NUM" property="fileNum" />
+			<result column="FILE_NAME" property="fileName" />
+			<result column="ORI_NAME" property="oriName" />
+			<result column="RESTAURANT_NUM" property="restaurantNum" />
+		</collection>
+
+	</resultMap>
+
+	<insert id="add" parameterType="RestaurantDTO"
+		useGeneratedKeys="true" keyProperty="restaurantNum"
+		keyColumn="RESTAURANT_NUM">
+
+		INSERT INTO "TB_RESTAURANT" (
+		"MEMBER_NUM",
+		"RESTAURANT_NAME",
+		"RESTAURANT_CATEGORY",
+		"RESTAURANT_LOCATION",
+		"RESTAURANT_DETAIL_ADDRESS",
+		"RESTAURANT_CONTENTS",
+		"RESTAURANT_PHONE",
+		"RESTAURANT_TIME"
+		) VALUES (
+		#{memberNum},
+		#{restaurantName},
+		#{restaurantCategory},
+		#{restaurantLocation},
+		#{restaurantDetailAddress},
+		#{restaurantContents},
+		#{restaurantPhone},
+		#{restaurantTime}
+		)
+
+	</insert>
+
+	<insert id="addFile" parameterType="RestaurantFileDTO">
+
+		INSERT INTO
+		"TB_RESTAURANT_FILE" (
+		"RESTAURANT_NUM",
+		"FILE_NAME",
+		"ORI_NAME"
+		) VALUES
+		(
+		#{restaurantNum},
+		#{fileName},
+		#{oriName}
+		)
+
+	</insert>
+
+	<select id="list" parameterType="Pager"
+		resultMap="restaurantFileResultMap">
+
+		SELECT
+		R.*,
+		M."MEMBER_NAME",
+		COALESCE(AVG(RR."REVIEW_SCORE"), 0) AS
+		"avgScore",
+		COUNT(RR."REVIEW_NUM") AS "reviewCount",
+		F."FILE_NUM",
+		F."FILE_NAME",
+		F."ORI_NAME"
+		FROM "TB_RESTAURANT" R
+
+		LEFT JOIN "TB_MEMBER"
+		M
+		ON R."MEMBER_NUM" =
+		M."MEMBER_NUM"
+
+		LEFT JOIN (
+		SELECT DISTINCT ON
+		("RESTAURANT_NUM")
+		"FILE_NUM",
+		"RESTAURANT_NUM",
+		"FILE_NAME",
+		"ORI_NAME"
+		FROM "TB_RESTAURANT_FILE"
+		ORDER BY "RESTAURANT_NUM", "FILE_NUM" ASC
+		) F
+		ON R."RESTAURANT_NUM" =
+		F."RESTAURANT_NUM"
+
+		LEFT JOIN
+		"TB_RESTAURANT_REVIEW" RR
+		ON
+		R."RESTAURANT_NUM" = RR."RESTAURANT_NUM"
+
+		<where>
+			<if test="search != null and search != ''">
+				AND (
+				R."RESTAURANT_NAME" ILIKE '%' || #{search} || '%'
+				OR
+				R."RESTAURANT_LOCATION" ILIKE '%' || #{search} || '%'
+				OR
+				R."RESTAURANT_CATEGORY" ILIKE '%' || #{search} || '%'
+				)
+			</if>
+		</where>
+
+		GROUP BY
+		R."RESTAURANT_NUM",
+		M."MEMBER_NAME",
+		F."FILE_NUM",
+		F."FILE_NAME",
+		F."ORI_NAME"
+
+		ORDER BY R."RESTAURANT_NUM" DESC
+
+		LIMIT
+		#{perPage} OFFSET #{startNum}
+
+	</select>
+
+	<select id="detail" parameterType="RestaurantDTO"
+		resultMap="restaurantFileResultMap">
+
+		SELECT
+		R.*,
+		M."MEMBER_NAME",
+
+		COALESCE(AVG(RR."REVIEW_SCORE"),
+		0) AS "avgScore",
+
+		COUNT(RR."REVIEW_NUM") AS "reviewCount",
+
+		F."FILE_NUM",
+		F."FILE_NAME",
+		F."ORI_NAME"
+
+		FROM "TB_RESTAURANT" R
+
+		LEFT JOIN
+		"TB_MEMBER" M
+		ON R."MEMBER_NUM" = M."MEMBER_NUM"
+
+		LEFT JOIN
+		"TB_RESTAURANT_FILE" F
+		ON R."RESTAURANT_NUM" = F."RESTAURANT_NUM"
+
+		LEFT
+		JOIN "TB_RESTAURANT_REVIEW" RR
+		ON R."RESTAURANT_NUM" =
+		RR."RESTAURANT_NUM"
+
+		WHERE R."RESTAURANT_NUM" = #{restaurantNum}
+
+		GROUP BY
+		R."RESTAURANT_NUM",
+		M."MEMBER_NAME",
+		F."FILE_NUM",
+		F."FILE_NAME",
+		F."ORI_NAME"
+
+	</select>
+
+	<select id="getCount" parameterType="Pager" resultType="long">
+
+		SELECT COUNT(*)
+		FROM "TB_RESTAURANT" R
+
+		<where>
+			<if test="search != null and search != ''">
+				AND (
+				R."RESTAURANT_NAME" ILIKE '%' || #{search} || '%'
+				OR
+				R."RESTAURANT_LOCATION" ILIKE '%' || #{search} || '%'
+				OR
+				R."RESTAURANT_CATEGORY" ILIKE '%' || #{search} || '%'
+				)
+			</if>
+		</where>
+
+	</select>
+
+	<insert id="addLike" parameterType="RestaurantLikeDTO">
+
+		INSERT INTO
+		"TB_RESTAURANT_LIKE" (
+		"RESTAURANT_NUM",
+		"MEMBER_NUM"
+		) VALUES (
+		#{restaurantNum},
+		#{memberNum}
+		)
+
+	</insert>
+
+	<delete id="deleteLike" parameterType="RestaurantLikeDTO">
+
+		DELETE FROM
+		"TB_RESTAURANT_LIKE"
+		WHERE "RESTAURANT_NUM" = #{restaurantNum}
+		AND
+		"MEMBER_NUM" = #{memberNum}
+
+	</delete>
+
+	<select id="checkLike" parameterType="RestaurantLikeDTO"
+		resultType="int">
+
+		SELECT COUNT(*)
+		FROM "TB_RESTAURANT_LIKE"
+		WHERE
+		"RESTAURANT_NUM" = #{restaurantNum}
+		AND "MEMBER_NUM" = #{memberNum}
+
+	</select>
+
+	<select id="getLikeCount" parameterType="RestaurantDTO"
+		resultType="long">
+
+		SELECT COUNT(*)
+		FROM "TB_RESTAURANT_LIKE"
+		WHERE
+		"RESTAURANT_NUM" = #{restaurantNum}
+
+	</select>
+
+	<select id="popularList" resultType="RestaurantDTO">
+
+		SELECT
+		R."RESTAURANT_NUM" AS
+		"restaurantNum",
+		R."RESTAURANT_NAME" AS "restaurantName",
+		R."RESTAURANT_CATEGORY" AS "restaurantCategory",
+		R."RESTAURANT_LOCATION" AS "restaurantLocation",
+		R."RESTAURANT_SCORE"
+		AS "restaurantScore",
+
+		(
+		SELECT COUNT(*)
+		FROM "TB_RESTAURANT_LIKE" RL
+		WHERE RL."RESTAURANT_NUM" = R."RESTAURANT_NUM"
+		) AS "likeCount",
+
+		(
+		SELECT RF."FILE_NAME"
+		FROM "TB_RESTAURANT_FILE" RF
+		WHERE
+		RF."RESTAURANT_NUM" = R."RESTAURANT_NUM"
+		ORDER BY RF."FILE_NUM" ASC
+		LIMIT 1
+		) AS "fileName"
+
+		FROM "TB_RESTAURANT" R
+
+		ORDER BY "likeCount" DESC,
+		R."RESTAURANT_SCORE" DESC NULLS LAST
+
+		LIMIT 5
+
+	</select>
+
+	<update id="updateHit" parameterType="RestaurantDTO">
+
+		UPDATE "TB_RESTAURANT"
+		SET
+		"HIT" = COALESCE("HIT", 0) + 1
+		WHERE "RESTAURANT_NUM" =
+		#{restaurantNum}
+
+	</update>
+
+	<update id="update" parameterType="RestaurantDTO">
+
+		UPDATE "TB_RESTAURANT"
+		SET
+		"RESTAURANT_NAME" = #{restaurantName},
+		"RESTAURANT_CATEGORY" =
+		#{restaurantCategory},
+		"RESTAURANT_LOCATION" = #{restaurantLocation},
+		"RESTAURANT_DETAIL_ADDRESS" = #{restaurantDetailAddress},
+		"RESTAURANT_CONTENTS" = #{restaurantContents},
+		"RESTAURANT_PHONE" =
+		#{restaurantPhone},
+		"RESTAURANT_TIME" = #{restaurantTime}
+		WHERE
+		"RESTAURANT_NUM" = #{restaurantNum}
+		AND "MEMBER_NUM" = #{memberNum}
+
+	</update>
+
+	<delete id="delete" parameterType="RestaurantDTO">
+
+		DELETE FROM "TB_RESTAURANT"
+		WHERE "RESTAURANT_NUM" = #{restaurantNum}
+		AND "MEMBER_NUM" =
+		#{memberNum}
+
+	</delete>
+
+	<select id="fileDetail" parameterType="RestaurantFileDTO"
+		resultType="RestaurantFileDTO">
+
+		SELECT
+		"FILE_NUM" AS "fileNum",
+		"RESTAURANT_NUM" AS
+		"restaurantNum",
+		"FILE_NAME" AS "fileName",
+		"ORI_NAME" AS "oriName"
+		FROM
+		"TB_RESTAURANT_FILE"
+		WHERE "FILE_NUM" = #{fileNum}
+
+	</select>
+
+	<delete id="deleteFile" parameterType="RestaurantFileDTO">
+
+		DELETE FROM
+		"TB_RESTAURANT_FILE"
+		WHERE "FILE_NUM" = #{fileNum}
+
+	</delete>
+
+	<select id="getReviewSummary" resultType="RestaurantDTO"
+		parameterType="RestaurantDTO">
+
+		SELECT
+
+		COALESCE(AVG("REVIEW_SCORE"), 0) AS "avgScore",
+
+		COUNT(*) AS
+		"reviewCount"
+
+		FROM "TB_RESTAURANT_REVIEW"
+
+		WHERE
+		"RESTAURANT_NUM" = #{restaurantNum}
+
+	</select>
+
+</mapper>

@@ -52,6 +52,9 @@ public class SecurityConfig {
                         "/job/myJobList",
                         "/jobApply/**",
 
+                        "/restaurant/create",
+                        "/restaurant/create/**",
+
                         "/club/create",
                         "/club/create/**",
                         "/clubSchedule/create",
