@@ -62,8 +62,8 @@ public class MemberDTO implements UserDetails {
 	@NotBlank(message = "아이디를 입력하세요", groups = {UpdateGroup.class, SignUpGroup.class})
 	@Pattern(regexp = "^[a-zA-Z0-9]+$", message = "영어와 숫자만 가능합니다", groups = {UpdateGroup.class, SignUpGroup.class})
 	private String memberId;
-	@NotBlank(message = "비밀번호를 입력하세요", groups = SignUpGroup.class)
-//	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])$", message = "비밀번호 형식이 올바르지 않습니다")
+	@NotBlank(message = "비밀번호를 입력하세요", groups = {SignUpGroup.class, PasswordGroup.class})
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,16}$", message = "비밀번호는 8~16자 영문, 숫자, 특수문자(@,$,!,%,*,#,?,&)를 포함해야 합니다", groups = {SignUpGroup.class, PasswordGroup.class})
 	private String memberPw;
 
 	private MemberProfileDTO profile;

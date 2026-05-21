@@ -35,25 +35,37 @@ style.innerHTML = `
 
 document.head.appendChild(style);
 
-const checkboxes = document.querySelectorAll(
-    'input[name="productType"]'
-);
-
-checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-        checkbox.form.submit();
-    });
-});
-
 const filters = document.querySelectorAll(
     'input[name="productType"], input[name="productLocation"]'
 );
 
 filters.forEach((filter) => {
     filter.addEventListener("change", () => {
-        filter.form.submit();
+        resetAndLoad();
     });
 });
+
+// 검색 처리 (엔터 키)
+document.querySelector('input[name="search"]').addEventListener("keypress", (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        resetAndLoad();
+    }
+});
+
+// 검색 버튼 처리
+document.querySelector("form button[type='submit']").addEventListener("click", (e) => {
+    e.preventDefault();
+    resetAndLoad();
+});
+
+function resetAndLoad() {
+    $("#productContainer").empty();
+    page = 1;
+    loading = false;
+    end = false;
+    loadMore();
+}
 
 // ---------------------------------무한 스크롤--------------------------------------------
 let page = 1;
@@ -66,12 +78,17 @@ function loadMore() {
 
     loading = true;
 
+    // 현재 선택된 필터값들 가져오기
+    const formData = $("form").serializeArray();
+    const data = { page: page };
+    formData.forEach(item => {
+        data[item.name] = item.value;
+    });
+
     $.ajax({
         url: "/product/myListAjax",
         type: "GET",
-        data: {
-            page: page
-        },
+        data: data,
         success: function (html) {
 
             const data = $.trim(html);

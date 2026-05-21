@@ -45,12 +45,14 @@ public class ProductChatHandler extends TextWebSocketHandler {
 		String chatroomNumStr = (String) attrs.get("chatroomNum");
 
 		Authentication auth = (Authentication) session.getPrincipal();
-		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
-		Long memberNum = loginUser.getMemberNum();
+		if (auth != null && auth.getPrincipal() instanceof MemberDTO) {
+			MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+			Long memberNum = loginUser.getMemberNum();
 
-		// 사용자별 세션 추가
-		userSessions.putIfAbsent(memberNum, new CopyOnWriteArrayList<>());
-		userSessions.get(memberNum).add(session);
+			// 사용자별 세션 추가
+			userSessions.putIfAbsent(memberNum, new CopyOnWriteArrayList<>());
+			userSessions.get(memberNum).add(session);
+		}
 
 		// 방별 세션 추가 (숫자일 때만)
 		if (chatroomNumStr != null && !chatroomNumStr.equals("list")) {
@@ -100,10 +102,13 @@ public class ProductChatHandler extends TextWebSocketHandler {
 		List<WebSocketSession> roomSess = roomSessions.get(roomNum);
 		if (roomSess != null) {
 			for (WebSocketSession s : roomSess) {
-				MemberDTO user = (MemberDTO) ((Authentication) s.getPrincipal()).getPrincipal();
-				if (!user.getMemberNum().equals(loginUser.getMemberNum())) {
-					isOtherInRoom = true;
-					break;
+				Authentication authS = (Authentication) s.getPrincipal();
+				if(authS != null && authS.getPrincipal() instanceof MemberDTO) {
+					MemberDTO user = (MemberDTO) authS.getPrincipal();
+					if (!user.getMemberNum().equals(loginUser.getMemberNum())) {
+						isOtherInRoom = true;
+						break;
+					}
 				}
 			}
 		}
@@ -165,15 +170,17 @@ public class ProductChatHandler extends TextWebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
 
 		Authentication auth = (Authentication) session.getPrincipal();
-		MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
-		Long memberNum = loginUser.getMemberNum();
+		if (auth != null && auth.getPrincipal() instanceof MemberDTO) {
+			MemberDTO loginUser = (MemberDTO) auth.getPrincipal();
+			Long memberNum = loginUser.getMemberNum();
 
-		// 사용자 세션 제거
-		List<WebSocketSession> uSessions = userSessions.get(memberNum);
-		if (uSessions != null) {
-			uSessions.remove(session);
-			if (uSessions.isEmpty())
-				userSessions.remove(memberNum);
+			// 사용자 세션 제거
+			List<WebSocketSession> uSessions = userSessions.get(memberNum);
+			if (uSessions != null) {
+				uSessions.remove(session);
+				if (uSessions.isEmpty())
+					userSessions.remove(memberNum);
+			}
 		}
 
 		// 방 세션 제거
