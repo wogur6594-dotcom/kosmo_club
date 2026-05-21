@@ -1,0 +1,111 @@
+.total-schedule-page .schedule-card {
+	margin-bottom: 24px;
+}
+
+.total-schedule-page .schedule-title {
+	font-size: 24px;
+}
+
+.total-schedule-page .schedule-info {
+	font-size: 15px;
+	line-height: 1.7;
+}
+
+.schedule-list-box {
+	max-width: 950px;
+	margin: 50px auto;
+	background-color: white;
+	border-radius: 18px;
+	padding: 35px;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.page-title {
+	font-weight: 800;
+	color: #3f2d20;
+	margin-bottom: 25px;
+}
+
+.schedule-card {
+	border: 1px solid #ead8c7;
+	border-radius: 16px;
+	padding: 22px;
+	margin-bottom: 18px;
+	background-color: #fffdfb;
+}
+
+.schedule-title {
+	font-size: 21px;
+	font-weight: 800;
+	color: #3f2d20;
+	text-decoration: none;
+}
+
+.schedule-title:hover {
+	color: #a35400;
+	text-decoration: none;
+}
+
+.schedule-info {
+	margin-top: 12px;
+	color: #6d5b4d;
+	font-size: 15px;
+}
+
+.btn-gray {
+	background-color: #8c7b6d;
+	color: white;
+	border-radius: 12px;
+	font-weight: 700;
+	padding: 8px 18px;
+}
+
+.btn-gray:hover {
+	background-color: #77685d;
+	color: white;
+}
+
+.empty-box {
+	text-align: center;
+	padding: 60px 20px;
+	color: #999;
+	font-size: 17px;
+}
+
+.total-schedule-page .schedule-card {
+	transition: 0.2s;
+	cursor: pointer;
+}
+
+.total-schedule-page .schedule-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 10px 24px rgba(120, 80, 40, 0.12);
+}
+
+.total-schedule-page .club-name-badge {
+	display: inline-block;
+	background-color: #fff3e6;
+	color: #a35400;
+	font-size: 13px;
+	font-weight: 800;
+	padding: 6px 12px;
+	border-radius: 999px;
+	margin-bottom: 14px;
+}
+
+.total-schedule-page .schedule-date-line {
+	border-top: 1px dashed #ead8c8;
+	margin-top: 14px;
+	padding-top: 14px;
+}
+
+.schedule-card-link {
+	text-decoration: none;
+	color: inherit;
+	display: block;
+}
+
+.schedule-card-link:hover {
+	text-decoration: none;
+	color: inherit;
+}

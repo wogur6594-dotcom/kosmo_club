@@ -1,0 +1,161 @@
+.custom-topbar {
+	background-color: #fff7f3;
+	border-bottom: 1px solid #d8cfc8;
+	padding: 10px 0;
+}
+
+.topbar-brand {
+	color: #a35400 !important;
+	font-size: 31px;
+	font-weight: 900;
+	letter-spacing: -0.5px;
+}
+
+.topbar-brand:hover {
+	color: #8b4700 !important;
+}
+
+.topbar-menu-link {
+	color: #a35400 !important;
+	font-weight: 800;
+	font-size: 16px;
+	padding: 8px 0;
+}
+
+.topbar-menu-link:hover {
+	color: #5a3d2b !important;
+}
+
+.topbar-dropdown {
+	border-radius: 14px;
+	border: 1px solid #ead8c8;
+	box-shadow: 0 8px 20px rgba(120, 80, 40, 0.12);
+	padding: 8px;
+}
+
+.topbar-dropdown .dropdown-item {
+	border-radius: 10px;
+	font-weight: 700;
+	color: #5a3d2b;
+	padding: 9px 14px;
+}
+
+.topbar-dropdown .dropdown-item:hover {
+	background-color: #fff0e4;
+	color: #a35400;
+}
+
+.topbar-auth-area {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.topbar-btn {
+	background-color: #a35400;
+	color: white !important;
+	border-radius: 12px;
+	padding: 7px 18px;
+	font-size: 14px;
+	font-weight: 800;
+	text-decoration: none;
+	border: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 34px;
+}
+
+.topbar-btn:hover {
+	background-color: #8b4700;
+	color: white !important;
+	text-decoration: none;
+}
+
+.topbar-alert-btn {
+	background-color: white;
+	color: #a35400;
+	border: 1px solid #a35400;
+	border-radius: 12px;
+	padding: 7px 18px;
+	font-size: 14px;
+	font-weight: 800;
+	min-height: 34px;
+}
+
+.topbar-alert-btn:hover {
+	background-color: #fff0e4;
+	color: #8b4700;
+}
+
+.topbar-notification-menu {
+	width: 340px;
+	max-height: 420px;
+	overflow-y: auto;
+	border-radius: 16px;
+	border: 1px solid #ead8c8;
+	box-shadow: 0 8px 24px rgba(120, 80, 40, 0.14);
+	padding: 10px;
+}
+
+.topbar-notification-item {
+	border-radius: 12px;
+	padding: 12px;
+	background-color: #fff8f1;
+	border: 1px solid #ffcfaa;
+	white-space: normal;
+	margin-bottom: 8px;
+}
+
+.topbar-notification-item:hover {
+	background-color: #fff0e4;
+}
+
+.topbar-notification-text {
+	font-size: 14px;
+	color: #3f2d20;
+	font-weight: 700;
+	line-height: 1.5;
+}
+
+.topbar-notification-date {
+	font-size: 12px;
+	color: #999;
+	margin-top: 6px;
+}
+
+.topbar-notification-more {
+	color: #a35400 !important;
+	font-weight: 800;
+	border-radius: 10px;
+}
+
+.topbar-notification-more:hover {
+	background-color: #fff0e4;
+	color: #8b4700 !important;
+}
+
+@media ( max-width : 991px) {
+	.navbar-nav {
+		margin-left: 0 !important;
+		margin-top: 14px;
+	}
+	.topbar-auth-area {
+		margin-top: 14px;
+		flex-wrap: wrap;
+	}
+	.topbar-btn, .topbar-alert-btn {
+		width: auto;
+	}
+}
+
+.topbar-user-name {
+	background-color: #fff0e4;
+	color: #5a3d2b;
+	border: 1px solid #ead8c8;
+	border-radius: 999px;
+	padding: 7px 15px;
+	font-size: 14px;
+	font-weight: 800;
+	white-space: nowrap;
+}

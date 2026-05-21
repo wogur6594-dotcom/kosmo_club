@@ -17,6 +17,8 @@ public class RestaurantDTO {
 	private Long restaurantNum;
 	private Long memberNum;
 
+	private Double restaurantLat;
+	private Double restaurantLng;
 	private String restaurantName;
 	private String restaurantCategory;
 	private String restaurantLocation;

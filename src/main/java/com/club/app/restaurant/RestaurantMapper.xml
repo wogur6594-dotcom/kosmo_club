@@ -23,6 +23,8 @@
 		<result column="RESTAURANT_TIME" property="restaurantTime" />
 		<result column="CREATE_DATE" property="createDate" />
 		<result column="HIT" property="hit" />
+		<result column="RESTAURANT_LAT" property="restaurantLat" />
+		<result column="RESTAURANT_LNG" property="restaurantLng" />
 
 		<result column="MEMBER_NAME" property="memberName" />
 
@@ -50,6 +52,8 @@
 		"RESTAURANT_DETAIL_ADDRESS",
 		"RESTAURANT_CONTENTS",
 		"RESTAURANT_PHONE",
+		"RESTAURANT_LAT",
+		"RESTAURANT_LNG",
 		"RESTAURANT_TIME"
 		) VALUES (
 		#{memberNum},
@@ -59,6 +63,8 @@
 		#{restaurantDetailAddress},
 		#{restaurantContents},
 		#{restaurantPhone},
+		#{restaurantLat},
+		#{restaurantLng},
 		#{restaurantTime}
 		)
 
@@ -305,10 +311,14 @@
 		"RESTAURANT_CONTENTS" = #{restaurantContents},
 		"RESTAURANT_PHONE" =
 		#{restaurantPhone},
-		"RESTAURANT_TIME" = #{restaurantTime}
+		"RESTAURANT_LAT" = #{restaurantLat},
+		"RESTAURANT_LNG" = #{restaurantLng},
+		"RESTAURANT_TIME" =
+		#{restaurantTime}
 		WHERE
 		"RESTAURANT_NUM" = #{restaurantNum}
-		AND "MEMBER_NUM" = #{memberNum}
+		AND
+		"MEMBER_NUM" = #{memberNum}
 
 	</update>
 

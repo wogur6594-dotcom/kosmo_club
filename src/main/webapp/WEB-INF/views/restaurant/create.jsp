@@ -14,7 +14,8 @@
 <link rel="stylesheet" href="/css/restaurant.css">
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8e471a42003e30980f383ed3f0acf423&libraries=services"></script>
 </head>
 
 <body>
@@ -47,6 +48,8 @@
 						<option value="일식">일식</option>
 						<option value="양식">양식</option>
 						<option value="카페">카페</option>
+						<option value="디저트">디저트</option>
+						<option value="술집">술집</option>
 						<option value="치킨">치킨</option>
 						<option value="분식">분식</option>
 
@@ -60,7 +63,11 @@
 					<div class="address-row">
 						<input type="text" id="restaurantLocation"
 							name="restaurantLocation" class="form-control" readonly required
-							value="${dto.restaurantLocation}">
+							value="${dto.restaurantLocation}"> <input type="hidden"
+							name="restaurantLat" id="restaurantLat"
+							value="${dto.restaurantLat}"> <input type="hidden"
+							name="restaurantLng" id="restaurantLng"
+							value="${dto.restaurantLng}">
 
 						<button type="button" class="btn btn-brown"
 							onclick="searchAddress()">주소 검색</button>
@@ -125,10 +132,15 @@
 	</div>
 
 	<script>
+		const geocoder = new kakao.maps.services.Geocoder();
+		const form = document.querySelector("form");
+
 		function searchAddress() {
+
 			new daum.Postcode(
 					{
 						oncomplete : function(data) {
+
 							let address = "";
 
 							if (data.userSelectedType === "R") {
@@ -138,11 +150,51 @@
 							}
 
 							document.querySelector("#restaurantLocation").value = address;
+
+							geocoder
+									.addressSearch(
+											address,
+											function(result, status) {
+
+												if (status === kakao.maps.services.Status.OK) {
+
+													document
+															.querySelector("#restaurantLat").value = result[0].y;
+													document
+															.querySelector("#restaurantLng").value = result[0].x;
+
+													console
+															.log(
+																	"LAT:",
+																	document
+																			.querySelector("#restaurantLat").value);
+
+													console
+															.log(
+																	"LNG:",
+																	document
+																			.querySelector("#restaurantLng").value);
+												}
+											});
+
 							document.querySelector("#restaurantDetailAddress")
 									.focus();
 						}
 					}).open();
 		}
+
+		form.addEventListener("submit", function(e) {
+
+			const lat = document.querySelector("#restaurantLat").value;
+			const lng = document.querySelector("#restaurantLng").value;
+
+			if (!lat || !lng) {
+
+				e.preventDefault();
+
+				alert("주소 검색을 다시 진행해주세요.");
+			}
+		});
 	</script>
 
 </body>

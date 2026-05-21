@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<title>비밀번호 변경 - 당근 느낌</title>
+<title>비밀번호 변경</title>
 <style>
     :root {
         --daangn-orange: #ff8a3d;

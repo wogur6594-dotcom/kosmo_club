@@ -17,4 +17,6 @@ public interface ClubScheduleMapper {
 
 	public int update(ClubScheduleDTO clubScheduleDTO) throws Exception;
 
+	public List<ClubScheduleDTO> totalList() throws Exception;
+
 }

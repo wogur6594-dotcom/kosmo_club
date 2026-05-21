@@ -34,4 +34,8 @@ public class ClubScheduleService {
 		return clubScheduleMapper.update(clubScheduleDTO);
 	}
 
+	public List<ClubScheduleDTO> totalList() throws Exception {
+		return clubScheduleMapper.totalList();
+	}
+
 }

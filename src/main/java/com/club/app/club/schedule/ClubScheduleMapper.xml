@@ -85,7 +85,8 @@
 		UPDATE "TB_CLUB_SCHEDULE"
 		SET
 		"SCHEDULE_TITLE" = #{scheduleTitle},
-		"SCHEDULE_CONTENTS" = #{scheduleContents},
+		"SCHEDULE_CONTENTS" =
+		#{scheduleContents},
 		"SCHEDULE_LOCATION" = #{scheduleLocation},
 		"SCHEDULE_START" = #{scheduleStart},
 		"SCHEDULE_END" = #{scheduleEnd},
@@ -93,5 +94,27 @@
 		WHERE "SCHEDULE_NUM" = #{scheduleNum}
 
 	</update>
+
+	<select id="totalList" resultType="ClubScheduleDTO">
+
+		SELECT
+		CS."SCHEDULE_NUM" AS "scheduleNum",
+		CS."CLUB_NUM" AS "clubNum",
+		CS."SCHEDULE_TITLE" AS "scheduleTitle",
+		CS."SCHEDULE_CONTENTS" AS "scheduleContents",
+		CS."SCHEDULE_LOCATION" AS "scheduleLocation",
+		CS."SCHEDULE_START" AS "scheduleStart",
+		CS."SCHEDULE_END" AS "scheduleEnd",
+		CS."SCHEDULE_MAX" AS "scheduleMax",
+		C."CLUB_NAME" AS "clubName"
+
+		FROM "TB_CLUB_SCHEDULE" CS
+
+		JOIN "TB_CLUB" C
+		ON CS."CLUB_NUM" = C."CLUB_NUM"
+
+		ORDER BY CS."SCHEDULE_START" ASC
+
+	</select>
 
 </mapper>

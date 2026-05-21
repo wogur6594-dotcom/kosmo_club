@@ -15,10 +15,15 @@
 
 <link rel="stylesheet" href="/css/restaurant.css">
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=여기에_JavaScript키&libraries=services"></script>
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8e471a42003e30980f383ed3f0acf423&libraries=services"></script>
 </head>
 
 <body>
+	<c:if test="${not empty message}">
+		<script>
+			alert("${message}");
+		</script>
+	</c:if>
 
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
@@ -57,26 +62,51 @@
 
 			<div class="detail-body">
 
-				<div class="detail-top">
-					<h1 class="detail-title">${dto.restaurantName}</h1>
-					<div class="detail-category">${dto.restaurantCategory}</div>
-				</div>
+				<div class="detail-header-card">
 
-				<div class="detail-info">
+					<div class="detail-title-row">
 
-					<div class="detail-item">📍 ${dto.restaurantLocation}
-						${dto.restaurantDetailAddress}</div>
-					<div class="detail-item">📞 ${dto.restaurantPhone}</div>
-					<div class="detail-item">🕒 ${dto.restaurantTime}</div>
+						<div>
 
-					<div class="detail-item review-summary">
-						⭐ <span class="avg-score"> <fmt:formatNumber
-								value="${dto.avgScore}" pattern="0.0" />
-						</span> / 리뷰 <span class="review-count">${dto.reviewCount}</span>개
+							<h1 class="detail-title">${dto.restaurantName}</h1>
+
+							<div class="detail-category category-${dto.restaurantCategory}">
+								${dto.restaurantCategory}</div>
+
+						</div>
+
+						<div class="detail-save-badge">🍴 맛집</div>
+
 					</div>
 
-					<div class="detail-item">작성자 : ${dto.memberName}</div>
-					<div class="detail-item">👀 조회수 ${dto.hit}</div>
+					<div class="detail-meta-row">
+
+						<div class="detail-meta-badge score">
+							⭐ <span class="avg-score"> <fmt:formatNumber
+									value="${dto.avgScore}" pattern="0.0" />
+							</span>
+						</div>
+
+						<div class="detail-meta-badge">
+							📝 <span class="review-count">${dto.reviewCount}</span>
+						</div>
+
+						<div class="detail-meta-badge">👀 ${dto.hit}</div>
+
+					</div>
+
+					<div class="detail-info-list">
+
+						<div class="detail-info-item">📍 ${dto.restaurantLocation}
+							${dto.restaurantDetailAddress}</div>
+
+						<div class="detail-info-item">📞 ${dto.restaurantPhone}</div>
+
+						<div class="detail-info-item">🕒 ${dto.restaurantTime}</div>
+
+						<div class="detail-info-item">작성자 : ${dto.memberName}</div>
+
+					</div>
 
 				</div>
 
@@ -118,111 +148,128 @@
 
 					<h3 class="review-title">리뷰</h3>
 
+					<div class="review-sort-row">
+
+						<button type="button" class="review-sort-btn active"
+							data-sort="latest">최신순</button>
+
+						<button type="button" class="review-sort-btn" data-sort="high">
+							평점 높은순</button>
+
+						<button type="button" class="review-sort-btn" data-sort="low">
+							평점 낮은순</button>
+
+					</div>
+
 					<form id="reviewForm" action="/restaurantReview/add" method="post"
 						class="review-form">
 
-						<input type="hidden" name="restaurantNum"
-							value="${dto.restaurantNum}">
 
-						<div class="form-group">
+						<div class="review-list">
 
-							<label>평점</label>
+							<c:forEach items="${reviewList}" var="review">
 
-							<div class="star-select">
+								<div class="review-card" id="review-${review.reviewNum}"
+									data-num="${review.reviewNum}"
+									data-score="${review.reviewScore}">
 
-								<label> <input type="radio" name="reviewScore" value="5"
-									checked> <span>⭐⭐⭐⭐⭐</span>
-								</label> <label> <input type="radio" name="reviewScore"
-									value="4"> <span>⭐⭐⭐⭐</span>
-								</label> <label> <input type="radio" name="reviewScore"
-									value="3"> <span>⭐⭐⭐</span>
-								</label> <label> <input type="radio" name="reviewScore"
-									value="2"> <span>⭐⭐</span>
-								</label> <label> <input type="radio" name="reviewScore"
-									value="1"> <span>⭐</span>
-								</label>
+									<div class="review-head">
 
-							</div>
+										<div>
+											<strong>${review.memberName}</strong> <span
+												class="review-date">${review.createDateFormat}</span>
+										</div>
 
-						</div>
+										<div class="review-score-text">
+											<c:choose>
+												<c:when test="${review.reviewScore == 5}">⭐⭐⭐⭐⭐</c:when>
+												<c:when test="${review.reviewScore == 4}">⭐⭐⭐⭐</c:when>
+												<c:when test="${review.reviewScore == 3}">⭐⭐⭐</c:when>
+												<c:when test="${review.reviewScore == 2}">⭐⭐</c:when>
+												<c:otherwise>⭐</c:otherwise>
+											</c:choose>
+										</div>
 
-						<div class="form-group">
-							<label>리뷰 내용</label>
-							<textarea name="reviewContents" class="form-control" rows="4"
-								required></textarea>
-						</div>
-
-						<button type="submit" class="btn btn-brown">리뷰 등록</button>
-
-					</form>
-
-					<div class="review-list">
-
-						<c:forEach items="${reviewList}" var="review">
-
-							<div class="review-card" id="review-${review.reviewNum}">
-
-								<div class="review-head">
-
-									<div>
-										<strong>${review.memberName}</strong> <span
-											class="review-date">${review.createDateFormat}</span>
 									</div>
 
-									<div class="review-score-text">
-										<c:choose>
-											<c:when test="${review.reviewScore == 5}">⭐⭐⭐⭐⭐</c:when>
-											<c:when test="${review.reviewScore == 4}">⭐⭐⭐⭐</c:when>
-											<c:when test="${review.reviewScore == 3}">⭐⭐⭐</c:when>
-											<c:when test="${review.reviewScore == 2}">⭐⭐</c:when>
-											<c:otherwise>⭐</c:otherwise>
-										</c:choose>
-									</div>
+									<div class="review-contents">${review.reviewContents}</div>
+
+									<c:if test="${member.memberNum eq review.memberNum}">
+
+										<div class="review-btn-group">
+
+											<button type="button" class="btn btn-sm btn-review-update"
+												data-review-num="${review.reviewNum}"
+												data-review-contents="${review.reviewContents}"
+												data-review-score="${review.reviewScore}">수정</button>
+
+											<button type="button" class="btn btn-sm btn-review-delete"
+												data-review-num="${review.reviewNum}">삭제</button>
+
+										</div>
+
+									</c:if>
 
 								</div>
 
-								<div class="review-contents">${review.reviewContents}</div>
+							</c:forEach>
 
-								<c:if test="${member.memberNum eq review.memberNum}">
+							<c:if test="${empty reviewList}">
+								<div class="empty-review">아직 등록된 리뷰가 없습니다.</div>
+							</c:if>
 
-									<div class="review-btn-group">
+						</div>
+				</div>
+				<input type="hidden" name="restaurantNum"
+					value="${dto.restaurantNum}">
 
-										<button type="button" class="btn btn-sm btn-review-update"
-											data-review-num="${review.reviewNum}"
-											data-review-contents="${review.reviewContents}"
-											data-review-score="${review.reviewScore}">수정</button>
+				<div class="form-group">
 
-										<button type="button" class="btn btn-sm btn-review-delete"
-											data-review-num="${review.reviewNum}">삭제</button>
+					<label>평점</label>
 
-									</div>
+					<div class="star-select">
 
-								</c:if>
-
-							</div>
-
-						</c:forEach>
-
-						<c:if test="${empty reviewList}">
-							<div class="empty-review">아직 등록된 리뷰가 없습니다.</div>
-						</c:if>
+						<label> <input type="radio" name="reviewScore" value="5"
+							checked> <span>5점 ⭐⭐⭐⭐⭐</span>
+						</label> <label> <input type="radio" name="reviewScore" value="4">
+							<span>4점 ⭐⭐⭐⭐</span>
+						</label> <label> <input type="radio" name="reviewScore" value="3">
+							<span>3점 ⭐⭐⭐</span>
+						</label> <label> <input type="radio" name="reviewScore" value="2">
+							<span>2점 ⭐⭐</span>
+						</label> <label> <input type="radio" name="reviewScore" value="1">
+							<span>1점 ⭐</span>
+						</label>
 
 					</div>
 
 				</div>
 
+				<div class="form-group">
+					<label>리뷰 내용</label>
+					<textarea name="reviewContents" class="form-control" rows="4"
+						required></textarea>
+				</div>
+
+				<button type="submit" class="btn btn-brown">리뷰 등록</button>
+
+				</form>
+
 				<div class="detail-btn-group">
 
 					<c:if test="${member.memberNum eq dto.memberNum}">
 
-						<a href="./update?restaurantNum=${dto.restaurantNum}"
+						<a
+							href="./update?restaurantNum=${dto.restaurantNum}&page=${param.page}&search=${param.search}"
 							class="btn btn-brown"> 수정 </a>
 
 						<form action="./delete" method="post" style="display: inline;"
 							onsubmit="return confirm('맛집을 삭제하시겠습니까?');">
 
 							<input type="hidden" name="restaurantNum"
-								value="${dto.restaurantNum}">
+								value="${dto.restaurantNum}"> <input type="hidden"
+								name="page" value="${param.page}"> <input type="hidden"
+								name="search" value="${param.search}">
 
 							<button type="submit" class="btn btn-restaurant-delete">
 								삭제</button>
@@ -231,7 +278,15 @@
 
 					</c:if>
 
-					<a href="./list" class="btn btn-back">목록으로</a>
+					<c:choose>
+						<c:when test="${not empty param.page or not empty param.search}">
+							<a href="./list?page=${param.page}&search=${param.search}"
+								class="btn btn-back">목록으로</a>
+						</c:when>
+						<c:otherwise>
+							<a href="./list" class="btn btn-back">목록으로</a>
+						</c:otherwise>
+					</c:choose>
 
 				</div>
 
@@ -248,7 +303,8 @@
 
 	<script>
 		const restaurantNum = "${dto.restaurantNum}";
-		const restaurantLocation = "${dto.restaurantLocation} ${dto.restaurantDetailAddress}";
+		const restaurantLocation = "${dto.restaurantLocation}";
+		const restaurantDetailAddress = "${dto.restaurantDetailAddress}";
 		const restaurantName = "${dto.restaurantName}";
 
 		if (restaurantLocation && document.querySelector("#map")) {
@@ -267,6 +323,10 @@
 					.addressSearch(
 							restaurantLocation,
 							function(result, status) {
+
+								console.log(restaurantLocation);
+								console.log(status);
+								console.log(result);
 
 								if (status === kakao.maps.services.Status.OK) {
 
@@ -330,10 +390,32 @@
 					.then(
 							function(result) {
 
-								document.querySelector(".avg-score").innerText = Number(
-										result.avgScore).toFixed(1);
+								if (!result.avgScore || result.avgScore === 0) {
+									result.avgScore = 0;
+								}
 
-								document.querySelector(".review-count").innerText = result.reviewCount;
+								const avgScoreText = Number(result.avgScore)
+										.toFixed(1);
+
+								document.querySelectorAll(".avg-score")
+										.forEach(function(item) {
+											item.innerText = avgScoreText;
+										});
+
+								document
+										.querySelectorAll(".review-count")
+										.forEach(
+												function(item) {
+													item.innerText = result.reviewCount;
+												});
+
+								const reviewMetaBadge = document
+										.querySelector(".detail-meta-badge:nth-child(2)");
+
+								if (reviewMetaBadge) {
+									reviewMetaBadge.innerText = "📝 "
+											+ result.reviewCount;
+								}
 
 							});
 		}
@@ -381,19 +463,38 @@
 					})
 				}).then(function(response) {
 					return response.text();
-				}).then(function(result) {
+				}).then(
+						function(result) {
 
-					result = result.trim();
+							result = result.trim();
 
-					if (result === "login") {
-						alert("로그인이 필요합니다.");
-						location.href = "/member/login";
-						return;
-					}
+							if (result === "login") {
+								alert("로그인이 필요합니다.");
+								location.href = "/member/login";
+								return;
+							}
 
-					location.reload();
+							const likeCount = document
+									.querySelector(".like-count");
 
-				});
+							let countText = likeCount.innerText.replace("좋아요",
+									"").trim();
+							let count = Number(countText);
+
+							if (result === "add") {
+								likeBtn.innerText = "❤️ 좋아요 취소";
+								likeCount.innerText = "좋아요 " + (count + 1);
+								return;
+							}
+
+							if (result === "delete") {
+								likeBtn.innerText = "🤍 좋아요";
+								likeCount.innerText = "좋아요 "
+										+ Math.max(count - 1, 0);
+								return;
+							}
+
+						});
 
 			});
 
@@ -527,6 +628,7 @@
 													}
 
 													updateReviewSummary();
+													alert("리뷰가 등록되었습니다.");
 
 												});
 
@@ -535,6 +637,53 @@
 		}
 
 		const reviewList = document.querySelector(".review-list");
+		const reviewSortBtns = document.querySelectorAll(".review-sort-btn");
+
+		reviewSortBtns.forEach(function(btn) {
+
+			btn.addEventListener("click", function() {
+
+				reviewSortBtns.forEach(function(item) {
+					item.classList.remove("active");
+				});
+
+				btn.classList.add("active");
+
+				const sortType = btn.dataset.sort;
+				sortReviews(sortType);
+
+			});
+
+		});
+
+		function sortReviews(sortType) {
+
+			const reviewList = document.querySelector(".review-list");
+
+			if (!reviewList) {
+				return;
+			}
+
+			const cards = Array.from(reviewList
+					.querySelectorAll(".review-card"));
+
+			cards.sort(function(a, b) {
+
+				if (sortType === "high") {
+					return Number(b.dataset.score) - Number(a.dataset.score);
+				}
+
+				if (sortType === "low") {
+					return Number(a.dataset.score) - Number(b.dataset.score);
+				}
+
+				return Number(b.dataset.num) - Number(a.dataset.num);
+			});
+
+			cards.forEach(function(card) {
+				reviewList.appendChild(card);
+			});
+		}
 
 		if (reviewList) {
 
@@ -587,6 +736,8 @@
 																	.querySelectorAll(".review-card").length === 0) {
 																reviewList.innerHTML = '<div class="empty-review">아직 등록된 리뷰가 없습니다.</div>';
 															}
+
+															alert("리뷰가 삭제되었습니다.");
 
 															return;
 														}
@@ -717,7 +868,11 @@
 																	reviewNum,
 																	newContents,
 																	newScore);
+
 															updateReviewSummary();
+
+															alert("리뷰가 수정되었습니다.");
+
 															return;
 														}
 

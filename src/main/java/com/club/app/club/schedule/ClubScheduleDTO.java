@@ -24,6 +24,7 @@ public class ClubScheduleDTO {
 	private LocalDateTime scheduleStart;
 	private LocalDateTime scheduleEnd;
 
+	private String clubName;
 	private Integer scheduleMax;
 
 	private LocalDateTime createDate;

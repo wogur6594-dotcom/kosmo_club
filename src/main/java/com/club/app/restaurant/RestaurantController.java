@@ -65,7 +65,7 @@ public class RestaurantController {
 
 		if (result > 0) {
 			redirectAttributes.addFlashAttribute("message", "맛집이 등록되었습니다.");
-			return "redirect:/restaurant/list";
+			return "redirect:/restaurant/detail?restaurantNum=" + restaurantDTO.getRestaurantNum();
 		}
 
 		redirectAttributes.addFlashAttribute("message", "맛집 등록에 실패했습니다.");
@@ -132,8 +132,9 @@ public class RestaurantController {
 	}
 
 	@GetMapping("update")
-	public String update(RestaurantDTO restaurantDTO, @AuthenticationPrincipal MemberDTO memberDTO, Model model)
-			throws Exception {
+	public String update(RestaurantDTO restaurantDTO, @AuthenticationPrincipal MemberDTO memberDTO, Model model,
+			@RequestParam(value = "page", required = false) String page,
+			@RequestParam(value = "search", required = false) String search) throws Exception {
 
 		if (memberDTO == null) {
 			return "redirect:/member/login";
@@ -147,7 +148,17 @@ public class RestaurantController {
 
 		if (!restaurantDTO.getMemberNum().equals(memberDTO.getMemberNum())) {
 
-			return "redirect:/restaurant/detail?restaurantNum=" + restaurantDTO.getRestaurantNum();
+			String redirectUrl = "redirect:/restaurant/detail?restaurantNum=" + restaurantDTO.getRestaurantNum();
+
+			if (page != null && !page.isBlank()) {
+				redirectUrl += "&page=" + page;
+			}
+
+			if (search != null && !search.isBlank()) {
+				redirectUrl += "&search=" + search;
+			}
+
+			return redirectUrl;
 		}
 
 		model.addAttribute("dto", restaurantDTO);
@@ -156,17 +167,44 @@ public class RestaurantController {
 	}
 
 	@PostMapping("update")
-	public String update(RestaurantDTO restaurantDTO, MultipartFile[] files,
-			@RequestParam(value = "deleteFileNums", required = false) List<Long> deleteFileNums) throws Exception {
+	public String update(RestaurantDTO restaurantDTO,
+			@RequestParam(value = "files", required = false) MultipartFile[] files,
+			@RequestParam(value = "deleteFileNums", required = false) List<Long> deleteFileNums,
+			@RequestParam(value = "page", required = false) String page,
+			@RequestParam(value = "search", required = false) String search,
+			@AuthenticationPrincipal MemberDTO memberDTO, RedirectAttributes redirectAttributes) throws Exception {
 
-		restaurantService.update(restaurantDTO, files, deleteFileNums);
+		if (memberDTO == null) {
+			return "redirect:/member/login";
+		}
 
-		return "redirect:./detail?restaurantNum=" + restaurantDTO.getRestaurantNum();
+		restaurantDTO.setMemberNum(memberDTO.getMemberNum());
+
+		int result = restaurantService.update(restaurantDTO, files, deleteFileNums);
+
+		if (result > 0) {
+			redirectAttributes.addFlashAttribute("message", "맛집 정보가 수정되었습니다.");
+		} else {
+			redirectAttributes.addFlashAttribute("message", "수정 권한이 없거나 수정에 실패했습니다.");
+		}
+
+		String redirectUrl = "redirect:./detail?restaurantNum=" + restaurantDTO.getRestaurantNum();
+
+		if (page != null && !page.isBlank()) {
+			redirectUrl += "&page=" + page;
+		}
+
+		if (search != null && !search.isBlank()) {
+			redirectUrl += "&search=" + search;
+		}
+
+		return redirectUrl;
 	}
 
 	@PostMapping("delete")
 	public String delete(RestaurantDTO restaurantDTO, @AuthenticationPrincipal MemberDTO memberDTO,
-			RedirectAttributes redirectAttributes) throws Exception {
+			RedirectAttributes redirectAttributes, @RequestParam(value = "page", required = false) String page,
+			@RequestParam(value = "search", required = false) String search) throws Exception {
 
 		if (memberDTO == null) {
 			return "redirect:/member/login";
@@ -176,12 +214,25 @@ public class RestaurantController {
 
 		int result = restaurantService.delete(restaurantDTO);
 
-		if (result > 0) {
+		String redirectUrl = "redirect:/restaurant/list";
 
+		if (page != null && !page.isBlank()) {
+			redirectUrl += "?page=" + page;
+		}
+
+		if (search != null && !search.isBlank()) {
+			if (redirectUrl.contains("?")) {
+				redirectUrl += "&search=" + search;
+			} else {
+				redirectUrl += "?search=" + search;
+			}
+		}
+
+		if (result > 0) {
 			redirectAttributes.addFlashAttribute("message", "맛집이 삭제되었습니다.");
 		}
 
-		return "redirect:/restaurant/list";
+		return redirectUrl;
 	}
 
 	@PostMapping("deleteFile")
