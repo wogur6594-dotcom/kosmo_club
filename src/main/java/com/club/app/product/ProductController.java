@@ -49,7 +49,8 @@ public class ProductController {
 
 	// 등록 페이지
 	@GetMapping("add")
-	public String addForm() {
+	public String addForm(Model model) {
+		model.addAttribute("productDTO", new ProductDTO());
 		return "product/add";
 	}
 
@@ -110,7 +111,8 @@ public class ProductController {
 	}
 
 	@PostMapping("edit")
-	public String edit(@Valid @ModelAttribute("productDTO") ProductDTO productDTO, BindingResult bindingResult, Authentication auth, Model model) throws Exception {
+	public String edit(@Valid @ModelAttribute("productDTO") ProductDTO productDTO, BindingResult bindingResult,
+			Authentication auth, Model model) throws Exception {
 
 		if (bindingResult.hasErrors()) {
 			// 데이터 재조회 (파일 목록 등을 위해)
