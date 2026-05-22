@@ -27,7 +27,7 @@
 			</foreach>
 		</if>
 		<if test="productLocation != null and productLocation != ''">
-			AND "PRODUCT_LOCATION" LIKE CONCAT('%', #{productLocation}, '%')
+			AND "PRODUCT_LOCATION" LIKE CONCAT(#{productLocation}, '%')
 		</if>
 	</sql>
 
@@ -123,7 +123,7 @@
 			</foreach>
 		</if>
 		<if test="productLocation != null and productLocation != ''">
-			AND "PRODUCT_LOCATION" LIKE CONCAT('%', #{productLocation}, '%')
+			AND "PRODUCT_LOCATION" LIKE CONCAT(#{productLocation}, '%')
 		</if>
 		ORDER BY "CREATETIME" DESC
 		LIMIT #{perPage} OFFSET #{startNum}
