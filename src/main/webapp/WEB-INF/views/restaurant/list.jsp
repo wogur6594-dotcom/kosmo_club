@@ -13,7 +13,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/css/restaurant.css?v=12">
+<link rel="stylesheet" href="/css/restaurant.css?v=13">
 </head>
 
 <body>
@@ -128,15 +128,55 @@
 
 								<div class="thumb-box">
 
+									<c:set var="defaultImage" value="/image/default-restaurant.jpg" />
+
+									<c:if test="${dto.restaurantCategory eq '한식'}">
+										<c:set var="defaultImage" value="/image/default-korean.jpg" />
+									</c:if>
+
+									<c:if test="${dto.restaurantCategory eq '중식'}">
+										<c:set var="defaultImage" value="/image/default-chinese.jpg" />
+									</c:if>
+
+									<c:if test="${dto.restaurantCategory eq '일식'}">
+										<c:set var="defaultImage" value="/image/default-japanese.jpg" />
+									</c:if>
+
+									<c:if test="${dto.restaurantCategory eq '양식'}">
+										<c:set var="defaultImage" value="/image/default-western.jpg" />
+									</c:if>
+
+									<c:if test="${dto.restaurantCategory eq '카페'}">
+										<c:set var="defaultImage" value="/image/default-cafe.jpg" />
+									</c:if>
+
+									<c:if test="${dto.restaurantCategory eq '디저트'}">
+										<c:set var="defaultImage" value="/image/default-dessert.jpg" />
+									</c:if>
+
+									<c:if test="${dto.restaurantCategory eq '술집'}">
+										<c:set var="defaultImage" value="/image/default-bar.jpg" />
+									</c:if>
+
+									<c:if test="${dto.restaurantCategory eq '치킨'}">
+										<c:set var="defaultImage" value="/image/default-chicken.jpg" />
+									</c:if>
+
+									<c:if test="${dto.restaurantCategory eq '분식'}">
+										<c:set var="defaultImage" value="/image/default-snack.jpg" />
+									</c:if>
+
 									<c:choose>
+
 										<c:when test="${not empty dto.fileDTOs}">
 											<img src="/files/restaurant/${dto.fileDTOs[0].fileName}"
-												onerror="this.parentElement.innerHTML='<div class=&quot;no-image&quot;></div>'">
+												onerror="this.onerror=null; this.src='${defaultImage}';">
 										</c:when>
 
 										<c:otherwise>
-											<div class="no-image"></div>
+											<img src="${defaultImage}">
 										</c:otherwise>
+
 									</c:choose>
 
 								</div>

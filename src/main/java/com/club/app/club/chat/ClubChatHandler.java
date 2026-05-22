@@ -1,6 +1,7 @@
 package com.club.app.club.chat;
 
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 public class ClubChatHandler extends TextWebSocketHandler {
 
 	private final ClubMessageService clubMessageService;
-
 	private final ObjectMapper objectMapper;
 
 	private static final Map<Long, Set<WebSocketSession>> rooms = new ConcurrentHashMap<>();
@@ -32,6 +32,8 @@ public class ClubChatHandler extends TextWebSocketHandler {
 
 		rooms.putIfAbsent(clubNum, ConcurrentHashMap.newKeySet());
 		rooms.get(clubNum).add(session);
+
+		System.out.println("동호회 채팅 연결 성공 clubNum = " + clubNum);
 	}
 
 	@Override
@@ -41,19 +43,53 @@ public class ClubChatHandler extends TextWebSocketHandler {
 		Long memberNum = (Long) session.getAttributes().get("memberNum");
 		String memberName = (String) session.getAttributes().get("memberName");
 
-		String contents = message.getPayload();
+		String payload = message.getPayload();
+
+		String messageType = "TEXT";
+		String messageContents = payload;
+		String imageUrl = null;
+
+		try {
+			Map<String, Object> receiveData = objectMapper.readValue(payload, Map.class);
+
+			if (receiveData.get("messageType") != null) {
+				messageType = String.valueOf(receiveData.get("messageType"));
+			}
+
+			if (receiveData.get("messageContents") != null) {
+				messageContents = String.valueOf(receiveData.get("messageContents"));
+			} else {
+				messageContents = "";
+			}
+
+			if (receiveData.get("imageUrl") != null) {
+				imageUrl = String.valueOf(receiveData.get("imageUrl"));
+			}
+
+		} catch (Exception e) {
+			messageType = "TEXT";
+			messageContents = payload;
+			imageUrl = null;
+		}
 
 		ClubMessageDTO dto = new ClubMessageDTO();
 		dto.setClubNum(clubNum);
 		dto.setSenderNum(memberNum);
-		dto.setMessageContents(contents);
+		dto.setMessageContents(messageContents);
+		dto.setMessageType(messageType);
+		dto.setImageUrl(imageUrl);
 
 		clubMessageService.insert(dto);
 
 		String time = LocalTime.now().withSecond(0).withNano(0).toString();
 
-		Map<String, Object> sendData = Map.of("memberNum", memberNum, "senderName", memberName, "messageContents",
-				contents, "chatTime", time);
+		Map<String, Object> sendData = new HashMap<>();
+		sendData.put("memberNum", memberNum);
+		sendData.put("senderName", memberName);
+		sendData.put("messageContents", messageContents);
+		sendData.put("messageType", messageType);
+		sendData.put("imageUrl", imageUrl);
+		sendData.put("chatTime", time);
 
 		String json = objectMapper.writeValueAsString(sendData);
 
@@ -84,5 +120,7 @@ public class ClubChatHandler extends TextWebSocketHandler {
 				rooms.remove(clubNum);
 			}
 		}
+
+		System.out.println("동호회 채팅 연결 종료 clubNum = " + clubNum);
 	}
 }
