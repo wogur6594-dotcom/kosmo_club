@@ -221,6 +221,33 @@ a:hover {
 	background-color: #a35400 !important;
 	color: white !important;
 }
+
+.club-capacity {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	font-weight: 700;
+}
+
+/* 모집 가능 */
+.club-capacity.available {
+	color: #16a34a;
+}
+
+/* 모집 마감 */
+.club-capacity.full {
+	color: #dc2626;
+}
+
+/* 동그라미 뱃지 */
+.club-capacity-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: currentColor;
+	box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+	flex-shrink: 0;
+}
 </style>
 
 </head>
@@ -477,14 +504,17 @@ a:hover {
 
 							<div
 								class="flex items-center justify-between border-t border-outline-variant/30 pt-sm">
-								<span
-									class="flex items-center font-label-lg club-capacity
-	${dto.currentMember >= dto.clubMax ? 'full' : 'available'}">
 
-									<span class="club-capacity-dot"></span>
-								</span> 정원 : ${dto.currentMember} / ${dto.clubMax}명 </span> <span
+								<span
+									class="club-capacity ${dto.currentMember >= dto.clubMax ? 'full' : 'available'}">
+
+									<span class="club-capacity-dot"></span> 정원 :
+									${dto.currentMember} / ${dto.clubMax}명
+
+								</span> <span
 									class="text-primary font-label-lg hover:underline transition-all">
 									상세보기 </span>
+
 							</div>
 						</div>
 

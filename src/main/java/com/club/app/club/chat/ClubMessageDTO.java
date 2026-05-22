@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class ClubMessageDTO {
 
+	private String messageType;
+	private String imageUrl;
 	private String chatTime;
 	private Long messageNum;
 	private Long clubNum;

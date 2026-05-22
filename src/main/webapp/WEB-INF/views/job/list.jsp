@@ -378,7 +378,8 @@ body {
 						<c:forEach items="${list}" var="dto">
 							<div
 								class="job-item
-	${dto.currentApplyMember ge dto.jobMaxMember ? 'opacity-50' : ''}">
+${dto.currentApplyMember ge dto.jobMaxMember ? 'opacity-50' : ''}"
+								onclick="location.href='./detail?jobNum=${dto.jobNum}'">
 
 								<a href="./detail?jobNum=${dto.jobNum}" class="job-title">
 									${dto.jobTitle} </a>
