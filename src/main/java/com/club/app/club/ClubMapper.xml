@@ -8,10 +8,33 @@
 
 	<select id="getCount" parameterType="Pager" resultType="long">
 		SELECT COUNT(*)
-		FROM "TB_CLUB"
+		FROM "TB_CLUB" C
 		<where>
 			<if test="clubCategory != null and clubCategory != ''">
-				"CLUB_CATEGORY" = #{clubCategory}
+				C."CLUB_CATEGORY" = #{clubCategory}
+			</if>
+
+			<if test="search != null and search != ''">
+				AND
+				<choose>
+					<when test="kind == 'name'">
+						C."CLUB_NAME" ILIKE '%' || #{search} || '%'
+					</when>
+					<when test="kind == 'location'">
+						C."CLUB_LOCATION" ILIKE '%' || #{search} || '%'
+					</when>
+					<otherwise>
+						(
+						C."CLUB_NAME" ILIKE '%' || #{search} || '%'
+						OR
+						C."CLUB_LOCATION"
+						ILIKE '%' || #{search} || '%'
+						OR C."CLUB_CONTENTS"
+						ILIKE '%' ||
+						#{search} || '%'
+						)
+					</otherwise>
+				</choose>
 			</if>
 		</where>
 	</select>
@@ -63,6 +86,25 @@
 		<where>
 			<if test="clubCategory != null and clubCategory != ''">
 				C."CLUB_CATEGORY" = #{clubCategory}
+			</if>
+
+			<if test="search != null and search != ''">
+				AND
+				<choose>
+					<when test="kind == 'name'">
+						C."CLUB_NAME" ILIKE '%' || #{search} || '%'
+					</when>
+					<when test="kind == 'location'">
+						C."CLUB_LOCATION" ILIKE '%' || #{search} || '%'
+					</when>
+					<otherwise>
+						(
+						C."CLUB_NAME" ILIKE '%' || #{search} || '%'
+						OR C."CLUB_LOCATION" ILIKE '%' || #{search} || '%'
+						OR C."CLUB_CONTENTS" ILIKE '%' || #{search} || '%'
+						)
+					</otherwise>
+				</choose>
 			</if>
 		</where>
 
@@ -214,7 +256,8 @@
 		F."ORI_NAME",
 
 		(
-		SELECT COUNT(*)
+		SELECT
+		COUNT(*)
 		FROM "TB_CLUB_MEMBER" CM2
 		WHERE CM2."CLUB_NUM" =
 		C."CLUB_NUM"
@@ -223,7 +266,8 @@
 
 		FROM "TB_CLUB" C
 
-		INNER JOIN "TB_CLUB_MEMBER" CM
+		INNER
+		JOIN "TB_CLUB_MEMBER" CM
 		ON C."CLUB_NUM" = CM."CLUB_NUM"
 
 		LEFT JOIN
@@ -236,10 +280,12 @@
 		FROM "TB_CLUBFILE"
 		ORDER BY "CLUB_NUM", "FILE_NUM" ASC
 		) F
-		ON C."CLUB_NUM" = F."CLUB_NUM"
+		ON
+		C."CLUB_NUM" = F."CLUB_NUM"
 
 		WHERE CM."MEMBER_NUM" = #{memberNum}
-		AND CM."ROLE_NUM" IN (1,2)
+		AND
+		CM."ROLE_NUM" IN (1,2)
 
 		ORDER BY C."CLUB_NUM" DESC
 

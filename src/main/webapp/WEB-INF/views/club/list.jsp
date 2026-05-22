@@ -19,7 +19,6 @@
 	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
 	rel="stylesheet">
 
-
 <style>
 main {
 	max-width: 1200px;
@@ -69,19 +68,19 @@ main {
 	margin-bottom: 24px;
 }
 
-.mb-lg {
-	margin-bottom: 40px;
+.mb-sm {
+	margin-bottom: 16px;
+}
+
+.mb-xs {
+	margin-bottom: 8px;
 }
 
 .bg-secondary-container {
 	background-color: #fff1e6;
 }
 
-.bg-secondary {
-	background-color: #a35400;
-}
-
-.text-on-secondary, .text-on-primary {
+.text-on-primary {
 	color: white;
 }
 
@@ -94,7 +93,7 @@ main {
 }
 
 .bg-primary {
-	background-color: #a35400;
+	background-color: #a35400 !important;
 }
 
 .bg-surface {
@@ -105,13 +104,8 @@ main {
 	background-color: #f7eee8;
 }
 
-.card-img-fix {
-	height: 220px;
-	object-fit: cover;
-}
-
-.h-48 {
-	height: 220px;
+.text-primary {
+	color: #a35400 !important;
 }
 
 .card-img-fix {
@@ -121,20 +115,16 @@ main {
 	display: block;
 }
 
+.h-48 {
+	height: 220px;
+}
+
 .rounded-3xl {
 	border-radius: 24px;
 }
 
 .gap-sm {
 	gap: 8px;
-}
-
-.mb-sm {
-	margin-bottom: 16px;
-}
-
-.mb-xs {
-	margin-bottom: 8px;
 }
 
 .pt-sm {
@@ -181,19 +171,6 @@ main {
 	color: white;
 }
 
-.bg-primary {
-	background-color: #a35400 !important;
-}
-
-.text-primary {
-	color: #a35400 !important;
-}
-
-.btn-primary {
-	background-color: #a35400 !important;
-	border-color: #a35400 !important;
-}
-
 a {
 	color: #a35400;
 }
@@ -203,20 +180,17 @@ a {
 	color: white !important;
 }
 
-/* 링크 hover 시 파란색 방지 */
 a:hover {
 	color: inherit !important;
 	text-decoration: none !important;
 }
 
-/* 카테고리 버튼 hover 색상 고정 */
 .category-filter:hover {
 	background-color: #f7eee8 !important;
 	color: #6f5b4c !important;
 	text-decoration: none !important;
 }
 
-/* 선택된 카테고리는 hover 해도 갈색 유지 */
 .category-filter.category-active:hover {
 	background-color: #a35400 !important;
 	color: white !important;
@@ -229,17 +203,14 @@ a:hover {
 	font-weight: 700;
 }
 
-/* 모집 가능 */
 .club-capacity.available {
 	color: #16a34a;
 }
 
-/* 모집 마감 */
 .club-capacity.full {
 	color: #dc2626;
 }
 
-/* 동그라미 뱃지 */
 .club-capacity-dot {
 	width: 10px;
 	height: 10px;
@@ -249,9 +220,7 @@ a:hover {
 	flex-shrink: 0;
 }
 </style>
-
 </head>
-
 
 <body id="page-top" class="text-on-background min-h-screen"
 	style="background-color: #f8f5f1;">
@@ -265,156 +234,130 @@ a:hover {
 	<c:import url="/WEB-INF/views/temp/topbar.jsp"></c:import>
 
 	<main class="pb-5">
-		<!-- Hero Section -->
+
 		<section class="max-w-container-max mx-auto px-gutter py-lg">
 			<div
 				class="relative bg-secondary-container rounded-3xl overflow-hidden min-h-[320px] flex items-center shadow-sm">
 				<div class="relative z-10 p-xl max-w-lg">
 					<h1
-						class="font-headline-lg text-headline-lg text-on-secondary-container mb-sm">우리
-						동네 모임</h1>
-					<p
-						class="font-body-lg text-body-lg text-on-secondary-container opacity-90 mb-md">취향이
-						비슷한 이웃들을 만나보세요. 운동부터 공부까지, 즐거운 동네 생활이 시작됩니다.</p>
-					<a href="./create"
-						class="inline-flex items-center gap-2
-	bg-[#a35400] hover:bg-[#8b4700]
-	text-white font-semibold
-	px-8 py-4
-	rounded-2xl
-	shadow-[0_8px_20px_rgba(163,84,0,0.25)]
-	hover:shadow-[0_12px_28px_rgba(163,84,0,0.35)]
-	transition-all duration-300
-	active:scale-95">
+						class="font-headline-lg text-headline-lg text-on-secondary-container mb-sm">
+						우리 동네 모임</h1>
 
-						<span class="material-symbols-outlined text-[22px]">
-							add_circle </span> 모임 만들기
+					<p
+						class="font-body-lg text-body-lg text-on-secondary-container opacity-90 mb-md">
+						취향이 비슷한 이웃들을 만나보세요. 운동부터 공부까지, 즐거운 동네 생활이 시작됩니다.</p>
+
+					<a href="./create"
+						class="inline-flex items-center gap-2 bg-[#a35400] hover:bg-[#8b4700] text-white font-semibold px-8 py-4 rounded-2xl shadow-[0_8px_20px_rgba(163,84,0,0.25)] hover:shadow-[0_12px_28px_rgba(163,84,0,0.35)] transition-all duration-300 active:scale-95">
+						<span class="material-symbols-outlined text-[22px]">add_circle</span>
+						모임 만들기
 					</a>
 				</div>
+
 				<div class="absolute right-0 top-0 bottom-0 w-1/2 hidden md:block">
-					<img alt="People meeting in a cafe"
-						class="w-full h-full object-cover"
-						data-alt="A warm and inviting scene of diverse neighbors gathered around a rustic wooden table in a sunlit community cafe. They are laughing and interacting naturally, sharing coffee and pastries. The lighting is soft and golden, emphasizing a light-mode aesthetic with warm orange and green accents. The style is modern, cinematic, and evokes a strong sense of local connectivity and friendly neighborhood spirit."
-						src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIwUmn0tFmQkgSwMFy61P73eTt15HCCGwBZt7kXYKafUinjmG966bTbjMQQI0Z4sPFaxa90-FeETB9o6SMw1iLZPmmsMnsZtU5SjuEXFrB9iF5YIZ9dpgBMVoBtsuQcDNTZQBHKFw_NzxfI6XFF5vq-N7Ao25vXevP8Xa-vWM4DwXkePrPxzOqW2Z_EcAxSUFwQsxR_vFUX2mopRZZmHT3BXwPoHiLZOp8ibnA7eTKPLwoxP7HDHOXjwfbIKcb472D8jQ1QT4ftZEF" />
+					<img alt="동호회 대표 이미지" class="w-full h-full object-cover"
+						src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIwUmn0tFmQkgSwMFy61P73eTt15HCCGwBZt7kXYKafUinjmG966bTbjMQQI0Z4sPFaxa90-FeETB9o6SMw1iLZPmmsMnsZtU5SjuEXFrB9iF5YIZ9dpgBMVoBtsuQcDNTZQBHKFw_NzxfI6XFF5vq-N7Ao25vXevP8Xa-vWM4DwXkePrPxzOqW2Z_EcAxSUFwQsxR_vFUX2mopRZZmHT3BXwPoHiLZOp8ibnA7eTKPLwoxP7HDHOXjwfbIKcb472D8jQ1QT4ftZEF">
 				</div>
 			</div>
 		</section>
 
-
-
 		<div id="club-list"></div>
 
-		<div class="flex flex-wrap gap-3 mb-3">
+		<section class="max-w-container-max mx-auto px-gutter mb-2">
+			<div class="flex flex-wrap gap-sm items-center">
 
+				<span class="font-label-lg text-label-lg text-on-surface mr-sm">
+					관심사별로 찾기: </span> <a
+					href="${pageContext.request.contextPath}/club/list#club-list"
+					class="category-filter px-md py-2 rounded-full
+					${empty param.clubCategory ? 'bg-primary text-on-primary category-active' : 'bg-surface-container-low text-on-surface-variant'}
+					font-label-lg text-label-lg active:scale-95 transition-all">
+					전체 </a> <a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=운동#club-list"
+					class="category-filter px-md py-2 rounded-full
+					${param.clubCategory eq '운동' ? 'bg-primary text-on-primary category-active' : 'bg-surface-container-low text-on-surface-variant'}
+					font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+					<span class="material-symbols-outlined text-[18px]">exercise</span>
+					운동
+				</a> <a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=맛집#club-list"
+					class="category-filter px-md py-2 rounded-full
+					${param.clubCategory eq '맛집' ? 'bg-primary text-on-primary category-active' : 'bg-surface-container-low text-on-surface-variant'}
+					font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+					<span class="material-symbols-outlined text-[18px]">restaurant</span>
+					맛집
+				</a> <a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=여행#club-list"
+					class="category-filter px-md py-2 rounded-full
+					${param.clubCategory eq '여행' ? 'bg-primary text-on-primary category-active' : 'bg-surface-container-low text-on-surface-variant'}
+					font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+					<span class="material-symbols-outlined text-[18px]">travel_explore</span>
+					여행
+				</a> <a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=음악#club-list"
+					class="category-filter px-md py-2 rounded-full
+					${param.clubCategory eq '음악' ? 'bg-primary text-on-primary category-active' : 'bg-surface-container-low text-on-surface-variant'}
+					font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+					<span class="material-symbols-outlined text-[18px]">music_note</span>
+					음악
+				</a> <a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=스터디#club-list"
+					class="category-filter px-md py-2 rounded-full
+					${param.clubCategory eq '스터디' ? 'bg-primary text-on-primary category-active' : 'bg-surface-container-low text-on-surface-variant'}
+					font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+					<span class="material-symbols-outlined text-[18px]">school</span>
+					스터디
+				</a> <a
+					href="${pageContext.request.contextPath}/club/list?clubCategory=기타#club-list"
+					class="category-filter px-md py-2 rounded-full
+					${param.clubCategory eq '기타' ? 'bg-primary text-on-primary category-active' : 'bg-surface-container-low text-on-surface-variant'}
+					font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
+					<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+					기타
+				</a>
 
-
-			<!-- Filters Section -->
-			<section class="max-w-container-max mx-auto px-gutter mb-2">
-
-				<div class="flex flex-wrap gap-sm items-center">
-
-					<span class="font-label-lg text-label-lg text-on-surface mr-sm">
-						관심사별로 찾기: </span>
-
-					<!-- 전체 -->
-					<a href="${pageContext.request.contextPath}/club/list#club-list"
-						class="category-filter px-md py-2 rounded-full
-			${empty param.clubCategory
-			? 'bg-primary text-on-primary category-active'
-			: 'bg-surface-container-low text-on-surface-variant'}
-			font-label-lg text-label-lg active:scale-95 transition-all">
-
-						전체 </a>
-
-					<!-- 운동 -->
-					<a
-						href="${pageContext.request.contextPath}/club/list?clubCategory=운동#club-list"
-						class="category-filter px-md py-2 rounded-full
-			${param.clubCategory eq '운동'
-			? 'bg-primary text-on-primary category-active'
-			: 'bg-surface-container-low text-on-surface-variant'}
-			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
-
-						<span class="material-symbols-outlined text-[18px]">
-							exercise </span> 운동
-					</a>
-
-					<!-- 맛집 -->
-					<a
-						href="${pageContext.request.contextPath}/club/list?clubCategory=맛집#club-list"
-						class="category-filter px-md py-2 rounded-full
-			${param.clubCategory eq '맛집'
-			? 'bg-primary text-on-primary category-active'
-			: 'bg-surface-container-low text-on-surface-variant'}
-			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
-
-						<span class="material-symbols-outlined text-[18px]">
-							restaurant </span> 맛집
-					</a>
-
-					<!-- 여행 -->
-					<a
-						href="${pageContext.request.contextPath}/club/list?clubCategory=여행#club-list"
-						class="category-filter px-md py-2 rounded-full
-			${param.clubCategory eq '여행'
-			? 'bg-primary text-on-primary category-active'
-			: 'bg-surface-container-low text-on-surface-variant'}
-			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
-
-						<span class="material-symbols-outlined text-[18px]">
-							travel_explore </span> 여행
-					</a>
-
-					<!-- 음악 -->
-					<a
-						href="${pageContext.request.contextPath}/club/list?clubCategory=음악#club-list"
-						class="category-filter px-md py-2 rounded-full
-			${param.clubCategory eq '음악'
-			? 'bg-primary text-on-primary category-active'
-			: 'bg-surface-container-low text-on-surface-variant'}
-			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
-
-						<span class="material-symbols-outlined text-[18px]">
-							music_note </span> 음악
-					</a>
-
-					<!-- 스터디 -->
-					<a
-						href="${pageContext.request.contextPath}/club/list?clubCategory=스터디#club-list"
-						class="category-filter px-md py-2 rounded-full
-			${param.clubCategory eq '스터디'
-			? 'bg-primary text-on-primary category-active'
-			: 'bg-surface-container-low text-on-surface-variant'}
-			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
-
-						<span class="material-symbols-outlined text-[18px]"> school
-					</span> 스터디
-					</a>
-
-					<!-- 기타 -->
-					<a
-						href="${pageContext.request.contextPath}/club/list?clubCategory=기타#club-list"
-						class="category-filter px-md py-2 rounded-full
-			${param.clubCategory eq '기타'
-			? 'bg-primary text-on-primary category-active'
-			: 'bg-surface-container-low text-on-surface-variant'}
-			font-label-lg text-label-lg active:scale-95 transition-all flex items-center gap-1">
-
-						<span class="material-symbols-outlined text-[18px]">
-							more_horiz </span> 기타
-					</a>
-				</div>
-		</div>
-
+			</div>
 		</section>
-		<!-- Clubs Grid (Bento Style) -->
+
+		<section class="max-w-container-max mx-auto px-gutter mb-4">
+			<form action="${pageContext.request.contextPath}/club/list#club-list"
+				method="get"
+				class="bg-white rounded-3xl p-4 shadow-sm flex flex-wrap items-center gap-3">
+
+				<input type="hidden" name="clubCategory"
+					value="${param.clubCategory}"> <select name="kind"
+					class="px-4 py-3 rounded-2xl bg-surface-container-low text-on-surface-variant font-semibold border-0 outline-none">
+
+					<option value="">전체</option>
+
+					<option value="name" ${param.kind eq 'name' ? 'selected' : ''}>
+						모임명</option>
+
+					<option value="location"
+						${param.kind eq 'location' ? 'selected' : ''}>지역</option>
+
+				</select> <input type="text" name="search" value="${param.search}"
+					placeholder="모임명이나 지역을 검색해보세요"
+					class="flex-1 min-w-[240px] px-4 py-3 rounded-2xl bg-surface-container-low text-on-surface border-0 outline-none">
+
+				<button type="submit"
+					class="px-6 py-3 rounded-2xl bg-primary text-white font-bold shadow-sm hover:opacity-90 transition-all">
+					검색</button>
+
+				<a href="${pageContext.request.contextPath}/club/list#club-list"
+					class="px-5 py-3 rounded-2xl bg-surface-container-low text-primary font-bold">
+					초기화 </a>
+
+			</form>
+		</section>
 
 		<section class="max-w-container-max mx-auto px-gutter">
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
 
 				<c:forEach items="${list}" var="dto">
 
-					<a href="./detail?clubNum=${dto.clubNum}&page=${pager.page}"
+					<a
+						href="./detail?clubNum=${dto.clubNum}&page=${pager.page}&clubCategory=${param.clubCategory}&kind=${param.kind}&search=${param.search}"
 						class="club-card-link group bg-surface rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(154,70,0,0.05)] hover:shadow-[0_20px_40px_rgba(154,70,0,0.1)] transition-all border border-outline-variant/30">
 
 						<div class="h-48 overflow-hidden">
@@ -428,9 +371,7 @@ a:hover {
 								</c:when>
 
 								<c:otherwise>
-
 									<c:choose>
-
 										<c:when test="${dto.clubCategory eq '운동'}">
 											<img
 												src="${pageContext.request.contextPath}/image/default-sports.jpg"
@@ -472,9 +413,7 @@ a:hover {
 												alt="기본 이미지"
 												class="w-full card-img-fix default-club-image group-hover:scale-105 transition-transform duration-500">
 										</c:otherwise>
-
 									</c:choose>
-
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -507,131 +446,49 @@ a:hover {
 
 								<span
 									class="club-capacity ${dto.currentMember >= dto.clubMax ? 'full' : 'available'}">
-
 									<span class="club-capacity-dot"></span> 정원 :
 									${dto.currentMember} / ${dto.clubMax}명
-
 								</span> <span
 									class="text-primary font-label-lg hover:underline transition-all">
 									상세보기 </span>
 
 							</div>
 						</div>
-
-
 					</a>
 
 				</c:forEach>
+
 			</div>
 
 			<div id="paging-position"></div>
+
 			<div class="paging">
 
 				<c:if test="${pager.pre}">
 					<a
-						href="${pageContext.request.contextPath}/club/list?page=${pager.start-1}&clubCategory=${pager.clubCategory}#paging-position">
+						href="${pageContext.request.contextPath}/club/list?page=${pager.start-1}&clubCategory=${param.clubCategory}&kind=${param.kind}&search=${param.search}#paging-position">
 						Previous </a>
 				</c:if>
 
 				<c:forEach begin="${pager.start}" end="${pager.end}" var="i">
 					<a
-						href="${pageContext.request.contextPath}/club/list?page=${i}&clubCategory=${pager.clubCategory}#paging-position"
+						href="${pageContext.request.contextPath}/club/list?page=${i}&clubCategory=${param.clubCategory}&kind=${param.kind}&search=${param.search}#paging-position"
 						class="${pager.page eq i ? 'active-page' : ''}"> ${i} </a>
 				</c:forEach>
 
 				<c:if test="${pager.next}">
 					<a
-						href="${pageContext.request.contextPath}/club/list?page=${pager.end+1}&clubCategory=${pager.clubCategory}#paging-position">
+						href="${pageContext.request.contextPath}/club/list?page=${pager.end+1}&clubCategory=${param.clubCategory}&kind=${param.kind}&search=${param.search}#paging-position">
 						Next </a>
 				</c:if>
 
 			</div>
 
-
 		</section>
 
-
-
 	</main>
-	<!-- Footer -->
-	<!-- <footer
-		class="w-full py-xl bg-surface-container-low dark:bg-surface-dim border-t border-outline-variant dark:border-outline">
-		<div
-			class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md px-gutter max-w-container-max mx-auto">
-			<div class="flex flex-col gap-sm">
-				<div
-					class="text-headline-sm font-headline-sm font-bold text-on-surface-variant flex items-center gap-2">
-					<span class="material-symbols-outlined">eco</span> Kosmo
-				</div>
-				<p
-					class="font-body-sm text-body-sm text-on-surface-variant opacity-80">©
-					2026 Kosmo 팀프로젝트</p>
-			</div>
-			<div class="flex flex-col gap-xs">
-				<h4 class="font-label-lg text-label-lg text-on-surface mb-xs">Community</h4>
-				<a
-					class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant hover:underline hover:text-primary transition-colors"
-					href="#">About Us</a> <a
-					class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant hover:underline hover:text-primary transition-colors"
-					href="#">Regional Info</a> <a
-					class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant hover:underline hover:text-primary transition-colors"
-					href="#">Business Inquiry</a>
-			</div>
-			<div class="flex flex-col gap-xs">
-				<h4 class="font-label-lg text-label-lg text-on-surface mb-xs">Support</h4>
-				<a
-					class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant hover:underline hover:text-primary transition-colors"
-					href="#">Help Center</a> <a
-					class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant hover:underline hover:text-primary transition-colors"
-					href="#">Terms of Service</a> <a
-					class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant hover:underline hover:text-primary transition-colors"
-					href="#">Privacy Policy</a>
-			</div>
-			<div class="flex flex-col gap-sm">
-				<h4 class="font-label-lg text-label-lg text-on-surface mb-xs">Download
-					App</h4>
-				<div class="flex gap-sm">
-					<div
-						class="w-10 h-10 bg-surface-container-highest rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary/10 transition-colors">
-						<span class="material-symbols-outlined text-on-surface-variant">phone_iphone</span>
-					</div>
-					<div
-						class="w-10 h-10 bg-surface-container-highest rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary/10 transition-colors">
-						<span class="material-symbols-outlined text-on-surface-variant">ad_units</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
-	Mobile BottomNavBar
-	<div
-		class="md:hidden fixed bottom-0 left-0 right-0 bg-surface/95 backdrop-blur-md border-t border-outline-variant z-50 flex justify-around items-center h-16 px-gutter">
-		<button
-			class="flex flex-col items-center gap-1 text-on-surface-variant">
-			<span class="material-symbols-outlined">home</span> <span
-				class="text-[10px] font-label-sm">Home</span>
-		</button>
-		<button
-			class="flex flex-col items-center gap-1 text-on-surface-variant">
-			<span class="material-symbols-outlined">explore</span> <span
-				class="text-[10px] font-label-sm">Used Goods</span>
-		</button>
-		<button class="flex flex-col items-center gap-1 text-primary">
-			<span class="material-symbols-outlined"
-				style="font-variation-settings: 'FILL' 1;">groups</span> <span
-				class="text-[10px] font-label-sm font-bold">Clubs</span>
-		</button>
-		<button
-			class="flex flex-col items-center gap-1 text-on-surface-variant">
-			<span class="material-symbols-outlined">chat</span> <span
-				class="text-[10px] font-label-sm">Chat</span>
-		</button>
-		<button
-			class="flex flex-col items-center gap-1 text-on-surface-variant">
-			<span class="material-symbols-outlined">person</span> <span
-				class="text-[10px] font-label-sm">Profile</span>
-		</button>
-	</div> -->
+
 	<c:import url="/WEB-INF/views/temp/footer.jsp"></c:import>
+
 </body>
 </html>
