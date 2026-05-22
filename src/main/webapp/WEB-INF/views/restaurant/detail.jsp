@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -81,9 +80,14 @@
 
 							<c:forEach items="${dto.fileDTOs}" var="file">
 								<div class="detail-slide-item">
-									<img src="/files/restaurant/${file.fileName}"
-										class="restaurant-detail-img"
-										onerror="this.onerror=null; this.classList.add('default-detail-image'); this.src='${defaultImage}';">
+									<c:choose>
+										<c:when test="${fn:startsWith(file.fileName, 'http')}">
+											<img src="${file.fileName}" class="restaurant-detail-img" onerror="this.onerror=null; this.classList.add('default-detail-image'); this.src='${defaultImage}';">
+										</c:when>
+										<c:otherwise>
+											<img src="/files/restaurant/${file.fileName}" class="restaurant-detail-img" onerror="this.onerror=null; this.classList.add('default-detail-image'); this.src='${defaultImage}';">
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</c:forEach>
 

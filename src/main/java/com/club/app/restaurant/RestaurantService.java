@@ -1,14 +1,11 @@
 package com.club.app.restaurant;
 
-import java.io.File;
 import java.util.List;
-import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.club.app.file.FileManager;
+import com.club.app.file.S3Service;
 import com.club.app.pager.Pager;
 import com.club.app.restaurant.file.RestaurantFileDTO;
 import com.club.app.restaurant.like.RestaurantLikeDTO;
@@ -19,41 +16,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RestaurantService {
 
-	private final FileManager fileManager;
+	private final S3Service s3Service;
 	private final RestaurantMapper restaurantMapper;
-
-	@Value("${app.upload.restaurant}")
-	private String uploadPath;
 
 	public int add(RestaurantDTO restaurantDTO, MultipartFile[] files) throws Exception {
 
 		int result = restaurantMapper.add(restaurantDTO);
 
 		if (files != null) {
-
-			File folder = new File(uploadPath);
-
-			if (!folder.exists()) {
-				folder.mkdirs();
-			}
-
 			for (MultipartFile file : files) {
-
 				if (file == null || file.isEmpty()) {
 					continue;
 				}
 
-				String oriName = file.getOriginalFilename();
-				String fileName = UUID.randomUUID().toString() + "_" + oriName;
-
-				File saveFile = new File(folder, fileName);
-
-				file.transferTo(saveFile);
+				String fileName = s3Service.upload(file, "restaurant");
 
 				RestaurantFileDTO restaurantFileDTO = new RestaurantFileDTO();
 				restaurantFileDTO.setRestaurantNum(restaurantDTO.getRestaurantNum());
 				restaurantFileDTO.setFileName(fileName);
-				restaurantFileDTO.setOriName(oriName);
+				restaurantFileDTO.setOriName(file.getOriginalFilename());
 
 				restaurantMapper.addFile(restaurantFileDTO);
 			}
@@ -116,17 +97,14 @@ public class RestaurantService {
 		int result = restaurantMapper.update(restaurantDTO);
 
 		if (files != null) {
-
 			for (MultipartFile multipartFile : files) {
-
 				if (multipartFile == null || multipartFile.isEmpty()) {
 					continue;
 				}
 
-				String fileName = fileManager.fileSave("restaurant", multipartFile);
+				String fileName = s3Service.upload(multipartFile, "restaurant");
 
 				RestaurantFileDTO restaurantFileDTO = new RestaurantFileDTO();
-
 				restaurantFileDTO.setRestaurantNum(restaurantDTO.getRestaurantNum());
 				restaurantFileDTO.setFileName(fileName);
 				restaurantFileDTO.setOriName(multipartFile.getOriginalFilename());
@@ -139,19 +117,23 @@ public class RestaurantService {
 	}
 
 	public int delete(RestaurantDTO restaurantDTO) throws Exception {
-
+		// S3 파일 삭제를 위해 상세 정보 가져오기
+		RestaurantDTO detail = restaurantMapper.detail(restaurantDTO);
+		if(detail != null && detail.getFileDTOs() != null){
+			for(RestaurantFileDTO file : detail.getFileDTOs()){
+				s3Service.delete(file.getFileName());
+			}
+		}
 		return restaurantMapper.delete(restaurantDTO);
 	}
 
 	public int deleteFile(RestaurantFileDTO restaurantFileDTO) throws Exception {
-
 		RestaurantFileDTO fileDTO = restaurantMapper.fileDetail(restaurantFileDTO);
-
 		if (fileDTO == null) {
 			return 0;
 		}
 
-		fileManager.fileDelete("restaurant", fileDTO.getFileName());
+		s3Service.delete(fileDTO.getFileName());
 
 		return restaurantMapper.deleteFile(restaurantFileDTO);
 	}

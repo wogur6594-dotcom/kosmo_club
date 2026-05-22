@@ -362,12 +362,15 @@ a:hover {
 
 						<div class="h-48 overflow-hidden">
 							<c:choose>
-								<c:when
-									test="${not empty dto.fileDTO and not empty dto.fileDTO.fileName}">
-									<img
-										src="${pageContext.request.contextPath}/files/club/${dto.fileDTO.fileName}"
-										alt="${dto.clubName}"
-										class="w-full card-img-fix group-hover:scale-105 transition-transform duration-500">
+								<c:when test="${not empty dto.fileDTO and not empty dto.fileDTO.fileName}">
+									<c:choose>
+										<c:when test="${fn:startsWith(dto.fileDTO.fileName, 'http')}">
+											<img src="${dto.fileDTO.fileName}" alt="${dto.clubName}" class="w-full card-img-fix group-hover:scale-105 transition-transform duration-500">
+										</c:when>
+										<c:otherwise>
+											<img src="${pageContext.request.contextPath}/files/club/${dto.fileDTO.fileName}" alt="${dto.clubName}" class="w-full card-img-fix group-hover:scale-105 transition-transform duration-500">
+										</c:otherwise>
+									</c:choose>
 								</c:when>
 
 								<c:otherwise>

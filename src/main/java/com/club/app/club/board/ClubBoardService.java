@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.club.app.file.FileManager;
+import com.club.app.file.S3Service;
 import com.club.app.pager.Pager;
 
 @Service
@@ -16,7 +16,7 @@ public class ClubBoardService {
 	private ClubFileMapper clubFileMapper;
 
 	@Autowired
-	private FileManager fileManager;
+	private S3Service s3Service;
 
 	@Autowired
 	private ClubBoardMapper clubBoardMapper;
@@ -56,7 +56,7 @@ public class ClubBoardService {
 					continue;
 				}
 
-				String fileName = fileManager.fileSave("clubboard", mf);
+				String fileName = s3Service.upload(mf, "clubBoard");
 
 				ClubFileDTO clubFileDTO = new ClubFileDTO();
 
@@ -90,7 +90,7 @@ public class ClubBoardService {
 					continue;
 				}
 
-				String fileName = fileManager.fileSave("clubboard", mf);
+				String fileName = s3Service.upload(mf, "clubBoard");
 
 				ClubFileDTO clubFileDTO = new ClubFileDTO();
 
@@ -107,6 +107,12 @@ public class ClubBoardService {
 	}
 
 	public int delete(ClubBoardDTO clubBoardDTO) throws Exception {
+		ClubBoardDTO detail = this.detail(clubBoardDTO);
+		if(detail != null && detail.getList() != null){
+			for(ClubFileDTO file : detail.getList()){
+				s3Service.delete(file.getFileName());
+			}
+		}
 		return clubBoardMapper.delete(clubBoardDTO);
 	}
 

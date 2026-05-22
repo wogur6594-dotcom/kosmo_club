@@ -1,8 +1,6 @@
 package com.club.app.club.chat;
 
-import java.io.File;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,6 +17,7 @@ import com.club.app.club.ClubDTO;
 import com.club.app.club.ClubService;
 import com.club.app.club.member.ClubMemberDTO;
 import com.club.app.club.member.ClubMemberService;
+import com.club.app.file.S3Service;
 import com.club.app.member.MemberDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +30,7 @@ public class ClubChatController {
 	private final ClubMemberService clubMemberService;
 	private final ClubMessageService clubMessageService;
 	private final ClubService clubService;
+	private final S3Service s3Service;
 
 	@GetMapping("room")
 	public String room(@RequestParam("clubNum") Long clubNum, @AuthenticationPrincipal MemberDTO memberDTO, Model model,
@@ -90,18 +90,9 @@ public class ClubChatController {
 			return "typeFail";
 		}
 
-		String ext = oriName.substring(oriName.lastIndexOf("."));
-		String fileName = UUID.randomUUID().toString() + ext;
+		// S3 업로드 적용
+		String fileUrl = s3Service.upload(file, "clubChat");
 
-		File dir = new File("C:/upload/clubChat/");
-
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-
-		File saveFile = new File(dir, fileName);
-		file.transferTo(saveFile);
-
-		return "/files/clubChat/" + fileName;
+		return fileUrl;
 	}
 }

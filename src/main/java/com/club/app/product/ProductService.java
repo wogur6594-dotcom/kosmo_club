@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.club.app.file.FileManager;
+import com.club.app.file.S3Service;
 import com.club.app.pager.ProductPager;
 
 @Service
@@ -19,7 +20,7 @@ public class ProductService {
 	private ProductMapper productMapper;
 
 	@Autowired
-	private com.club.app.file.S3Service s3Service;
+	private S3Service s3Service;
 
 	public int add(ProductDTO productDTO) throws Exception {
 

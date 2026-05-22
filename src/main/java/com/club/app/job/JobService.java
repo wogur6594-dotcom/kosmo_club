@@ -1,12 +1,10 @@
 package com.club.app.job;
 
-import java.io.File;
 import java.util.List;
-import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.club.app.file.S3Service;
 import com.club.app.member.MemberDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -16,9 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class JobService {
 
 	private final JobMapper jobMapper;
-
-	@Value("${app.upload.path}")
-	private String path;
+	private final S3Service s3Service;
 
 	public int add(JobDTO jobDTO) throws Exception {
 
@@ -26,17 +22,7 @@ public class JobService {
 
 		if (jobDTO.getAttach() != null && !jobDTO.getAttach().isEmpty()) {
 
-			File folder = new File(path + "job/");
-
-			if (!folder.exists()) {
-				folder.mkdirs();
-			}
-
-			String fileName = UUID.randomUUID() + "_" + jobDTO.getAttach().getOriginalFilename();
-
-			File file = new File(folder, fileName);
-
-			jobDTO.getAttach().transferTo(file);
+			String fileName = s3Service.upload(jobDTO.getAttach(), "job");
 
 			JobFileDTO jobFileDTO = new JobFileDTO();
 
@@ -69,17 +55,7 @@ public class JobService {
 
 			this.deleteFile(jobDTO);
 
-			File folder = new File(path + "job/");
-
-			if (!folder.exists()) {
-				folder.mkdirs();
-			}
-
-			String fileName = UUID.randomUUID() + "_" + jobDTO.getAttach().getOriginalFilename();
-
-			File file = new File(folder, fileName);
-
-			jobDTO.getAttach().transferTo(file);
+			String fileName = s3Service.upload(jobDTO.getAttach(), "job");
 
 			JobFileDTO jobFileDTO = new JobFileDTO();
 
@@ -114,12 +90,7 @@ public class JobService {
 		JobFileDTO jobFileDTO = jobMapper.fileDetail(jobDTO);
 
 		if (jobFileDTO != null) {
-			File file = new File(path + "job/", jobFileDTO.getFileName());
-
-			if (file.exists()) {
-				file.delete();
-			}
-
+			s3Service.delete(jobFileDTO.getFileName());
 			jobMapper.deleteFile(jobDTO);
 		}
 

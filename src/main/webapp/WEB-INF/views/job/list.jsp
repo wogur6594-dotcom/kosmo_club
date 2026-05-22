@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
@@ -386,8 +387,14 @@ ${dto.currentApplyMember ge dto.jobMaxMember ? 'opacity-50' : ''}"
 
 								<!-- 썸네일 이미지 -->
 								<c:if test="${not empty dto.fileName}">
-									<img src="/files/job/${dto.fileName}"
-										style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; float: right;">
+									<c:choose>
+										<c:when test="${not empty dto.fileName and fn:startsWith(dto.fileName, 'http')}">
+											<img src="${dto.fileName}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; float: right;">
+										</c:when>
+										<c:otherwise>
+											<img src="/files/job/${dto.fileName}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; float: right;">
+										</c:otherwise>
+									</c:choose>
 								</c:if>
 
 								<div class="job-meta">${dto.memberName}·

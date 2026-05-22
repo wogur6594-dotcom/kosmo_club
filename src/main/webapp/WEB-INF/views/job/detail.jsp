@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 
@@ -30,7 +31,14 @@
 
 		<c:if test="${not empty dto.fileName}">
 			<div class="mb-4">
-				<img src="/files/job/${dto.fileName}" class="job-image">
+				<c:choose>
+					<c:when test="${not empty dto.fileName and fn:startsWith(dto.fileName, 'http')}">
+						<img src="${dto.fileName}" class="job-image">
+					</c:when>
+					<c:otherwise>
+						<img src="/files/job/${dto.fileName}" class="job-image">
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</c:if>
 

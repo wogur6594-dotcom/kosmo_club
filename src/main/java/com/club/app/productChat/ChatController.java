@@ -7,10 +7,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.club.app.file.S3Service;
 import com.club.app.member.MemberDTO;
 import com.club.app.product.ProductDTO;
 import com.club.app.product.ProductService;
@@ -26,7 +30,7 @@ public class ChatController {
 	private ProductService productService;
 	
 	@Autowired
-	private com.club.app.file.S3Service s3Service;
+	private S3Service s3Service;
 
 	// 채팅방 생성
 	@GetMapping("create")
@@ -138,16 +142,16 @@ public class ChatController {
 	}
 
 	// 사진 업로드
-	@org.springframework.web.bind.annotation.PostMapping("uploadImage")
-	@org.springframework.web.bind.annotation.ResponseBody
-	public String uploadImage(@RequestParam("file") org.springframework.web.multipart.MultipartFile file)
+	@PostMapping("uploadImage")
+	@ResponseBody
+	public String uploadImage(@RequestParam("file") MultipartFile file)
 			throws Exception {
 		return s3Service.upload(file, "chat");
 	}
 
 	// 거래 상태 변경
-	@org.springframework.web.bind.annotation.PostMapping("updateStatus")
-	@org.springframework.web.bind.annotation.ResponseBody
+	@PostMapping("updateStatus")
+	@ResponseBody
 	public String updateStatus(ProductDTO productDTO) throws Exception {
 		int result = productService.edit(productDTO);
 		return result > 0 ? "success" : "fail";

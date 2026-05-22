@@ -129,8 +129,14 @@
 				<div class="side-card p-3 mb-3">
 
 					<c:if test="${not empty dto.fileDTO}">
-						<img src="/files/club/${dto.fileDTO.fileName}"
-							alt="${dto.clubName}" class="club-image mb-3">
+						<c:choose>
+							<c:when test="${fn:startsWith(dto.fileDTO.fileName, 'http')}">
+								<img src="${dto.fileDTO.fileName}" alt="${dto.clubName}" class="club-image mb-3">
+							</c:when>
+							<c:otherwise>
+								<img src="/files/club/${dto.fileDTO.fileName}" alt="${dto.clubName}" class="club-image mb-3">
+							</c:otherwise>
+						</c:choose>
 					</c:if>
 
 					<h5 class="section-title mb-3">동호회 정보</h5>

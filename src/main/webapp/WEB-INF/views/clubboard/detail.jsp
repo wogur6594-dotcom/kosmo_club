@@ -48,7 +48,9 @@
 
 				<div class="board-detail-meta-item">
 					<strong>등록일 :</strong>
-					${fn:replace(fn:substring(dto.createDate.toString(), 0, 16), 'T', ' ')}
+					<c:if test="${not empty dto.createDate}">
+						${fn:replace(fn:substring(dto.createDate.toString(), 0, 16), 'T', ' ')}
+					</c:if>
 				</div>
 
 				<div class="board-detail-meta-item">
@@ -58,11 +60,14 @@
 			</div>
 
 			<c:forEach items="${dto.list}" var="file">
-
-				<img
-					src="${pageContext.request.contextPath}/files/clubboard/${file.fileName}"
-					class="board-detail-image">
-
+				<c:choose>
+					<c:when test="${not empty file.fileName and fn:startsWith(file.fileName, 'http')}">
+						<img src="${file.fileName}" class="board-detail-image">
+					</c:when>
+					<c:otherwise>
+						<img src="${pageContext.request.contextPath}/files/clubboard/${file.fileName}" class="board-detail-image">
+					</c:otherwise>
+				</c:choose>
 			</c:forEach>
 
 			<div class="board-detail-content">${dto.boardContents}</div>
@@ -118,9 +123,11 @@
 							<div class="comment-item">
 
 								<div>
-									<span class="comment-writer"> ${comment.memberName} </span> <span
-										class="comment-date">
-										${fn:replace(fn:substring(comment.createDate.toString(), 0, 16), 'T', ' ')}
+									<span class="comment-writer"> ${comment.memberName} </span> 
+									<span class="comment-date">
+										<c:if test="${not empty comment.createDate}">
+											${fn:replace(fn:substring(comment.createDate.toString(), 0, 16), 'T', ' ')}
+										</c:if>
 									</span>
 								</div>
 

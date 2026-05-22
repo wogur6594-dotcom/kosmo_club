@@ -280,7 +280,6 @@
 
 		DELETE FROM "TB_CLUB_BOARD"
 		WHERE "BOARD_NUM" = #{boardNum}
-		AND "BOARD_WRITER" = #{boardWriter}
 
 	</delete>
 

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.club.app.file.S3Service;
+
 @Service
 public class ChatService {
 
@@ -12,7 +14,7 @@ public class ChatService {
 	private ChatMapper chatMapper;
 
 	@Autowired
-	private com.club.app.file.S3Service s3Service;
+	private S3Service s3Service;
 
 	// 채팅방 조회
 	public ChatRoomDTO findRoom(ChatRoomDTO chatRoomDTO) throws Exception {

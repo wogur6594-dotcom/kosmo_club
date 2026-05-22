@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 
 <!DOCTYPE html>
 <html>
@@ -103,9 +104,20 @@ body {
 
 									<div style="display: inline-block; margin-right: 15px; vertical-align: top;">
 
-										<img src="${pageContext.request.contextPath}/files/clubboard/${f.fileName}"
-											class="preview-img"
-											alt="${f.oriName}">
+										<c:choose>
+											<c:when test="${not empty f.fileName and fn:startsWith(f.fileName, 'http')}">
+												<img src="${f.fileName}"
+													class="preview-img"
+													alt="${f.oriName}">
+											</c:when>
+											<c:otherwise>
+												<c:if test="${not empty f.fileName}">
+													<img src="${pageContext.request.contextPath}/files/clubboard/${f.fileName}"
+														class="preview-img"
+														alt="${f.oriName}">
+												</c:if>
+											</c:otherwise>
+										</c:choose>
 
 										<div class="text-center mt-2">
 										

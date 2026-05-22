@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -15,6 +16,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.club.app.member.MemberDTO;
+import com.club.app.notification.NotificationDTO;
+import com.club.app.notification.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -24,15 +27,15 @@ public class ProductChatHandler extends TextWebSocketHandler {
 
 	private final ObjectMapper objectMapper;
 	private final ChatService chatService;
-	private final com.club.app.notification.NotificationService notificationService;
+	private final NotificationService notificationService;
 	
 	// 방별 세션 (Detail view 전용)
 	private final Map<Long, List<WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
 	// 사용자별 모든 세션 (List view + Detail view 통합)
 	private final Map<Long, List<WebSocketSession>> userSessions = new ConcurrentHashMap<>();
 
-	@org.springframework.beans.factory.annotation.Autowired
-	public ProductChatHandler(ObjectMapper objectMapper, ChatService chatService, com.club.app.notification.NotificationService notificationService) {
+	@Autowired
+	public ProductChatHandler(ObjectMapper objectMapper, ChatService chatService, NotificationService notificationService) {
 		this.objectMapper = objectMapper;
 		this.chatService = chatService;
 		this.notificationService = notificationService;
@@ -123,7 +126,7 @@ public class ProductChatHandler extends TextWebSocketHandler {
 			// 알림 등록 (상대방에게만, 방에 없을 때)
 			if (!isOtherInRoom) {
 				Long recipientNum = (room.getBuyerNum().equals(loginUser.getMemberNum())) ? room.getSellerNum() : room.getBuyerNum();
-				com.club.app.notification.NotificationDTO noti = new com.club.app.notification.NotificationDTO();
+				NotificationDTO noti = new NotificationDTO();
 				noti.setMemberNum(recipientNum);
 				noti.setNotificationContents(loginUser.getMemberId() + "님으로부터 새 메시지가 도착했습니다.");
 				noti.setNotificationUrl("/productChat/detail?chatroomNum=" + roomNum);

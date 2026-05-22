@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.club.app.member.MemberDTO;
 import com.club.app.member.MemberService;
 import com.club.app.pager.ProductPager;
+import com.club.app.productChat.ChatService;
 
 import jakarta.validation.Valid;
 
@@ -33,7 +34,7 @@ public class ProductController {
 	private ProductService productService;
 
 	@Autowired
-	private com.club.app.productChat.ChatService chatService;
+	private ChatService chatService;
 
 	@Autowired
 	private MemberService memberService;

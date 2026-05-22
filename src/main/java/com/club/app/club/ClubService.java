@@ -1,8 +1,6 @@
 package com.club.app.club;
 
-import java.io.File;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.club.app.club.member.ClubMemberDTO;
 import com.club.app.club.member.ClubMemberMapper;
 import com.club.app.file.FileDTO;
+import com.club.app.file.S3Service;
 import com.club.app.member.MemberDTO;
 import com.club.app.pager.Pager;
 
@@ -23,6 +22,9 @@ public class ClubService {
 
 	@Autowired
 	private ClubMemberMapper clubMemberMapper;
+	
+	@Autowired
+	private S3Service s3Service;
 
 	public List<ClubDTO> list(Pager pager) throws Exception {
 
@@ -50,23 +52,13 @@ public class ClubService {
 
 		clubMemberMapper.join(clubMemberDTO);
 
-		String path = "C:/upload/club/";
-
-		File dir = new File(path);
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-
 		for (MultipartFile multipartFile : attaches) {
 
 			if (multipartFile.isEmpty()) {
 				continue;
 			}
 
-			String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
-
-			File file = new File(path, fileName);
-			multipartFile.transferTo(file);
+			String fileName = s3Service.upload(multipartFile, "club");
 
 			FileDTO fileDTO = new FileDTO();
 			fileDTO.setFileName(fileName);
@@ -88,6 +80,10 @@ public class ClubService {
 	}
 
 	public int delete(ClubDTO clubDTO) throws Exception {
+		ClubDTO detail = clubMapper.detail(clubDTO);
+		if(detail != null && detail.getFileDTO() != null){
+			s3Service.delete(detail.getFileDTO().getFileName());
+		}
 		return clubMapper.delete(clubDTO);
 	}
 
