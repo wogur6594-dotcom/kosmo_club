@@ -9,7 +9,14 @@
                 <div class="product-img-container" style="position: relative; padding-top: 100%; overflow: hidden;">
                     <c:choose>
                         <c:when test="${not empty l.fileList and not empty l.fileList[0].fileName}">
-                            <img src="<c:url value='/files/product/${l.fileList[0].fileName}'/>" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                            <c:choose>
+                                <c:when test="${fn:startsWith(l.fileList[0].fileName, 'http')}">
+                                    <img src="${l.fileList[0].fileName}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="<c:url value='/files/product/${l.fileList[0].fileName}'/>" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                                </c:otherwise>
+                            </c:choose>
                         </c:when>
                         <c:otherwise>
                             <img src="<c:url value='/image/noImage.png'/>" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">

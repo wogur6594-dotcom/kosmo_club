@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -116,8 +117,14 @@ body {
 		<div class="profile-edit-section">
 			<c:choose>
 				<c:when test="${not empty update.profile.fileName}">
-					<img src="/files/memberProfile/${update.profile.fileName}"
-						class="profile-preview" id="previewImg">
+					<c:choose>
+						<c:when test="${fn:startsWith(update.profile.fileName, 'http')}">
+							<img src="${update.profile.fileName}" class="profile-preview" id="previewImg">
+						</c:when>
+						<c:otherwise>
+							<img src="/files/memberProfile/${update.profile.fileName}" class="profile-preview" id="previewImg">
+						</c:otherwise>
+					</c:choose>
 				</c:when>
 				<c:otherwise>
 					<img src="/image/default.png" class="profile-preview"

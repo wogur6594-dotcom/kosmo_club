@@ -104,6 +104,11 @@
 		WHERE "FILE_NUM" = #{fileNum}
 	</delete>
 
+	<select id="getFileDetail" parameterType="long" resultType="ProductFileDTO">
+		SELECT * FROM "TB_PRODUCTFILE"
+		WHERE "FILE_NUM" = #{fileNum}
+	</select>
+
 	<delete id="delete" parameterType="ProductDTO">
 		DELETE FROM "TB_PRODUCT"
 		WHERE "PRODUCT_NUM" = #{productNum}

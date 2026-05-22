@@ -254,7 +254,8 @@ function renderMessage(data) {
 
     let contentHtml = "";
     if (data.type === "image") {
-        contentHtml = `<img src="/files/chat/${data.messageContent}" alt="사진" style="max-width:200px; border-radius:8px; cursor:pointer" onclick="window.open(this.src)">`;
+        let imgSrc = data.messageContent.startsWith("http") ? data.messageContent : "/files/chat/" + data.messageContent;
+        contentHtml = `<img src="${imgSrc}" alt="사진" style="max-width:200px; border-radius:8px; cursor:pointer" onclick="window.open(this.src)">`;
     } else if (data.type === "map") {
         const [addr, coord] = data.messageContent.split("|");
         contentHtml = `

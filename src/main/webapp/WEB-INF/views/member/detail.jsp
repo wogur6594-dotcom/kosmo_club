@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -169,8 +170,14 @@ body {
 		<div class="profile-header">
 			<c:choose>
 				<c:when test="${not empty detail.profile.fileName}">
-					<img src="/files/memberProfile/${detail.profile.fileName}"
-						class="profile-img">
+					<c:choose>
+						<c:when test="${fn:startsWith(detail.profile.fileName, 'http')}">
+							<img src="${detail.profile.fileName}" class="profile-img">
+						</c:when>
+						<c:otherwise>
+							<img src="/files/memberProfile/${detail.profile.fileName}" class="profile-img">
+						</c:otherwise>
+					</c:choose>
 				</c:when>
 				<c:otherwise>
 					<img src="/image/default.png" class="profile-img">

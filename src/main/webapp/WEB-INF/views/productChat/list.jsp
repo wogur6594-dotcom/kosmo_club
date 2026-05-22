@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -134,7 +135,14 @@
 							<img class="thumb" src="/image/default.png">
 						</c:when>
 						<c:otherwise>
-							<img class="thumb" src="/files/memberProfile/${profileImg}" onerror="this.src='/image/default.png'">
+							<c:choose>
+								<c:when test="${fn:startsWith(profileImg, 'http')}">
+									<img class="thumb" src="${profileImg}" onerror="this.src='/image/default.png'">
+								</c:when>
+								<c:otherwise>
+									<img class="thumb" src="/files/memberProfile/${profileImg}" onerror="this.src='/image/default.png'">
+								</c:otherwise>
+							</c:choose>
 						</c:otherwise>
 					</c:choose>
 					

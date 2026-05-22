@@ -23,6 +23,8 @@ public interface ProductMapper {
 
 	public int deleteFile(Long fileNum) throws Exception;
 
+	public ProductFileDTO getFileDetail(Long fileNum) throws Exception;
+
 	public void delete(ProductDTO productDTO) throws Exception;
 
 	public List<ProductDTO> myList(ProductPager pager);

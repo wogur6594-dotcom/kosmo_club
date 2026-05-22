@@ -26,7 +26,7 @@ public class ChatController {
 	private ProductService productService;
 	
 	@Autowired
-	private com.club.app.file.FileManager fileManager;
+	private com.club.app.file.S3Service s3Service;
 
 	// 채팅방 생성
 	@GetMapping("create")
@@ -142,7 +142,7 @@ public class ChatController {
 	@org.springframework.web.bind.annotation.ResponseBody
 	public String uploadImage(@RequestParam("file") org.springframework.web.multipart.MultipartFile file)
 			throws Exception {
-		return fileManager.fileSave("chat", file);
+		return s3Service.upload(file, "chat");
 	}
 
 	// 거래 상태 변경

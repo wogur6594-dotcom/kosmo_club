@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!DOCTYPE html>
@@ -140,7 +141,21 @@
                         <div class="carousel-inner">
                             <c:forEach var="f" items="${product.fileList}" varStatus="status">
                                 <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                                    <img src="/files/product/${f.fileName}" class="d-block w-100">
+                                    <c:choose>
+                                        <c:when test="${fn:startsWith(f.fileName, 'http')}">
+                                            <img src="${f.fileName}" class="d-block w-100">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:choose>
+                                        <c:when test="${fn:startsWith(f.fileName, 'http')}">
+                                            <img src="${f.fileName}" class="d-block w-100">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="/files/product/${f.fileName}" class="d-block w-100">
+                                        </c:otherwise>
+                                    </c:choose>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </c:forEach>
                         </div>
@@ -162,7 +177,14 @@
         
         <div class="thumbnail-bar">
             <c:forEach var="f" items="${product.fileList}" varStatus="status">
-                <img src="/files/product/${f.fileName}" class="thumbnail-item ${status.index == 0 ? 'active' : ''}" data-target="#productCarousel" data-slide-to="${status.index}">
+                <c:choose>
+                    <c:when test="${fn:startsWith(f.fileName, 'http')}">
+                        <img src="${f.fileName}" class="thumbnail-item ${status.index == 0 ? 'active' : ''}" data-target="#productCarousel" data-slide-to="${status.index}">
+                    </c:when>
+                    <c:otherwise>
+                        <img src="/files/product/${f.fileName}" class="thumbnail-item ${status.index == 0 ? 'active' : ''}" data-target="#productCarousel" data-slide-to="${status.index}">
+                    </c:otherwise>
+                </c:choose>
             </c:forEach>
         </div>
 

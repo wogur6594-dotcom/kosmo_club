@@ -19,7 +19,7 @@ public class ProductService {
 	private ProductMapper productMapper;
 
 	@Autowired
-	private FileManager fileManager;
+	private com.club.app.file.S3Service s3Service;
 
 	public int add(ProductDTO productDTO) throws Exception {
 
@@ -34,8 +34,8 @@ public class ProductService {
 					continue;
 				}
 
-				// 실제 파일 저장
-				String fileName = fileManager.fileSave("product", mf);
+				// 실제 파일 저장 (S3 사용)
+				String fileName = s3Service.upload(mf, "product");
 
 				// DTO 생성
 				ProductFileDTO productFileDTO = new ProductFileDTO();
@@ -96,8 +96,8 @@ public class ProductService {
 		if (file == null || file.isEmpty()) {
 			return 0;
 		}
-		// 1. 파일 저장 (FileManager 사용)
-		String fileName = fileManager.fileSave("product", file);
+		// 1. 파일 저장 (S3Service 사용)
+		String fileName = s3Service.upload(file, "product");
 		// 2. DTO 생성
 		ProductFileDTO dto = new ProductFileDTO();
 		dto.setProductNum(productNum);
@@ -108,6 +108,10 @@ public class ProductService {
 	}
 
 	public int deleteFile(Long fileNum) throws Exception {
+		ProductFileDTO fileDTO = productMapper.getFileDetail(fileNum);
+		if (fileDTO != null) {
+			s3Service.delete(fileDTO.getFileName());
+		}
 		return productMapper.deleteFile(fileNum);
 	}
 
@@ -125,7 +129,14 @@ public class ProductService {
 			throw new AccessDeniedException("삭제 권한 없음");
 		}
 
-		// 3. 삭제 (cascade면 상품만 삭제)
+		// 3. S3 파일 삭제
+		if (product.getFileList() != null) {
+			for (ProductFileDTO f : product.getFileList()) {
+				s3Service.delete(f.getFileName());
+			}
+		}
+
+		// 4. 삭제 (cascade면 상품만 삭제)
 		productMapper.delete(productDTO);
 	}
 

@@ -206,7 +206,14 @@
                                     <div class="product-img-container">
                                         <c:choose>
                                             <c:when test="${not empty l.fileList and not empty l.fileList[0].fileName}">
-                                                <img src="<c:url value='/files/product/${l.fileList[0].fileName}'/>">
+                                                <c:choose>
+                                                    <c:when test="${fn:startsWith(l.fileList[0].fileName, 'http')}">
+                                                        <img src="${l.fileList[0].fileName}">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="<c:url value='/files/product/${l.fileList[0].fileName}'/>">
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </c:when>
                                             <c:otherwise>
                                                 <img src="<c:url value='/image/noImage.png'/>">

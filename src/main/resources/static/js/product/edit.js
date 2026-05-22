@@ -65,7 +65,7 @@ $(document).ready(function() {
                 res.fileList.forEach(f => {
                     html += `
                         <div class="position-relative mr-2 file-box">
-                            <img src="/files/product/${f.fileName}"
+                            <img src="${f.fileName.startsWith('http') ? f.fileName : '/files/product/' + f.fileName}"
                                  style="width:80px;height:80px;object-fit:cover;">
                             <button type="button"
                                     class="btn btn-sm btn-danger delete-btn"

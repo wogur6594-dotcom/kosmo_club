@@ -11,6 +11,9 @@ public class ChatService {
 	@Autowired
 	private ChatMapper chatMapper;
 
+	@Autowired
+	private com.club.app.file.S3Service s3Service;
+
 	// 채팅방 조회
 	public ChatRoomDTO findRoom(ChatRoomDTO chatRoomDTO) throws Exception {
 		return chatMapper.findRoom(chatRoomDTO);
@@ -42,6 +45,16 @@ public class ChatService {
 	}
 
 	public int deleteChatRoom(Long chatroomNum) throws Exception {
+		// 1. 채팅방의 모든 메시지 조회
+		List<ChatMessageDTO> messages = chatMapper.messageList(chatroomNum);
+
+		// 2. 이미지 타입의 메시지인 경우 S3에서 삭제
+		for (ChatMessageDTO m : messages) {
+			if ("image".equals(m.getType())) {
+				s3Service.delete(m.getMessageContent());
+			}
+		}
+		// 3. DB 삭제
 		return chatMapper.deleteChatRoom(chatroomNum);
 	}
 

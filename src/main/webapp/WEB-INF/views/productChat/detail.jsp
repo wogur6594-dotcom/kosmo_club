@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
@@ -144,7 +145,14 @@
             <a href="javascript:history.back()" class="text-dark mr-3"><i class="bi bi-chevron-left"></i></a>
             <div class="product-mini-info">
                 <c:if test="${not empty product.fileList}">
-                    <img src="/files/product/${product.fileList[0].fileName}" class="product-mini-img">
+                    <c:choose>
+                        <c:when test="${fn:startsWith(product.fileList[0].fileName, 'http')}">
+                            <img src="${product.fileList[0].fileName}" class="product-mini-img">
+                        </c:when>
+                        <c:otherwise>
+                            <img src="/files/product/${product.fileList[0].fileName}" class="product-mini-img">
+                        </c:otherwise>
+                    </c:choose>
                 </c:if>
                 <div class="product-mini-text">
                     <span class="title">${product.productTitle}</span>
@@ -170,7 +178,14 @@
 					<div class="content">
 						<c:choose>
 							<c:when test="${m.type == 'image'}">
-								<img src="/files/chat/${m.messageContent}" alt="사진">
+								<c:choose>
+									<c:when test="${fn:startsWith(m.messageContent, 'http')}">
+										<img src="${m.messageContent}" alt="사진">
+									</c:when>
+									<c:otherwise>
+										<img src="/files/chat/${m.messageContent}" alt="사진">
+									</c:otherwise>
+								</c:choose>
 							</c:when>
 							<c:when test="${m.type == 'map'}">
 								<div><strong>[장소 공유]</strong></div>

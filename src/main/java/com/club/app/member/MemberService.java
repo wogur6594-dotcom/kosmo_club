@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.club.app.file.FileManager;
+import com.club.app.file.S3Service;
 
 @Service
 public class MemberService implements UserDetailsService {
@@ -18,7 +18,7 @@ public class MemberService implements UserDetailsService {
 	private MemberMapper memberMapper;
 
 	@Autowired
-	private FileManager fileManager;
+	private S3Service s3Service;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -28,6 +28,11 @@ public class MemberService implements UserDetailsService {
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setMemberId(memberId);
 		memberDTO = memberMapper.detail(memberDTO);
+		
+		if (memberDTO == null) {
+			throw new UsernameNotFoundException("User not found: " + memberId);
+		}
+		
 		return memberDTO;
 	}
 
@@ -54,8 +59,8 @@ public class MemberService implements UserDetailsService {
 		// 2. 파일 업로드
 		if (attach != null && !attach.isEmpty()) {
 
-			// 실제 파일 저장
-			String fileName = fileManager.fileSave("memberProfile", attach);
+			// 실제 파일 저장 (S3 사용)
+			String fileName = s3Service.upload(attach, "memberProfile");
 
 			// DB 저장 DTO
 			MemberProfileDTO profileDTO = new MemberProfileDTO();
@@ -93,6 +98,15 @@ public class MemberService implements UserDetailsService {
 	}
 
 	public int delete(MemberDTO memberDTO) throws Exception {
+		// 1. 상세 정보 조회 (이미지 정보 포함)
+		MemberDTO detail = memberMapper.detail(memberDTO);
+		
+		// 2. 프로필 이미지가 있다면 S3에서 삭제
+		if (detail != null && detail.getProfile() != null) {
+			s3Service.delete(detail.getProfile().getFileName());
+		}
+		
+		// 3. DB 삭제
 		return memberMapper.delete(memberDTO);
 	}
 
@@ -117,8 +131,8 @@ public class MemberService implements UserDetailsService {
 
 	        if (detail.getProfile() != null) {
 
-	            // 실제 파일 삭제
-	            fileManager.fileDelete("memberProfile", detail.getProfile());
+	            // 실제 파일 삭제 (S3 사용)
+	            s3Service.delete(detail.getProfile().getFileName());
 
 	            // DB 삭제
 	            MemberProfileDTO profileDTO = new MemberProfileDTO();
@@ -133,8 +147,8 @@ public class MemberService implements UserDetailsService {
 		// 파일 저장
 		if (attach != null && !attach.isEmpty()) {
 
-			// 새 파일 저장
-			String fileName = fileManager.fileSave("memberProfile", attach);
+			// 새 파일 저장 (S3 사용)
+			String fileName = s3Service.upload(attach, "memberProfile");
 
 			// 프로필 DTO 생성
 			MemberProfileDTO profile = new MemberProfileDTO();
@@ -149,7 +163,7 @@ public class MemberService implements UserDetailsService {
 			// 기존 이미지 있는지 검사
 			if (detail.getProfile() != null) {
 
-				fileManager.fileDelete("memberProfile", detail.getProfile());
+				s3Service.delete(detail.getProfile().getFileName());
 
 				memberMapper.fileUpdate(profile);
 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!DOCTYPE html>
@@ -114,7 +115,14 @@
 						<div class="d-flex flex-wrap mt-2" id="fileBox">
 							<c:forEach var="f" items="${product.fileList}">
 								<div class="current-img-box file-box">
-									<img src="/files/product/${f.fileName}">
+									<c:choose>
+										<c:when test="${fn:startsWith(f.fileName, 'http')}">
+											<img src="${f.fileName}">
+										</c:when>
+										<c:otherwise>
+											<img src="/files/product/${f.fileName}">
+										</c:otherwise>
+									</c:choose>
 									<button type="button" class="btn btn-danger delete-btn" data-file-num="${f.fileNum}">
 										<i class="bi bi-x"></i>
 									</button>
