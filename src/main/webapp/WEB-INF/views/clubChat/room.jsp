@@ -32,11 +32,9 @@
 			<div class="chat-header">
 
 				<div>
-				<div class="chat-room-badge">
-	CLUB CHAT
-</div>
+					<div class="chat-room-badge">CLUB CHAT</div>
 					<h2 class="chat-title">${clubName}채팅방</h2>
-					<p class="chat-desc">${clubName} 회원들과 자유롭게 대화해보세요.</p>
+					<p class="chat-desc">${clubName}회원들과자유롭게대화해보세요.</p>
 				</div>
 
 				<a href="/club/detail?clubNum=${clubNum}" class="chat-back-btn">
@@ -78,7 +76,24 @@
 
 							<div class="chat-bubble">
 								<div class="chat-writer">${msg.senderName}</div>
-								<div class="chat-content">${msg.messageContents}</div>
+								<c:choose>
+
+									<c:when test="${msg.messageType eq 'IMAGE'}">
+
+										<div class="chat-image-wrap">
+											<img src="${msg.imageUrl}" class="chat-image"
+												onclick="openImage(this.src)">
+										</div>
+
+									</c:when>
+
+									<c:otherwise>
+
+										<div class="chat-content">${msg.messageContents}</div>
+
+									</c:otherwise>
+
+								</c:choose>
 								<div class="chat-time">${msg.chatTime}</div>
 							</div>
 			</div>
@@ -93,12 +108,25 @@
 
 		<div class="chat-input-area">
 
-			<input type="text" id="messageInput" class="form-control chat-input"
+			<button type="button" id="emojiBtn" class="chat-icon-btn">
+				😀</button>
+
+			<label class="chat-icon-btn image-label"> 📷 <input
+				type="file" id="imageInput" accept="image/*" style="display: none;">
+			</label> <input type="text" id="messageInput" class="form-control chat-input"
 				placeholder="메시지를 입력하세요">
 
 			<button type="button" id="sendBtn" class="btn chat-send-btn">
-
 				전송</button>
+
+		</div>
+
+		<div id="emojiBox" class="emoji-box">
+
+			<span class="emoji">😀</span> <span class="emoji">😂</span> <span
+				class="emoji">😍</span> <span class="emoji">👍</span> <span
+				class="emoji">🔥</span> <span class="emoji">😭</span> <span
+				class="emoji">🎉</span> <span class="emoji">😎</span>
 
 		</div>
 
@@ -156,11 +184,31 @@
 			div.dataset.senderNum = data.memberNum;
 			div.dataset.chatTime = data.chatTime;
 
-			div.innerHTML = '<div class="chat-bubble">'
-					+ '<div class="chat-writer">' + data.senderName + '</div>'
-					+ '<div class="chat-content">' + data.messageContents
-					+ '</div>' + '<div class="chat-time">' + data.chatTime
-					+ '</div>' + '</div>';
+			let contentHtml = "";
+
+			if(data.messageType === "IMAGE"){
+
+				contentHtml =
+					'<div class="chat-image-wrap">'
+					+ '<img src="' + data.imageUrl + '"'
+					+ ' class="chat-image"'
+					+ ' onclick="openImage(this.src)">'
+					+ '</div>';
+
+			}else{
+
+				contentHtml =
+					'<div class="chat-content">'
+					+ data.messageContents
+					+ '</div>';
+			}
+
+			div.innerHTML =
+				'<div class="chat-bubble">'
+				+ '<div class="chat-writer">' + data.senderName + '</div>'
+				+ contentHtml
+				+ '<div class="chat-time">' + data.chatTime + '</div>'
+				+ '</div>';
 
 			chatArea.appendChild(div);
 
@@ -200,7 +248,75 @@
 		}
 
 		chatArea.scrollTop = chatArea.scrollHeight;
-	</script>
+		const emojiBtn = document.getElementById("emojiBtn");
+		const emojiBox = document.getElementById("emojiBox");
 
+		emojiBtn.addEventListener("click", function(){
+
+			if(emojiBox.style.display === "block"){
+				emojiBox.style.display = "none";
+			}else{
+				emojiBox.style.display = "block";
+			}
+		});
+
+		document.querySelectorAll(".emoji").forEach(function(emoji){
+
+			emoji.addEventListener("click", function(){
+
+				messageInput.value += this.innerText;
+				messageInput.focus();
+			});
+		});
+
+		const imageInput = document.getElementById("imageInput");
+
+		imageInput.addEventListener("change", function(){
+
+			const file = this.files[0];
+
+			if(!file){
+				return;
+			}
+
+			const formData = new FormData();
+			formData.append("file", file);
+
+			fetch("/clubChat/imageUpload", {
+				method : "POST",
+				body : formData
+			})
+			.then(r => r.text())
+			.then(url => {
+
+				if(url === "fail"){
+					alert("업로드 실패");
+					return;
+				}
+
+				socket.send(JSON.stringify({
+					messageType : "IMAGE",
+					imageUrl : url
+				}));
+
+			});
+		});
+
+		function openImage(src){
+
+			document.getElementById("imageModal").style.display = "flex";
+			document.getElementById("modalImage").src = src;
+		}
+
+		function closeImage(){
+
+			document.getElementById("imageModal").style.display = "none";
+		}
+	</script>
+	<div id="imageModal" class="image-modal" onclick="closeImage()">
+
+		<img id="modalImage">
+
+	</div>
 </body>
 </html>

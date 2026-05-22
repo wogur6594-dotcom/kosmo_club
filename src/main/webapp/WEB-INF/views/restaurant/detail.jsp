@@ -3,6 +3,7 @@
 
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 
 <!DOCTYPE html>
 <html>
@@ -13,7 +14,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/css/restaurant.css">
+<link rel="stylesheet" href="/css/restaurant.css?v=22">
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8e471a42003e30980f383ed3f0acf423&libraries=services"></script>
 </head>
@@ -31,6 +32,44 @@
 
 		<div class="restaurant-detail-box">
 
+			<c:set var="defaultImage" value="/image/default-restaurant.jpg" />
+
+			<c:if test="${fn:trim(dto.restaurantCategory) eq '한식'}">
+				<c:set var="defaultImage" value="/image/default-korean.jpg" />
+			</c:if>
+
+			<c:if test="${fn:trim(dto.restaurantCategory) eq '중식'}">
+				<c:set var="defaultImage" value="/image/default-chinese.jpg" />
+			</c:if>
+
+			<c:if test="${fn:trim(dto.restaurantCategory) eq '일식'}">
+				<c:set var="defaultImage" value="/image/default-japanese.jpg" />
+			</c:if>
+
+			<c:if test="${fn:trim(dto.restaurantCategory) eq '양식'}">
+				<c:set var="defaultImage" value="/image/default-western.jpg" />
+			</c:if>
+
+			<c:if test="${fn:trim(dto.restaurantCategory) eq '카페'}">
+				<c:set var="defaultImage" value="/image/default-cafe.jpg" />
+			</c:if>
+
+			<c:if test="${fn:trim(dto.restaurantCategory) eq '디저트'}">
+				<c:set var="defaultImage" value="/image/default-dessert.jpg" />
+			</c:if>
+
+			<c:if test="${fn:trim(dto.restaurantCategory) eq '술집'}">
+				<c:set var="defaultImage" value="/image/default-bar.jpg" />
+			</c:if>
+
+			<c:if test="${fn:trim(dto.restaurantCategory) eq '치킨'}">
+				<c:set var="defaultImage" value="/image/default-chicken.jpg" />
+			</c:if>
+
+			<c:if test="${fn:trim(dto.restaurantCategory) eq '분식'}">
+				<c:set var="defaultImage" value="/image/default-snack.jpg" />
+			</c:if>
+
 			<c:choose>
 				<c:when test="${not empty dto.fileDTOs}">
 
@@ -43,7 +82,8 @@
 							<c:forEach items="${dto.fileDTOs}" var="file">
 								<div class="detail-slide-item">
 									<img src="/files/restaurant/${file.fileName}"
-										class="restaurant-detail-img">
+										class="restaurant-detail-img"
+										onerror="this.onerror=null; this.classList.add('default-detail-image'); this.src='${defaultImage}';">
 								</div>
 							</c:forEach>
 
@@ -56,7 +96,12 @@
 				</c:when>
 
 				<c:otherwise>
-					<div class="detail-no-image">등록된 사진이 없습니다.</div>
+
+					<div class="detail-slider-wrap default-detail-image-wrap">
+						<img src="${defaultImage}"
+							class="restaurant-detail-img default-detail-image">
+					</div>
+
 				</c:otherwise>
 			</c:choose>
 
@@ -70,7 +115,20 @@
 
 							<h1 class="detail-title">${dto.restaurantName}</h1>
 
-							<div class="detail-category category-${dto.restaurantCategory}">
+							<div
+								class="detail-category
+	<c:choose>
+		<c:when test="${fn:trim(dto.restaurantCategory) eq '한식'}">category-korean</c:when>
+		<c:when test="${fn:trim(dto.restaurantCategory) eq '중식'}">category-chinese</c:when>
+		<c:when test="${fn:trim(dto.restaurantCategory) eq '일식'}">category-japanese</c:when>
+		<c:when test="${fn:trim(dto.restaurantCategory) eq '양식'}">category-western</c:when>
+		<c:when test="${fn:trim(dto.restaurantCategory) eq '카페'}">category-cafe</c:when>
+		<c:when test="${fn:trim(dto.restaurantCategory) eq '디저트'}">category-dessert</c:when>
+		<c:when test="${fn:trim(dto.restaurantCategory) eq '술집'}">category-bar</c:when>
+		<c:when test="${fn:trim(dto.restaurantCategory) eq '치킨'}">category-chicken</c:when>
+		<c:when test="${fn:trim(dto.restaurantCategory) eq '분식'}">category-snack</c:when>
+	</c:choose>
+">
 								${dto.restaurantCategory}</div>
 
 						</div>
